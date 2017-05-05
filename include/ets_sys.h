@@ -1,5 +1,5 @@
 /*
- * ESPRSSIF MIT License
+ * ESPRESSIF MIT License
  *
  * Copyright (c) 2016 <ESPRESSIF SYSTEMS (SHANGHAI) PTE LTD>
  *
@@ -59,6 +59,14 @@ typedef struct _ETSTIMER_ {
 #define ETS_UART_INUM       5
 #define ETS_UART1_INUM      5
 #define ETS_FRC_TIMER1_INUM 9  /* use edge*/
+
+typedef void (* ets_isr_t)(void *);
+
+void ets_intr_lock(void);
+void ets_intr_unlock(void);
+void ets_isr_attach(int i, ets_isr_t func, void *arg);
+
+void NmiTimSetFunc(void (*func)(void));
 
 #define ETS_INTR_LOCK() \
     ets_intr_lock()

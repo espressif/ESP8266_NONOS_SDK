@@ -34,6 +34,7 @@ espconn_msg *pserver_list = NULL;
 remot_info premot[linkMax];
 
 struct espconn_packet pktinfo[2];
+extern bool manual_set_flag ;
 
 static uint8 espconn_tcp_get_buf_count(espconn_buf *pesp_buf);
 /******************************************************************************
@@ -1334,6 +1335,29 @@ espconn_gethostbyname(struct espconn *pespconn, const char *hostname, ip_addr_t 
 void ICACHE_FLASH_ATTR
 espconn_dns_setserver(u8_t numdns, ip_addr_t *dnsserver)
 {
-	dns_setserver(numdns,dnsserver);
+
+	manual_set_flag = true;
+	if(dnsserver == NULL) {
+		ip_addr_t default_dns_server;
+		default_dns_server.addr = 0xDEDE43D0;
+		dns_setserver(0,&default_dns_server);
+		dns_setserver(1,&default_dns_server);
+		manual_set_flag = false;
+		return;
+	}
+	return dns_setserver(numdns,dnsserver);
+
 }
 
+/******************************************************************************
+ * FunctionName : espconn_dns_getserver
+ * Description  : get dns server.
+ * Parameters   : numdns -- the index of the DNS server ,must
+ * 				  be < DNS_MAX_SERVERS = 2
+ *  Returns     : dnsserver -- struct ip_addr_t
+*******************************************************************************/
+ip_addr_t ICACHE_FLASH_ATTR
+espconn_dns_getserver(u8_t numdns)
+{
+	return dns_getserver(numdns);
+}

@@ -3,7 +3,7 @@
 # File	: gen_appbin.py
 # This file is part of Espressif's generate bin script.
 # 
-# ESPRSSIF MIT License
+# ESPRESSIF MIT License
 # 
 # Copyright (c) 2016 <ESPRESSIF SYSTEMS (SHANGHAI) PTE LTD>
 # 

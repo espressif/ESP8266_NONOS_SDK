@@ -266,7 +266,7 @@ sint8 time_zone = 8;
 /** Names/Addresses of servers */
 struct sntp_server {
 #if SNTP_SERVER_DNS
-  char* name;
+  char name[32];
 #endif /* SNTP_SERVER_DNS */
   ip_addr_t addr;
 };
@@ -304,7 +304,7 @@ static u32_t sntp_last_timestamp_sent[2];
 //uint32 current_stamp_2 = 0;
 static bool sntp_time_flag = false;
 static uint32 sntp_update_delay = SNTP_UPDATE_DELAY;
-static uint32 realtime_stamp = 0;
+static uint64 realtime_stamp = 0;
 LOCAL os_timer_t sntp_timer;
 /*****************************************/
 #define SECSPERMIN	60L
@@ -336,30 +336,8 @@ static const int year_lengths[2] = {
   365,
   366
 } ;
-struct tm
-{
-  int	tm_sec;
-  int	tm_min;
-  int	tm_hour;
-  int	tm_mday;
-  int	tm_mon;
-  int	tm_year;
-  int	tm_wday;
-  int	tm_yday;
-  int	tm_isdst;
-};
 
 struct tm res_buf;
-typedef struct __tzrule_struct
-{
-  char ch;
-  int m;
-  int n;
-  int d;
-  int s;
-  time_t change;
-  int offset;
-} __tzrule_type;
 
 __tzrule_type sntp__tzrule[2];
 struct tm * ICACHE_FLASH_ATTR
@@ -619,7 +597,7 @@ sntp_asctime(struct tm *tim_p)
     return sntp_asctime_r (tim_p, reult);
 }
 
-uint32 sntp_get_current_timestamp()
+uint64 sntp_get_current_timestamp()
 {
 	if(realtime_stamp == 0){
 		os_printf("please start sntp first !\n");
@@ -1077,7 +1055,8 @@ sntp_setserver(u8_t idx, ip_addr_t *server)
       ip_addr_set_any(&sntp_servers[idx].addr);
     }
 #if SNTP_SERVER_DNS
-    sntp_servers[idx].name = NULL;
+    //sntp_servers[idx].name = NULL;
+    os_memset(sntp_servers[idx].name,0x0,sizeof(sntp_servers[idx].name));
 #endif
   }
 }
@@ -1134,7 +1113,8 @@ void ICACHE_FLASH_ATTR
 sntp_setservername(u8_t idx, char *server)
 {
   if (idx < SNTP_MAX_SERVERS) {
-    sntp_servers[idx].name = server;
+    // sntp_servers[idx].name = server;
+      os_strcpy(sntp_servers[idx].name,server);
   }
 }
 

@@ -38,7 +38,7 @@
 #ifndef __LWIPOPTS_H__
 #define __LWIPOPTS_H__
 
-
+#define ESP_SYSTEM_APP 1
 /*
    -----------------------------------------------
    ---------- Platform specific locking ----------

@@ -1,5 +1,5 @@
 /*
- * ESPRSSIF MIT License
+ * ESPRESSIF MIT License
  *
  * Copyright (c) 2016 <ESPRESSIF SYSTEMS (SHANGHAI) PTE LTD>
  *
@@ -1388,7 +1388,7 @@ user_esp_platform_init(void)
 
     if (wifi_get_opmode() != SOFTAP_MODE) {
         os_timer_disarm(&client_timer);
-        os_timer_setfn(&client_timer, (os_timer_func_t *)user_esp_platform_check_ip, 1);
+        os_timer_setfn(&client_timer, (os_timer_func_t *)user_esp_platform_check_ip, (void *)1);
         os_timer_arm(&client_timer, 100, 0);
     }
 }

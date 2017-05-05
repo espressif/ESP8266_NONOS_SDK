@@ -1,5 +1,5 @@
 /*
- * ESPRSSIF MIT License
+ * ESPRESSIF MIT License
  *
  * Copyright (c) 2016 <ESPRESSIF SYSTEMS (SHANGHAI) PTE LTD>
  *
@@ -26,7 +26,6 @@
 #define __USER_CONFIG_H__
 
 #define AT_CUSTOM_UPGRADE
-#define AT_OVER_SDIO_SUPPORT
 
 #ifdef AT_CUSTOM_UPGRADE
     #ifndef AT_UPGRADE_SUPPORT

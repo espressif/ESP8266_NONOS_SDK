@@ -1,5 +1,5 @@
 /*
- * ESPRSSIF MIT License
+ * ESPRESSIF MIT License
  *
  * Copyright (c) 2016 <ESPRESSIF SYSTEMS (SHANGHAI) PTE LTD>
  *
@@ -26,11 +26,28 @@
 #define _OSAPI_H_
 
 #include <string.h>
+#include "os_type.h"
 #include "user_config.h"
+
+void ets_bzero(void *s, size_t n);
+void ets_delay_us(uint16_t us);
+void ets_install_putc1(void (*p)(char c));
 
 #define os_bzero ets_bzero
 #define os_delay_us ets_delay_us
 #define os_install_putc1 ets_install_putc1
+
+int ets_memcmp(const void *str1, const void *str2, unsigned int nbyte);
+void *ets_memcpy(void *dest, const void *src, unsigned int nbyte);
+void *ets_memmove(void *dest, const void *src, unsigned int nbyte);
+void *ets_memset(void *dest, int val, unsigned int nbyte);
+
+int ets_strcmp(const char *s1, const char *s2);
+char *ets_strcpy(char *s1, const char *s2);
+int ets_strlen(const char *s);
+int ets_strncmp(const char *s1, const char *s2, unsigned int n);
+char *ets_strncpy(char *s1, const char *s2, unsigned int n);
+char *ets_strstr(const char *s1, const char *s2);
 
 #define os_memcmp ets_memcmp
 #define os_memcpy ets_memcpy
@@ -44,12 +61,20 @@
 #define os_strncmp ets_strncmp
 #define os_strncpy ets_strncpy
 #define os_strstr ets_strstr
+
+void ets_timer_arm_new(os_timer_t *ptimer, uint32_t time, bool repeat_flag, bool ms_flag);
+void ets_timer_disarm(os_timer_t *ptimer);
+void ets_timer_setfn(os_timer_t *ptimer, os_timer_func_t *pfunction, void *parg);
+
 #ifdef USE_US_TIMER
 #define os_timer_arm_us(a, b, c) ets_timer_arm_new(a, b, c, 0)
 #endif
 #define os_timer_arm(a, b, c) ets_timer_arm_new(a, b, c, 1)
 #define os_timer_disarm ets_timer_disarm
 #define os_timer_setfn ets_timer_setfn
+
+int ets_sprintf(char *str, const char *format, ...)  __attribute__ ((format (printf, 2, 3)));
+int os_printf_plus(const char *format, ...)  __attribute__ ((format (printf, 1, 2)));
 
 #define os_sprintf  ets_sprintf
 

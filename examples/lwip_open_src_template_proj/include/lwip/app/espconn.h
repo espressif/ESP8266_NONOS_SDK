@@ -674,5 +674,13 @@ extern void espconn_mdns_enable(void);
  *  Returns     : none
 *******************************************************************************/
 extern void espconn_dns_setserver(u8_t numdns, ip_addr_t *dnsserver);
+/******************************************************************************
+ * FunctionName : espconn_dns_getserver
+ * Description  : get dns server.
+ * Parameters   : numdns -- the index of the DNS server ,must
+ * 				  be < DNS_MAX_SERVERS = 2
+ *  Returns     : dnsserver -- struct ip_addr_t
+*******************************************************************************/
+extern ip_addr_t espconn_dns_getserver(u8_t numdns);
 #endif
 

@@ -22,7 +22,8 @@ static const char mem_debug_file[] ICACHE_RODATA_ATTR = __FILE__;
 
 #define lwIP_ASSERT(Expression)	do{if(!(Expression)) {os_printf("%s %d\n", __func__, __LINE__);return;}}while(0)
 
-ringbuf_t ringbuf_new(size_t capacity)
+ringbuf_t ICACHE_FLASH_ATTR
+ringbuf_new(size_t capacity)
 {
 	ringbuf_t rb = (ringbuf_t)os_zalloc(sizeof(struct ringbuf_t));
 	if (rb){
@@ -38,17 +39,20 @@ ringbuf_t ringbuf_new(size_t capacity)
 	return rb;
 }
 
-size_t ringbuf_buffer_size(const struct ringbuf_t *rb)
+size_t ICACHE_FLASH_ATTR
+ringbuf_buffer_size(const struct ringbuf_t *rb)
 {
 	return rb->size;
 }
 
-void ringbuf_reset(ringbuf_t rb)
+void ICACHE_FLASH_ATTR
+ringbuf_reset(ringbuf_t rb)
 {
 	rb ->head = rb->tail = rb->buf;
 }
 
-void ringbuf_free(ringbuf_t *rb)
+void ICACHE_FLASH_ATTR
+ringbuf_free(ringbuf_t *rb)
 {
 	lwIP_ASSERT(rb && *rb);
 	os_free((*rb)->buf);
@@ -56,17 +60,20 @@ void ringbuf_free(ringbuf_t *rb)
 	*rb = NULL;
 }
 
-size_t ringbuf_capacity(const struct ringbuf_t *rb)
+size_t ICACHE_FLASH_ATTR
+ringbuf_capacity(const struct ringbuf_t *rb)
 {
 	return ringbuf_buffer_size(rb) - 1;
 }
 
-static const uint8_t* ringbuf_end(const struct ringbuf_t *rb)
+static const uint8_t* ICACHE_FLASH_ATTR
+ringbuf_end(const struct ringbuf_t *rb)
 {
 	return rb->buf + ringbuf_buffer_size(rb);
 }
 
-size_t ringbuf_bytes_free(const struct ringbuf_t *rb)
+size_t ICACHE_FLASH_ATTR
+ringbuf_bytes_free(const struct ringbuf_t *rb)
 {
 	if (rb->head >= rb->tail){
 		return ringbuf_capacity(rb) - (rb->head - rb->tail);
@@ -75,37 +82,44 @@ size_t ringbuf_bytes_free(const struct ringbuf_t *rb)
 	}
 }
 
-size_t ringbuf_bytes_used(const struct ringbuf_t *rb)
+size_t ICACHE_FLASH_ATTR
+ringbuf_bytes_used(const struct ringbuf_t *rb)
 {
 	return ringbuf_capacity(rb) - ringbuf_bytes_free(rb);
 }
 
-int ringbuf_is_full(const struct ringbuf_t *rb)
+int ICACHE_FLASH_ATTR
+ringbuf_is_full(const struct ringbuf_t *rb)
 {
 	return ringbuf_bytes_free(rb) == 0;
 }
 
-int ringbuf_is_empty(const struct ringbuf_t *rb)
+int ICACHE_FLASH_ATTR
+ringbuf_is_empty(const struct ringbuf_t *rb)
 {
 	return ringbuf_bytes_free(rb) == ringbuf_capacity(rb);
 }
 
-const void* ringbuf_tail(const struct ringbuf_t *rb)
+const void* ICACHE_FLASH_ATTR
+ringbuf_tail(const struct ringbuf_t *rb)
 {
 	return rb->tail;
 }
-const void* ringbuf_head(const struct ringbuf_t *rb)
+const void* ICACHE_FLASH_ATTR
+ringbuf_head(const struct ringbuf_t *rb)
 {
 	return rb->head;
 }
 
-static uint8_t *ringbuf_nextp(ringbuf_t rb, const uint8_t *p)
+static uint8_t* ICACHE_FLASH_ATTR
+ringbuf_nextp(ringbuf_t rb, const uint8_t *p)
 {
 	lwIP_ASSERT((p >= rb->buf) && (p < ringbuf_end(rb)));
 	return rb->buf + ((++p -rb->buf) % ringbuf_buffer_size(rb));
 }
 
-size_t ringbuf_findchr(const struct ringbuf_t *rb, int c, size_t offset)
+size_t ICACHE_FLASH_ATTR
+ringbuf_findchr(const struct ringbuf_t *rb, int c, size_t offset)
 {
 	const uint8_t *bufend = ringbuf_end(rb);
 	size_t bytes_used = ringbuf_bytes_used(rb);
@@ -122,7 +136,8 @@ size_t ringbuf_findchr(const struct ringbuf_t *rb, int c, size_t offset)
 		return ringbuf_findchr(rb, c, offset + n);
 }
 
-size_t ringbuf_memset(ringbuf_t dst, int c, size_t len)
+size_t ICACHE_FLASH_ATTR
+ringbuf_memset(ringbuf_t dst, int c, size_t len)
 {
 	const uint8_t *bufend = ringbuf_end(dst);
 	size_t nwritten = 0;
@@ -149,7 +164,8 @@ size_t ringbuf_memset(ringbuf_t dst, int c, size_t len)
 	return nwritten;
 }
 
-void *ringbuf_memcpy_into(ringbuf_t dst,const void *src, size_t count)
+void* ICACHE_FLASH_ATTR
+ringbuf_memcpy_into(ringbuf_t dst,const void *src, size_t count)
 {
 	const uint8_t *u8src = src;
 	const uint8_t *bufend = ringbuf_end(dst);
@@ -175,7 +191,8 @@ void *ringbuf_memcpy_into(ringbuf_t dst,const void *src, size_t count)
 	return dst->head;
 }
 
-void *ringbuf_memcpy_from(void *dst,ringbuf_t src, size_t count)
+void* ICACHE_FLASH_ATTR
+ringbuf_memcpy_from(void *dst,ringbuf_t src, size_t count)
 {
 	size_t bytes_used = ringbuf_bytes_used(src);
 

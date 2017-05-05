@@ -1,5 +1,5 @@
 /*
- * ESPRSSIF MIT License
+ * ESPRESSIF MIT License
  *
  * Copyright (c) 2016 <ESPRESSIF SYSTEMS (SHANGHAI) PTE LTD>
  *
@@ -34,6 +34,11 @@ bool ICACHE_FLASH_ATTR check_memleak_debug_enable(void)
     return MEMLEAK_DEBUG_ENABLE;
 }
 */
+
+void *pvPortMalloc (size_t sz, const char *, unsigned);
+void vPortFree (void *p, const char *, unsigned);
+void *pvPortZalloc (size_t sz, const char *, unsigned);
+void *pvPortRealloc (void *p, size_t n, const char *, unsigned);
 
 #ifndef MEMLEAK_DEBUG
 #define MEMLEAK_DEBUG_ENABLE	0

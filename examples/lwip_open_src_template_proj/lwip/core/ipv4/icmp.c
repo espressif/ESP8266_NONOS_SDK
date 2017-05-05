@@ -105,6 +105,22 @@ icmp_input(struct pbuf *p, struct netif *inp)
     /* This is OK, echo reply might have been parsed by a raw PCB
        (as obviously, an echo request has been sent, too). */
     break; 
+#if ESP_SYSTEM_APP /* by LiuHan: change the current MTU on the interface */
+  case ICMP_DUR:
+    {
+      u16_t next_mtu = 0;
+      next_mtu = *(u8_t *)((u8_t *)p->payload + 6);
+      next_mtu <<= 8;
+      next_mtu |= *(u8_t *)((u8_t *)p->payload + 7);
+      if (next_mtu != 0 && next_mtu != inp->mtu){
+    	  //ets_printf("Match the MTU.\n");
+    	  inp->mtu = next_mtu;
+      } else {
+    	  //ets_printf("Receive the MTU %d\n", next_mtu);
+      }
+    }
+	break;
+#endif
   case ICMP_ECHO:
 #if !LWIP_MULTICAST_PING || !LWIP_BROADCAST_PING
     {

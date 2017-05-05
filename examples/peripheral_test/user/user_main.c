@@ -1,5 +1,5 @@
 /*
- * ESPRSSIF MIT License
+ * ESPRESSIF MIT License
  *
  * Copyright (c) 2015 <ESPRESSIF SYSTEMS (SHANGHAI) PTE LTD>
  *
@@ -24,6 +24,7 @@
 #include "ets_sys.h"
 #include "osapi.h"
 #include "spi_test.h"
+#include "user_interface.h"
 
 /******************************************************************************
  * FunctionName : user_rf_cal_sector_set
@@ -62,6 +63,12 @@ user_rf_cal_sector_set(void)
             rf_cal_sec = 1024 - 5;
             break;
 
+        case FLASH_SIZE_64M_MAP_1024_1024:
+            rf_cal_sec = 2048 - 5;
+            break;
+        case FLASH_SIZE_128M_MAP_1024_1024:
+            rf_cal_sec = 4096 - 5;
+            break;
         default:
             rf_cal_sec = 0;
             break;

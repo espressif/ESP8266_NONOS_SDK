@@ -10,11 +10,7 @@
 #include "osapi.h"
 #include "os_type.h"
 #include "lwip/sntp.h"
-
-struct timeval {
-  unsigned long  tv_sec;         /* seconds */
-  unsigned long  tv_usec;        /* and microseconds */
-};
+#include <sys/time.h>
 
 /***************************RTC TIME OPTION***************************************/
 // daylight settings

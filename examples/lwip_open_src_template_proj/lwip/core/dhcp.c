@@ -137,6 +137,7 @@ u8_t  dhcp_rx_options_given[DHCP_OPTION_IDX_MAX];
 #define dhcp_get_option_value(dhcp, idx)      (dhcp_rx_options_val[idx])
 #define dhcp_set_option_value(dhcp, idx, val) (dhcp_rx_options_val[idx] = (val))
 
+bool manual_set_flag = false;  /* add for AT by tzx*/
 
 /* DHCP client state machine functions */
 static err_t dhcp_discover(struct netif *netif);
@@ -586,11 +587,13 @@ dhcp_handle_ack(struct netif *netif)
 #if LWIP_DNS
   /* DNS servers */
   n = 0;
-  while(dhcp_option_given(dhcp, DHCP_OPTION_IDX_DNS_SERVER + n) && (n < DNS_MAX_SERVERS)) {
-    ip_addr_t dns_addr;
-    ip4_addr_set_u32(&dns_addr, htonl(dhcp_get_option_value(dhcp, DHCP_OPTION_IDX_DNS_SERVER + n)));
-    dns_setserver(n, &dns_addr);
-    n++;
+  if(manual_set_flag == false) {
+	  while(dhcp_option_given(dhcp, DHCP_OPTION_IDX_DNS_SERVER + n) && (n < DNS_MAX_SERVERS)) {
+		ip_addr_t dns_addr;
+		ip4_addr_set_u32(&dns_addr, htonl(dhcp_get_option_value(dhcp, DHCP_OPTION_IDX_DNS_SERVER + n)));
+		dns_setserver(n, &dns_addr);
+		n++;
+	  }
   }
 #endif /* LWIP_DNS */
 }

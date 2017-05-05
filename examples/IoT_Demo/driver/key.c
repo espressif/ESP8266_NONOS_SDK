@@ -1,5 +1,5 @@
 /*
- * ESPRSSIF MIT License
+ * ESPRESSIF MIT License
  *
  * Copyright (c) 2016 <ESPRESSIF SYSTEMS (SHANGHAI) PTE LTD>
  *
@@ -31,7 +31,7 @@
 
 #include "driver/key.h"
 
-LOCAL void key_intr_handler(struct keys_param *keys);
+LOCAL void key_intr_handler(void *arg);
 
 /******************************************************************************
  * FunctionName : key_init_single
@@ -144,10 +144,11 @@ key_50ms_cb(struct single_key_param *single_key)
  * Returns      : none
 *******************************************************************************/
 LOCAL void
-key_intr_handler(struct keys_param *keys)
+key_intr_handler(void *arg)
 {
     uint8 i;
     uint32 gpio_status = GPIO_REG_READ(GPIO_STATUS_ADDRESS);
+    struct keys_param *keys = (struct keys_param *)arg;
 
     for (i = 0; i < keys->key_num; i++) {
         if (gpio_status & BIT(keys->single_key[i]->gpio_id)) {

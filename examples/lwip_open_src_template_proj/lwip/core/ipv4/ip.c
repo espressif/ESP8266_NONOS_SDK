@@ -725,6 +725,16 @@ err_t ip_output_if_opt(struct pbuf *p, ip_addr_t *src, ip_addr_t *dest,
 #endif /* CHECKSUM_GEN_IP_INLINE */
     ++ip_id;
 
+#if ESP_SYSTEM_APP /* by LiuHan: change IP fragment flags for support min MTU*/
+    if (IPH_PROTO(iphdr) == IP_PROTO_TCP){
+		//ets_printf("TCP protocol need change IP fragment flags\n");
+		IPH_OFFSET_SET(iphdr, htons(IP_DF));
+		chk_sum += iphdr->_offset;
+    } else {
+    	//ets_printf("current protocol %d\n", IPH_PROTO(iphdr));
+    }
+#endif /*CHECKSUM_GEN_IP_OFFSET */
+
     if (ip_addr_isany(src)) {
       ip_addr_copy(iphdr->src, netif->ip_addr);
     } else {
