@@ -82,7 +82,14 @@ void  hw_timer_set_func(void (* user_hw_timer_cb_set)(void))
     user_hw_timer_cb = user_hw_timer_cb_set;
 }
 
-static void  hw_timer_isr_cb(void)
+static void hw_timer_isr_cb(void *arg)
+{
+    if (user_hw_timer_cb != NULL) {
+        (*(user_hw_timer_cb))();
+    }
+}
+
+static void hw_timer_nmi_cb(void)
 {
     if (user_hw_timer_cb != NULL) {
         (*(user_hw_timer_cb))();
@@ -112,7 +119,7 @@ void ICACHE_FLASH_ATTR hw_timer_init(FRC1_TIMER_SOURCE_TYPE source_type, u8 req)
     }
 
     if (source_type == NMI_SOURCE) {
-        ETS_FRC_TIMER1_NMI_INTR_ATTACH(hw_timer_isr_cb);
+        ETS_FRC_TIMER1_NMI_INTR_ATTACH(hw_timer_nmi_cb);
     } else {
         ETS_FRC_TIMER1_INTR_ATTACH(hw_timer_isr_cb, NULL);
     }
