@@ -1,6 +1,11 @@
 gwen:
-    main:   4a953ba
-    wpa2:   4a953ba
+    main    :   f71908f
+    net80211:   f71908f
+    lwip    :   f71908f
+    wpa2    :   4a953ba
+
+phy:
+    phy     :   1136
 
 gitlab:
-    driver: 68fc7b06
+    driver  :   68fc7b06

@@ -236,11 +236,17 @@ bool wifi_station_disconnect(void);
 
 sint8 wifi_station_get_rssi(void);
 
+typedef enum {
+    WIFI_SCAN_TYPE_ACTIVE = 0,  /**< active scan */
+    WIFI_SCAN_TYPE_PASSIVE,     /**< passive scan */
+} wifi_scan_type_t;
+
 struct scan_config {
     uint8 *ssid;    // Note: ssid == NULL, don't filter ssid.
     uint8 *bssid;    // Note: bssid == NULL, don't filter bssid.
     uint8 channel;    // Note: channel == 0, scan all channels, otherwise scan set channel.
     uint8 show_hidden;    // Note: show_hidden == 1, can get hidden ssid routers' info.
+    wifi_scan_type_t scan_type; // scan type, active or passive
 };
 
 bool wifi_station_scan(struct scan_config *config, scan_done_cb_t cb);
