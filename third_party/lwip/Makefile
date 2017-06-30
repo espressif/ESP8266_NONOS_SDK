@@ -12,7 +12,13 @@
 #     a generated lib/image xxx.a ()
 #
 ifndef PDIR
-GEN_LIBS = libuser.a
+UP_EXTRACT_DIR = ..
+GEN_LIBS = liblwip.a
+COMPONENTS_liblwip = api/liblwipapi.a	\
+						app/liblwipapp.a	\
+						core/liblwipcore.a	\
+						core/ipv4/liblwipipv4.a	\
+						netif/liblwipnetif.a
 endif
 
 
@@ -24,6 +30,7 @@ endif
 #   for a subtree within the makefile rooted therein
 #
 #DEFINES += 
+CCFLAGS += -ffunction-sections -fdata-sections
 
 #############################################################
 # Recursion Magic - Don't touch this!!
@@ -39,8 +46,6 @@ endif
 
 INCLUDES := $(INCLUDES) -I $(PDIR)include
 INCLUDES += -I ./
-INCLUDES += -I ../../rom/include
-INCLUDES += -I ../../include/ets
 PDIR := ../$(PDIR)
 sinclude $(PDIR)Makefile
 
