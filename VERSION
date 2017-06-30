@@ -1,11 +1,22 @@
 gwen:
-    main    :   f71908f
-    net80211:   f71908f
-    lwip    :   f71908f
-    wpa2    :   4a953ba
+    at          :   ce90efd
+    crtypt      :   ce90efd
+    espnow      :   ce90efd
+    json        :   ce90efd
+    lwip        :   ce90efd
+    main        :   ce90efd
+    mesh        :   ce90efd
+    net80211    :   ce90efd
+    pp          :   ce90efd
+    smartconfig :   ce90efd
+    ssl         :   ce90efd
+    upgrade     :   ce90efd
+    wpa         :   ce90efd
+    wpa2        :   ce90efd
+    wps         :   ce90efd
 
 phy:
-    phy     :   1136
+    phy         :   1136
 
 gitlab:
-    driver  :   68fc7b06
+    driver      :   68fc7b06
