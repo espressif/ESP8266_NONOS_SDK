@@ -25,6 +25,8 @@
 #ifndef __MEM_H__
 #define __MEM_H__
 
+#include <stddef.h>
+
 /* Note: check_memleak_debug_enable is a weak function inside SDK.
  * please copy following codes to user_main.c.
 #include "mem.h"
