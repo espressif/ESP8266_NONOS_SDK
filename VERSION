@@ -20,4 +20,4 @@ phy:
 
 gitlab:
     driver      :   68fc7b06
-    mbedtls     :   4d9e78fb
+    mbedtls     :   1fbea4ea
