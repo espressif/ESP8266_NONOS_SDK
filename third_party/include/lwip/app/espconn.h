@@ -573,7 +573,7 @@ extern sint8 espconn_get_keepalive(struct espconn *espconn, uint8 level, void *o
  *                - ESPCONN_ARG: dns client not initialized or invalid hostname
 *******************************************************************************/
 
-extern sint8 espconn_gethostbyname(struct espconn *pespconn, const char *name, ip_addr_t *addr, dns_found_callback found);
+extern err_t espconn_gethostbyname(struct espconn *pespconn, const char *name, ip_addr_t *addr, dns_found_callback found);
 
 /******************************************************************************
  * FunctionName : espconn_igmp_join
