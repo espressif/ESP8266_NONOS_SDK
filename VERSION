@@ -3,14 +3,14 @@ gwen:
     crypto      :   ce90efd
     espnow      :   ce90efd
     json        :   ce90efd
-    main        :   7106d38
+    main        :   deb1901
     mesh        :   b19a6f7
-    net80211    :   b19a6f7
-    pp          :   7106d38
+    net80211    :   deb1901
+    pp          :   deb1901
     smartconfig :   b19a6f7
     ssl         :   b19a6f7
     upgrade     :   b19a6f7
-    wpa         :   7106d38
+    wpa         :   deb1901
     wpa2        :   b19a6f7
     wps         :   b19a6f7
 
