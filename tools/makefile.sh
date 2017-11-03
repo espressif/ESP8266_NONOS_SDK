@@ -17,12 +17,16 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-
-#
-# Generate the certificates and keys for testing.
-#
-
 PROJECT_NAME="TLS Project"
+mkdir ca
+mkdir bin
+TrueCA=-1
+if [ -f "ca.crt" ]; then
+	echo ca.crt is found, generating esp_ca_cert.bin...
+	TrueCA=1
+else
+	echo ca.crt not exist\! We would generate self-signed CA certificate,and generating esp_ca_cert.bin...
+	TrueCA=0
 
 # Generate the openssl configuration files.
 cat > ca_cert.conf << EOF  
@@ -34,59 +38,161 @@ prompt                 = no
  O                      = $PROJECT_NAME Dodgy Certificate Authority
 EOF
 
-cat > certs.conf << EOF  
+	
+	openssl genrsa -out ca.key 1024	#you can change number 1024 if encryption bits is required
+	openssl req -out ca.req -key ca.key -new -config ./ca_cert.conf
+
+	# generate the actual self-signed ca certs.
+	openssl x509 -req -in ca.req -out ca.crt -sha1 -days 5000 -signkey ca.key
+
+	cp ca.key ca/
+
+fi
+
+	openssl x509 -in ca.crt -outform DER -out TLS.ca_x509.cer
+	cp TLS.ca_x509.cer ca/
+	cp make_cacert.py ca/
+	cd ca/
+	python make_cacert.py
+	cd ..
+	cp ca/esp_ca_cert.bin bin/
+	cp ca.crt ca/
+
+echo esp_ca_cert.bin generated OK\!
+
+if [ $TrueCA -eq 1 ];then
+	echo trust CA
+	if [ -f "client.crt" ] && [ -f "client.key" ]; then
+		echo client.crt \&\& client.key are found, generating esp_cert_private_key.bin 
+		mkdir client
+		mkdir include
+		openssl rsa -in client.key -out TLS.key_1024 -outform DER
+		openssl x509 -in client.crt -outform DER -out TLS.x509_1024.cer
+		cp TLS.x509_1024.cer client/
+		cp TLS.key_1024 client/
+		mv client/TLS.x509_1024.cer client/certificate.cer
+		mv client/TLS.key_1024 client/private_key.key_1024
+		cp make_cert.py client/
+		cd client
+	
+		python make_cert.py
+		rm make_cert.py
+		mv esp_cert_private_key.bin ../bin/
+		cd ..
+
+		# set default cert for use in the client
+		xxd -i  TLS.x509_1024.cer | sed -e \
+		        "s/TLS_x509_1024_cer/default_certificate/" > cert.h
+		# set default key for use in the server
+		xxd -i TLS.key_1024 | sed -e \
+		        "s/TLS_key_1024/default_private_key/" > private_key.h
+		cp cert.h private_key.h include/
+		cp client.crt client.key client/
+		
+	elif [ -f "server.crt" ] && [ -f "server.key" ]; then
+		echo server.crt \&\& server.key are found, generating esp_cert_private_key.bin
+		mkdir server
+		mkdir include
+		openssl rsa -in server.key -out TLS.key_1024 -outform DER
+		openssl x509 -in server.crt -outform DER -out TLS.x509_1024.cer
+		cp TLS.x509_1024.cer server/
+		cp TLS.key_1024 server/
+		mv server/TLS.x509_1024.cer server/certificate.cer
+		mv server/TLS.key_1024 server/private_key.key_1024
+		cp make_cert.py server/
+		cd server
+	
+		python make_cert.py
+		rm make_cert.py
+		mv esp_cert_private_key.bin ../bin/
+		cd ..
+
+		# set default cert for use in the client
+		xxd -i  TLS.x509_1024.cer | sed -e \
+		        "s/TLS_x509_1024_cer/default_certificate/" > cert.h
+		# set default key for use in the server
+		xxd -i TLS.key_1024 | sed -e \
+		        "s/TLS_key_1024/default_private_key/" > private_key.h
+		cp cert.h private_key.h include/
+		cp server.crt server.key server/
+	else
+		echo we would not generate certificate \for ESP chip when trust CA exist and [client.crt \&\& client.key] or [server.crt \&\& server.key] could not be found.
+	fi
+elif [ $TrueCA -eq 0 ];then
+	echo generate cerificate and private key with self-signed CA
+	mkdir server
+	mkdir client
+	mkdir include
+
+cat > server_cert.conf << EOF  
 [ req ]
 distinguished_name     = req_distinguished_name
 prompt                 = no
 
 [ req_distinguished_name ]
  O                      = $PROJECT_NAME
- CN                     = 127.0.0.1
+ CN                     = 192.168.111.100
 EOF
 
-cat > device_cert.conf << EOF  
+cat > client_cert.conf << EOF  
 [ req ]
 distinguished_name     = req_distinguished_name
 prompt                 = no
 
 [ req_distinguished_name ]
  O                      = $PROJECT_NAME Device Certificate
+ CN                     = 192.168.111.101
 EOF
 
-# private key generation
-openssl genrsa -out TLS.ca_key.pem 1024
-openssl genrsa -out TLS.key_1024.pem 1024
+	openssl genrsa -out server.key 1024
+	openssl genrsa -out client.key 1024
 
-# convert private keys into DER format
-openssl rsa -in TLS.key_1024.pem -out TLS.key_1024 -outform DER
+	openssl rsa -in client.key -out TLS.key_1024 -outform DER
+	openssl req -out server.req -key server.key -new -config ./server_cert.conf 
+	openssl req -out client.req -key client.key -new -config ./client_cert.conf 
 
-# cert requests
-openssl req -out TLS.ca_x509.req -key TLS.ca_key.pem -new \
-            -config ./ca_cert.conf
-openssl req -out TLS.x509_1024.req -key TLS.key_1024.pem -new \
-            -config ./certs.conf 
+	openssl x509 -req -in server.req -out server.crt -sha1 -CAcreateserial -days 5000 -CA ca.crt -CAkey ca.key
+	openssl x509 -req -in client.req -out client.crt -sha1 -CAcreateserial -days 5000 -CA ca.crt -CAkey ca.key
+	cp server.crt server.key server/
 
-# generate the actual certs.
-openssl x509 -req -in TLS.ca_x509.req -out TLS.ca_x509.pem \
-            -sha1 -days 5000 -signkey TLS.ca_key.pem
-openssl x509 -req -in TLS.x509_1024.req -out TLS.x509_1024.pem \
-            -sha1 -CAcreateserial -days 5000 \
-            -CA TLS.ca_x509.pem -CAkey TLS.ca_key.pem
+	openssl x509 -in client.crt -outform DER -out TLS.x509_1024.cer
+	cp TLS.x509_1024.cer client/
+	cp TLS.key_1024 client/
+	mv client/TLS.x509_1024.cer client/certificate.cer
+	mv client/TLS.key_1024 client/private_key.key_1024
+	cp make_cert.py client/
+	cd client
+	
+	python make_cert.py
+	rm make_cert.py
+	mv esp_cert_private_key.bin ../bin/
+	cd ..
 
-# some cleanup
-rm TLS*.req
-rm *.conf
+		# set default cert for use in the client
+		xxd -i  TLS.x509_1024.cer | sed -e \
+		        "s/TLS_x509_1024_cer/default_certificate/" > cert.h
+		# set default key for use in the server
+		xxd -i TLS.key_1024 | sed -e \
+		        "s/TLS_key_1024/default_private_key/" > private_key.h
+		mv cert.h private_key.h include/
+	cp client.crt client.key client/
+		rm *.crt
+		rm *.key
 
-openssl x509 -in TLS.ca_x509.pem -outform DER -out TLS.ca_x509.cer
-openssl x509 -in TLS.x509_1024.pem -outform DER -out TLS.x509_1024.cer
+else
+	echo error happened\!TrueCA didnot initialize.
+fi
 
-#
-# Generate the certificates and keys for encrypt.
-#
+#delete intermediate file
 
-# set default cert for use in the client
-xxd -i  TLS.x509_1024.cer | sed -e \
-        "s/TLS_x509_1024_cer/default_certificate/" > cert.h
-# set default key for use in the server
-xxd -i TLS.key_1024 | sed -e \
-        "s/TLS_key_1024/default_private_key/" > private_key.h
+rm ca/make_cacert.py ca/esp_ca_cert.bin -rf
+rm *.conf -rf
+rm *.req -rf
+rm *.h -rf
+
+rm *.srl -rf
+
+find -name \*.cer | xargs rm -f
+find -name \*.key_1024 | xargs rm -f
+
+echo esp_ca_cert.bin \&\& esp_cert_private_key.bin was generated under bin\/ directory
