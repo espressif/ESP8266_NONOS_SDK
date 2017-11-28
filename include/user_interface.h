@@ -672,4 +672,48 @@ void wifi_disable_gpio_wakeup(void);
 
 void uart_div_modify(uint8 uart_no, uint32 DivLatchValue);
 
+typedef enum {
+    WIFI_COUNTRY_POLICY_AUTO,   /**< Country policy is auto, use the country info of AP to which the station is connected */
+    WIFI_COUNTRY_POLICY_MANUAL, /**< Country policy is manual, always use the configured country info */
+} WIFI_COUNTRY_POLICY;
+
+typedef struct {
+    char cc[3];               /**< country code string */
+    uint8_t schan;            /**< start channel */
+    uint8_t nchan;            /**< total channel number */
+    uint8_t policy;           /**< country policy */
+} wifi_country_t;
+
+/**
+  * @brief     configure country info
+  *
+  * @attention 1. The default country is {.cc="CN", .schan=1, .nchan=13, policy=WIFI_COUNTRY_POLICY_AUTO}
+  * @attention 2. When the country policy is WIFI_COUNTRY_POLICY_AUTO, use the country info of AP to which the station is
+  *               connected. E.g. if the configured country info is {.cc="USA", .schan=1, .nchan=11}, the country info of
+  *               the AP to which the station is connected is {.cc="JP", .schan=1, .nchan=14}, then our country info is 
+  *               {.cc="JP", .schan=1, .nchan=14}. If the station disconnected from the AP, the country info back to
+  *               {.cc="USA", .schan=1, .nchan=11} again.
+  * @attention 3. When the country policy is WIFI_COUNTRY_POLICY_MANUAL, always use the configured country info.
+  * @attention 4. When the country info is changed because of configuration or because the station connects to a different
+  *               external AP, the country IE in probe response/beacon of the soft-AP is changed also.
+  * @attention 5. The country configuration is not stored into flash
+  *
+  * @param     wifi_country_t *country: the configured country info
+  *
+  * @return  0 : succeed
+  * @return -1 : fail
+  */
+bool wifi_set_country(wifi_country_t *country);
+
+/**
+  * @brief     get the current country info
+  *
+  * @param     wifi_country_t *country: country info
+  *
+  * @return  0 : succeed
+  * @return -1 : fail
+  */
+bool wifi_get_country(wifi_country_t *country);
+
+
 #endif
