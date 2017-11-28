@@ -556,6 +556,11 @@ static void espconn_close_internal(void *arg, netconn_event event_type)
 	ssl_reerr = pssl_recon->pcommon.err;
 	hs_status = pssl_recon->hs_status;
 	if (espconn != NULL) {
+		//clear pcommon parameters.
+		pssl_recon->pcommon.write_flag = false;
+		pssl_recon->pcommon.ptrbuf = NULL;
+		pssl_recon->pcommon.cntr = 0;
+		pssl_recon->pcommon.err  = 0;
 		espconn = pssl_recon->preverse;
 	} else {
 		espconn = pssl_recon->pespconn;
