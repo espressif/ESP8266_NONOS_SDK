@@ -218,12 +218,18 @@ typedef struct _scaninfo {
 
 typedef void (* scan_done_cb_t)(void *arg, STATUS status);
 
+typedef struct {
+    int8  rssi;
+    AUTH_MODE  authmode;
+} wifi_fast_scan_threshold_t;
+
 struct station_config {
     uint8 ssid[32];
     uint8 password[64];
     uint8 bssid_set;    // Note: If bssid_set is 1, station will just connect to the router
                         // with both ssid[] and bssid[] matched. Please check about this.
     uint8 bssid[6];
+    wifi_fast_scan_threshold_t threshold;
 };
 
 bool wifi_station_get_config(struct station_config *config);
@@ -241,12 +247,27 @@ typedef enum {
     WIFI_SCAN_TYPE_PASSIVE,     /**< passive scan */
 } wifi_scan_type_t;
 
+/** @brief Range of active scan times per channel */
+typedef struct {
+    uint32_t min;  /**< minimum active scan time per channel, units: millisecond */
+    uint32_t max;  /**< maximum active scan time per channel, units: millisecond, values above 1500ms may
+                                          cause station to disconnect from AP and are not recommended.  */
+} wifi_active_scan_time_t;
+
+/** @brief Aggregate of active & passive scan time per channel */
+typedef union {
+    wifi_active_scan_time_t active;  /**< active scan time per channel, units: millisecond. */
+    uint32_t passive;                /**< passive scan time per channel, units: millisecond, values above 1500ms may
+                                          cause station to disconnect from AP and are not recommended. */
+} wifi_scan_time_t;
+
 struct scan_config {
     uint8 *ssid;    // Note: ssid == NULL, don't filter ssid.
     uint8 *bssid;    // Note: bssid == NULL, don't filter bssid.
     uint8 channel;    // Note: channel == 0, scan all channels, otherwise scan set channel.
     uint8 show_hidden;    // Note: show_hidden == 1, can get hidden ssid routers' info.
     wifi_scan_type_t scan_type; // scan type, active or passive
+    wifi_scan_time_t scan_time; // scan time per channel
 };
 
 bool wifi_station_scan(struct scan_config *config, scan_done_cb_t cb);

@@ -1,18 +1,18 @@
 gwen:
     at          :   9422289
-    crypto      :   ce90efd
-    espnow      :   ce90efd
+    crypto      :   115c9cb
+    espnow      :   115c9cb
     json        :   ce90efd
-    main        :   9422289
+    main        :   115c9cb
     mesh        :   b19a6f7
-    net80211    :   deb1901
-    pp          :   deb1901
-    smartconfig :   b19a6f7
+    net80211    :   115c9cb
+    pp          :   115c9cb
+    smartconfig :   115c9cb
     ssl         :   b19a6f7
     upgrade     :   b19a6f7
-    wpa         :   deb1901
-    wpa2        :   b19a6f7
-    wps         :   b19a6f7
+    wpa         :   115c9cb
+    wpa2        :   115c9cb
+    wps         :   115c9cb
 
 phy:
     phy         :   1136
