@@ -184,6 +184,16 @@ typedef enum _auth_mode {
     AUTH_MAX
 } AUTH_MODE;
 
+typedef enum _cipher_type {
+    CIPHER_NONE = 0,
+    CIPHER_WEP40,
+    CIPHER_WEP104,
+    CIPHER_TKIP,
+    CIPHER_CCMP,
+    CIPHER_TKIP_CCMP,
+    CIPHER_UNKNOWN,
+} CIPHER_TYPE;
+
 uint8 wifi_get_opmode(void);
 uint8 wifi_get_opmode_default(void);
 bool wifi_set_opmode(uint8 opmode);
@@ -205,6 +215,13 @@ struct bss_info {
     sint16 freqcal_val;
     uint8 *esp_mesh_ie;
     uint8 simple_pair;
+    CIPHER_TYPE pairwise_cipher;
+    CIPHER_TYPE group_cipher;
+    uint32_t phy_11b:1;
+    uint32_t phy_11g:1;
+    uint32_t phy_11n:1;
+    uint32_t wps:1;
+    uint32_t reserved:28;
 };
 
 typedef struct _scaninfo {
