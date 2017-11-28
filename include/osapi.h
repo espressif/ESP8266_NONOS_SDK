@@ -30,7 +30,7 @@
 #include "user_config.h"
 
 void ets_bzero(void *s, size_t n);
-void ets_delay_us(uint16_t us);
+void ets_delay_us(uint32_t us);
 void ets_install_putc1(void (*p)(char c));
 
 #define os_bzero ets_bzero
