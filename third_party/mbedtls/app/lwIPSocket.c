@@ -302,6 +302,20 @@ static err_t do_accepted(void *arg, struct tcp_pcb *newpcb, err_t err)
     lwIP_netconn *newconn = NULL;
     lwIP_netconn *conn = arg;
     err = ERR_OK;
+
+    //Avoid two TCP connections coming in simultaneously
+    struct  tcp_pcb *pactive_pcb;
+    int active_pcb_num=0;
+    for(pactive_pcb = tcp_active_pcbs; pactive_pcb != NULL; pactive_pcb = pactive_pcb->next){
+    	if (pactive_pcb->state == ESTABLISHED ||pactive_pcb->state == SYN_RCVD){
+    		active_pcb_num++;
+                if (active_pcb_num > MEMP_NUM_TCP_PCB){
+                    ESP_LOG("%s %d active_pcb_number:%d\n",__FILE__, __LINE__,active_pcb_num);
+                    return ERR_MEM;
+                }
+    	}
+    }
+
     lwIP_REQUIRE_ACTION(conn, exit, err = ESP_ARG);
     /* We have to set the callback here even though
      * the new socket is unknown. conn->socket is marked as -1. */
