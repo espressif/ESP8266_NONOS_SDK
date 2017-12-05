@@ -882,6 +882,9 @@ int __attribute__((weak)) mbedtls_parse_internal(int socket, sint8 error)
 			}
 			
 			system_soft_wdt_stop();
+			uint8 cpu_freq;
+			cpu_freq = system_get_cpu_freq();
+			system_update_cpu_freq(160);
 			while ((ret = mbedtls_ssl_handshake(&TLSmsg->ssl)) != 0) {
 
 				if (ret == MBEDTLS_ERR_SSL_WANT_READ || ret == MBEDTLS_ERR_SSL_WANT_WRITE) {
@@ -892,6 +895,7 @@ int __attribute__((weak)) mbedtls_parse_internal(int socket, sint8 error)
 				}
 			}
 			system_soft_wdt_restart();
+			system_update_cpu_freq(cpu_freq);
 			lwIP_REQUIRE_NOERROR(ret, exit);
 			/**/
 			TLSmsg->quiet = mbedtls_handshake_result(TLSmsg);
