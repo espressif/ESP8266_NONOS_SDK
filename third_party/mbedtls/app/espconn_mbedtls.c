@@ -433,7 +433,9 @@ static void mbedtls_fail_info(espconn_msg *pinfo, int ret)
 		} else {
 			os_printf("client's data invalid protocol\n");
 		}
-		mbedtls_ssl_close_notify(&TLSmsg->ssl);
+            if(ret != MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY){
+                mbedtls_ssl_close_notify(&TLSmsg->ssl);
+            }
 	} else{
 		if (pinfo->preverse != NULL) {
 			os_printf("server handshake failed!\n");
@@ -830,7 +832,10 @@ int __attribute__((weak)) mbedtls_parse_internal(int socket, sint8 error)
 					if (ret == MBEDTLS_ERR_SSL_WANT_READ || ret == 0){
 						ret = ESPCONN_OK;
 						break;
-					} else{
+					} else if(ret == MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY){
+						ret = ESPCONN_OK;
+                                                mbedtls_ssl_close_notify(&TLSmsg->ssl);
+					}else{
 						break;
 					}
 				}				
@@ -931,9 +936,12 @@ int __attribute__((weak)) mbedtls_parse_internal(int socket, sint8 error)
 
 exit:
 	if (ret != ESPCONN_OK){
-		mbedtls_fail_info(Threadmsg, ret);		
-		ets_post(lwIPThreadPrio, NETCONN_EVENT_CLOSE,(uint32)Threadmsg);
-	}
+		mbedtls_fail_info(Threadmsg, ret);
+                if(ret == MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY){
+                     Threadmsg->hs_status = ESPCONN_OK;
+                  ets_post(lwIPThreadPrio, NETCONN_EVENT_CLOSE,(uint32)Threadmsg);
+                }
+        }
 	return ret;
 }
 
