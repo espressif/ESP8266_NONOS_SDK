@@ -3,9 +3,9 @@ gwen:
     crypto      :   12f98d2
     espnow      :   12f98d2
     json        :   ce90efd
-    main        :   c02f4fb
+    main        :   dad1c5c
     mesh        :   b19a6f7
-    net80211    :   c02f4fb
+    net80211    :   dad1c5c
     pp          :   12f98d2
     smartconfig :   12f98d2
     ssl         :   b19a6f7
