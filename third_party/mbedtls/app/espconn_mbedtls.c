@@ -666,6 +666,11 @@ again:
 			offerset += sizeof(file_head) + pfile_param->file_head.file_length;
 			goto again;
 		}
+		/*Optional is load the cert*/
+		if (auth_info->auth_type == ESPCONN_CERT_OWN && os_memcmp(pfile_param->file_head.file_name, "certificate", os_strlen("certificate")) != 0){
+			offerset += sizeof(file_head) + pfile_param->file_head.file_length;
+			goto again;
+		}
 		load_buf = (uint8_t *) os_zalloc( pfile_param->file_head.file_length + FILE_OFFSET);
 		if (load_buf == NULL){
 			os_free(pfile_param);
