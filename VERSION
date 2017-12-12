@@ -1,9 +1,9 @@
 gwen:
-    at          :   fb8a34f
+    at          :   e6b3ebb
     crypto      :   12f98d2
     espnow      :   12f98d2
     json        :   ce90efd
-    main        :   fb8a34f
+    main        :   e6b3ebb
     mesh        :   b19a6f7
     net80211    :   3d8c2b1
     pp          :   3d8c2b1
