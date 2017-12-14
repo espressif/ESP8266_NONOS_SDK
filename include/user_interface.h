@@ -447,6 +447,7 @@ enum {
     EVENT_SOFTAPMODE_STADISCONNECTED,
     EVENT_SOFTAPMODE_PROBEREQRECVED,
     EVENT_OPMODE_CHANGED,
+    EVENT_SOFTAPMODE_DISTRIBUTE_STA_IP,
     EVENT_MAX
 };
 
@@ -514,6 +515,12 @@ typedef struct {
 
 typedef struct {
     uint8 mac[6];
+    struct ip_addr ip;
+    uint8 aid;
+} Event_SoftAPMode_Distribute_Sta_IP_t;
+
+typedef struct {
+    uint8 mac[6];
     uint8 aid;
 } Event_SoftAPMode_StaDisconnected_t;
 
@@ -533,6 +540,7 @@ typedef union {
     Event_StaMode_AuthMode_Change_t        auth_change;
     Event_StaMode_Got_IP_t                got_ip;
     Event_SoftAPMode_StaConnected_t        sta_connected;
+    Event_SoftAPMode_Distribute_Sta_IP_t   distribute_sta_ip;
     Event_SoftAPMode_StaDisconnected_t    sta_disconnected;
     Event_SoftAPMode_ProbeReqRecved_t   ap_probereqrecved;
     Event_OpMode_Change_t               opmode_changed;
