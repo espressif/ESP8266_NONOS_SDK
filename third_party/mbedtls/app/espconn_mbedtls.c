@@ -944,8 +944,8 @@ exit:
 		mbedtls_fail_info(Threadmsg, ret);
                 if(ret == MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY){
                      Threadmsg->hs_status = ESPCONN_OK;
-                  ets_post(lwIPThreadPrio, NETCONN_EVENT_CLOSE,(uint32)Threadmsg);
                 }
+                ets_post(lwIPThreadPrio, NETCONN_EVENT_CLOSE,(uint32)Threadmsg);
         }
 	return ret;
 }
