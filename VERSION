@@ -3,10 +3,10 @@ gwen:
     crypto      :   12f98d2
     espnow      :   12f98d2
     json        :   ce90efd
-    main        :   bc83da6
+    main        :   16cf6ef
     net80211    :   3d8c2b1
     pp          :   3d8c2b1
-    smartconfig :   12f98d2
+    smartconfig :   16cf6ef
     ssl         :   b19a6f7
     upgrade     :   b19a6f7
     wpa         :   12f98d2
