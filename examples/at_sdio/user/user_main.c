@@ -206,13 +206,21 @@ extern void at_custom_uart_rx_buffer_fetch_cb(void);
 
 void ICACHE_FLASH_ATTR user_init(void)
 {
-    char buf[64] = {0};
+    char buf[128] = {0};
     at_customLinkMax = 5;
 	sdio_slave_init();
 	sdio_register_recv_cb(sdio_recv_data_callback);
     at_init();
 	at_register_uart_rx_buffer_fetch_cb(at_custom_uart_rx_buffer_fetch_cb);
+#ifdef ESP_AT_FW_VERSION
+    if ((ESP_AT_FW_VERSION != NULL) && (os_strlen(ESP_AT_FW_VERSION) < 64)) {
+        os_sprintf(buf,"compile time:%s %s\r\n"ESP_AT_FW_VERSION,__DATE__,__TIME__);
+    } else {
+        os_sprintf(buf,"compile time:%s %s",__DATE__,__TIME__);
+    }
+#else
     os_sprintf(buf,"compile time:%s %s",__DATE__,__TIME__);
+#endif
     at_set_custom_info(buf);
 	at_fake_uart_enable(TRUE,at_sdio_response);
 	

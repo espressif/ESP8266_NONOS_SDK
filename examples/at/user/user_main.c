@@ -177,10 +177,18 @@ user_rf_pre_init(void)
 void ICACHE_FLASH_ATTR
 user_init(void)
 {
-    char buf[64] = {0};
+    char buf[128] = {0};
     at_customLinkMax = 5;
     at_init();
+#ifdef ESP_AT_FW_VERSION
+    if ((ESP_AT_FW_VERSION != NULL) && (os_strlen(ESP_AT_FW_VERSION) < 64)) {
+        os_sprintf(buf,"compile time:%s %s\r\n"ESP_AT_FW_VERSION,__DATE__,__TIME__);
+    } else {
+        os_sprintf(buf,"compile time:%s %s",__DATE__,__TIME__);
+    }
+#else
     os_sprintf(buf,"compile time:%s %s",__DATE__,__TIME__);
+#endif
     at_set_custom_info(buf);
     at_port_print("\r\nready\r\n");
     at_cmd_array_regist(&at_custom_cmd[0], sizeof(at_custom_cmd)/sizeof(at_custom_cmd[0]));

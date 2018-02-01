@@ -35,6 +35,10 @@ LDDIR = ../ld
 
 CCFLAGS += -Os
 
+ifdef ESP_AT_FW_VERSION
+CCFLAGS += -DESP_AT_FW_VERSION=\"$(ESP_AT_FW_VERSION)\"
+endif
+
 TARGET_LDFLAGS =		\
 	-nostdlib		\
 	-Wl,-EL \
