@@ -353,6 +353,8 @@ static void mbedtls_msg_free(pmbedtls_msg *msg)
         os_free((*msg)->ssl.out_buf);
         (*msg)->ssl.out_buf = NULL;
     }
+    if((*msg)->pfinished != NULL)
+        mbedtls_finished_free(&(*msg)->pfinished);
 #endif
 	mbedtls_entropy_free(&(*msg)->entropy);
 	mbedtls_ssl_free(&(*msg)->ssl);
