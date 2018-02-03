@@ -751,24 +751,30 @@ int lwip_close(int s)
     {
         return -1;
     }
-
-	if (sock->conn->state != NETCONN_STATE_ERROR){
-	    tcp_recv(sock->conn->tcp, NULL);
-	    err = tcp_close(sock->conn->tcp);		
-
-	    if (err != ERR_OK)
-	    {
-	        /* closing failed, try again later */
-	        tcp_recv(sock->conn->tcp, recv_tcp);
-	        return -1;
-	    }   
-	}
+    /*Do not set callback function when tcp->state is LISTEN.
+    Avoid memory overlap when conn->tcp changes from
+    struct tcp_bcb to struct tcp_pcb_listen after lwip_listen.*/
+    if (sock->conn->tcp->state != LISTEN)
+    {
+        if (sock->conn->state != NETCONN_STATE_ERROR){
+            tcp_recv(sock->conn->tcp, NULL);
+            err = tcp_close(sock->conn->tcp);
 	
-	/* closing succeeded */
-	remove_tcp(sock->conn);
-	free_netconn(sock->conn);
-	free_socket(sock);
-	return ERR_OK;
+            if (err != ERR_OK)
+            {
+                /* closing failed, try again later */
+                tcp_recv(sock->conn->tcp, recv_tcp);
+                return -1;
+            }
+        }
+        /* closing succeeded */
+        remove_tcp(sock->conn);
+    } else {
+        tcp_close(sock->conn->tcp);
+    }
+    free_netconn(sock->conn);
+    free_socket(sock);
+    return ERR_OK;
 }
 
 int lwip_write(int s, const void *data, size_t size)
