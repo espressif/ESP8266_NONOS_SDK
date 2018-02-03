@@ -1336,6 +1336,12 @@ tcp_rexmit(struct tcp_pcb *pcb)
   }
   seg->next = *cur_seg;
   *cur_seg = seg;
+#if TCP_OVERSIZE
+  if (seg->next == NULL) {
+    /* the retransmitted segment is last in unsent, so reset unsent_oversize */
+    pcb->unsent_oversize = 0;
+  }
+#endif /* TCP_OVERSIZE */
 
   ++pcb->nrtx;
 
