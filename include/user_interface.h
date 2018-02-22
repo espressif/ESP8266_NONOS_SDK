@@ -725,8 +725,8 @@ typedef struct {
   *
   * @param     wifi_country_t *country: the configured country info
   *
-  * @return  0 : succeed
-  * @return -1 : fail
+  * @return  true : succeed
+  * @return false : fail
   */
 bool wifi_set_country(wifi_country_t *country);
 
@@ -735,8 +735,8 @@ bool wifi_set_country(wifi_country_t *country);
   *
   * @param     wifi_country_t *country: country info
   *
-  * @return  0 : succeed
-  * @return -1 : fail
+  * @return  true : succeed
+  * @return false : fail
   */
 bool wifi_get_country(wifi_country_t *country);
 
