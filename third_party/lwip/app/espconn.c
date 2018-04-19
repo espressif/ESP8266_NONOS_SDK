@@ -1106,6 +1106,8 @@ espconn_set_opt(struct espconn *espconn, uint8 opt)
 	if (value) {
 		pnode->pcommon.espconn_opt |= opt;
 		tpcb = pnode->pcommon.pcb;
+		if (NULL == tpcb)
+			return ESPCONN_OK;
 		if (espconn_delay_disabled(pnode))
 			tcp_nagle_disable(tpcb);
 
@@ -1142,6 +1144,8 @@ espconn_clear_opt(struct espconn *espconn, uint8 opt)
 	if (value) {
 		pnode->pcommon.espconn_opt &= ~opt;
 		tpcb = pnode->pcommon.pcb;
+		if (NULL == tpcb)
+			return ESPCONN_OK;
 		if (espconn_keepalive_enabled(pnode))
 			espconn_keepalive_disable(tpcb);
 
@@ -1177,6 +1181,8 @@ sint8 ICACHE_FLASH_ATTR espconn_set_keepalive(struct espconn *espconn, uint8 lev
 	value = espconn_find_connection(espconn, &pnode);
 	if (value && espconn_keepalive_disabled(pnode)) {
 		struct tcp_pcb *pcb = pnode->pcommon.pcb;
+		if (NULL == pcb)
+			return ESPCONN_OK;
 		switch (level){
 			case ESPCONN_KEEPIDLE:
 				pcb->keep_idle = 1000 * (u32_t)(*(int*)optarg);
@@ -1222,6 +1228,8 @@ sint8 ICACHE_FLASH_ATTR espconn_get_keepalive(struct espconn *espconn, uint8 lev
 	value = espconn_find_connection(espconn, &pnode);
 	if (value && espconn_keepalive_disabled(pnode)) {
 		struct tcp_pcb *pcb = pnode->pcommon.pcb;
+		if (NULL == pcb)
+			return ESPCONN_OK;
 		switch (level) {
 		case ESPCONN_KEEPIDLE:
 			*(int*)optarg = (int)(pcb->keep_idle/1000);
