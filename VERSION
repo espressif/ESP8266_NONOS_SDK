@@ -11,7 +11,7 @@ gwen:
     upgrade     :   b19a6f7
     wpa         :   e801541
     wpa2        :   12f98d2
-    wps         :   12f98d2
+    wps         :   fd30c50
 
 phy:
     phy         :   1136
