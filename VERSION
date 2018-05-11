@@ -1,17 +1,17 @@
 gwen:
-    at          :   79c552b
-    crypto      :   12f98d2
-    espnow      :   12f98d2
+    at          :   350448e
+    crypto      :   350448e
+    espnow      :   350448e
     json        :   ce90efd
-    main        :   79c552b
-    net80211    :   ef57762
-    pp          :   c309acb
-    smartconfig :   16cf6ef
+    main        :   350448e
+    net80211    :   350448e
+    pp          :   350448e
+    smartconfig :   350448e
     ssl         :   b19a6f7
     upgrade     :   b19a6f7
-    wpa         :   e801541
-    wpa2        :   12f98d2
-    wps         :   fd30c50
+    wpa         :   350448e
+    wpa2        :   350448e
+    wps         :   350448e
 
 phy:
     phy         :   1136
