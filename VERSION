@@ -1,9 +1,9 @@
 gwen:
-    at          :   b4b2c73
+    at          :   79c552b
     crypto      :   12f98d2
     espnow      :   12f98d2
     json        :   ce90efd
-    main        :   b4b2c73
+    main        :   79c552b
     net80211    :   ef57762
     pp          :   c309acb
     smartconfig :   16cf6ef
