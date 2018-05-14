@@ -3,9 +3,9 @@ gwen:
     crypto      :   350448e
     espnow      :   350448e
     json        :   ce90efd
-    main        :   e915b22
+    main        :   097de86
     net80211    :   350448e
-    pp          :   350448e
+    pp          :   097de86
     smartconfig :   350448e
     ssl         :   b19a6f7
     upgrade     :   b19a6f7

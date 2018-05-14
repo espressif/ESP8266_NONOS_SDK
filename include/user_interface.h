@@ -423,8 +423,17 @@ enum sleep_type {
     MODEM_SLEEP_T
 };
 
+enum sleep_level {
+    MIN_SLEEP_T,
+    MAX_SLEEP_T
+};
+
 bool wifi_set_sleep_type(enum sleep_type type);
 enum sleep_type wifi_get_sleep_type(void);
+bool wifi_set_sleep_level(enum sleep_level level);
+enum sleep_level wifi_get_sleep_level(void);
+bool wifi_set_listen_interval(uint8 interval);
+uint8 wifi_get_listen_interval(void);
 
 void wifi_fpm_open(void);
 void wifi_fpm_close(void);
