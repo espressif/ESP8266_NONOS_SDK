@@ -473,6 +473,27 @@ sint16 ICACHE_FLASH_ATTR espconn_recv(struct espconn *espconn, void *mem, size_t
 	return ESPCONN_ARG;
 }
 
+sint16 ICACHE_FLASH_ATTR espconn_recved_len(struct espconn *espconn)
+{
+	espconn_msg *pnode = NULL;
+	bool value = false;
+
+	if (espconn == NULL)
+		return ESPCONN_ARG;
+
+	/*Find the node depend on the espconn message*/
+	value = espconn_find_connection(espconn, &pnode);
+	if (value && espconn->type == ESPCONN_TCP){
+		if (pnode->readbuf != NULL){
+			return (sint16)ringbuf_bytes_used(pnode->readbuf);
+		} else{
+			return 0;
+		}
+	}
+
+	return ESPCONN_ARG;
+}
+
 /******************************************************************************
  * FunctionName : espconn_sendto
  * Description  : send data for UDP
