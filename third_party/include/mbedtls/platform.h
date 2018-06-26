@@ -33,6 +33,7 @@
 extern "C" {
 #endif
 
+#include "osapi.h"
 /**
  * \name SECTION: Module settings
  *
@@ -40,9 +41,9 @@ extern "C" {
  * Either change them in config.h or define them on the compiler command line.
  * \{
  */
-extern int ets_snprintf(char *buf, unsigned int size, const char *format, ...);
-extern void *pvPortCalloc(unsigned int count, unsigned int size);
-extern void vPortFree( void *pv );
+// extern int ets_snprintf(char *buf, unsigned int size, const char *format, ...);
+void *pvPortCalloc(unsigned int count, unsigned int size, const char*, unsigned);
+void vPortFree (void *p, const char *, unsigned);
 #define MBEDTLS_PLATFORM_NO_STD_FUNCTIONS
 #if !defined(MBEDTLS_PLATFORM_NO_STD_FUNCTIONS)
 #include <stdio.h>
@@ -61,10 +62,18 @@ extern void vPortFree( void *pv );
 #define MBEDTLS_PLATFORM_STD_FPRINTF fprintf /**< Default fprintf to use */
 #endif
 #if !defined(MBEDTLS_PLATFORM_STD_CALLOC)
-#define MBEDTLS_PLATFORM_STD_CALLOC   pvPortCalloc /**< Default allocator to use */
+#ifndef MEMLEAK_DEBUG
+#define MBEDTLS_PLATFORM_STD_CALLOC(l, s)   ({void* p = pvPortMalloc((l) * (s), "", __LINE__,true);if(p){os_memset(p,0x0,(l) * (s));} p;})// pvPortCalloc(l, s, "", __LINE__) // pvPortCalloc /**< Default allocator to use */
+#else
+#define MBEDTLS_PLATFORM_STD_CALLOC(l, s) ({const char *file = mem_debug_file;void* p = pvPortMalloc((l) * (s), file, __LINE__,true);if(p){os_memset(p,0x0,(l) * (s));} p;})// ({const char *file = mem_debug_file; pvPortCalloc(l, s, file, __LINE__);})
+#endif
 #endif
 #if !defined(MBEDTLS_PLATFORM_STD_FREE)
-#define MBEDTLS_PLATFORM_STD_FREE       vPortFree /**< Default free to use */
+#ifndef MEMLEAK_DEBUG
+#define MBEDTLS_PLATFORM_STD_FREE(s)        vPortFree(s, "", __LINE__) // vPortFree /**< Default free to use */
+#else
+#define MBEDTLS_PLATFORM_STD_FREE(s)      do{const char *file = mem_debug_file;vPortFree(s, file, __LINE__);}while(0)
+#endif
 #endif
 #if !defined(MBEDTLS_PLATFORM_STD_EXIT)
 #define MBEDTLS_PLATFORM_STD_EXIT      exit /**< Default free to use */
@@ -103,8 +112,13 @@ int mbedtls_platform_set_calloc_free( void * (*calloc_func)( size_t, size_t ),
                               void (*free_func)( void * ) );
 #endif /* MBEDTLS_PLATFORM_FREE_MACRO && MBEDTLS_PLATFORM_CALLOC_MACRO */
 #else /* !MBEDTLS_PLATFORM_MEMORY */
-#define mbedtls_free       vPortFree
-#define mbedtls_calloc     pvPortCalloc
+#ifndef MEMLEAK_DEBUG
+#define mbedtls_free(s)        vPortFree(s, "", __LINE__)
+#define mbedtls_calloc(l, s)   ({void* p = (void*)pvPortMalloc((l) * (s), "", __LINE__,true);if(p){os_memset(p,0x0,(l) * (s));} p;})// pvPortCalloc(l, s, "", __LINE__)
+#else
+#define mbedtls_free(s)      do{const char *file = mem_debug_file;vPortFree(s, file, __LINE__);}while(0)
+#define mbedtls_calloc(l, s) ({const char *file = mem_debug_file; pvPortCalloc(l, s, file, __LINE__);})
+#endif
 #endif /* MBEDTLS_PLATFORM_MEMORY && !MBEDTLS_PLATFORM_{FREE,CALLOC}_MACRO */
 
 /*

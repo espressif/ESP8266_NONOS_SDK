@@ -1,22 +1,22 @@
 gwen:
-    at          :   754dddb
-    crypto      :   350448e
-    espnow      :   350448e
-    json        :   ce90efd
-    main        :   754dddb
-    net80211    :   350448e
-    pp          :   097de86
-    smartconfig :   350448e
-    ssl         :   b19a6f7
-    upgrade     :   5287040
-    wpa         :   350448e
-    wpa2        :   350448e
-    wps         :   350448e
+    at          :   bc85feb
+    crypto      :   bc85feb
+    espnow      :   bc85feb
+    json        :   bc85feb
+    main        :   bc85feb
+    net80211    :   bc85feb
+    pp          :   bc85feb
+    smartconfig :   bc85feb
+    ssl         :   bc85feb
+    upgrade     :   bc85feb
+    wpa         :   bc85feb
+    wpa2        :   bc85feb
+    wps         :   bc85feb
 
 phy:
     phy         :   1136
 
 gitlab:
     driver      :   68fc7b06
-    lwip        :   c097d4cf
-    mbedtls     :   e4dace14
+    lwip        :   3c7a0dbe
+    mbedtls     :   3c7a0dbe
