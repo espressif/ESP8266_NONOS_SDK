@@ -77,7 +77,7 @@ LINKFLAGS_eagle.app.v6 = \
 	-lmain	\
 	-ljson	\
 	-lupgrade	\
-	-lssl		\
+	-lmbedtls		\
 	-lwps		\
 	-lsmartconfig	\
 	-lairkiss		\
@@ -118,6 +118,10 @@ ifeq ($(APP),0)
 else
 CONFIGURATION_DEFINES +=    \
 	-DAT_UPGRADE_SUPPORT
+endif
+
+ifeq ($(SPI_SIZE_MAP),5)
+CONFIGURATION_DEFINES += -DFLASH_MAP=$(SPI_SIZE_MAP)
 endif
 
 DEFINES +=				\
