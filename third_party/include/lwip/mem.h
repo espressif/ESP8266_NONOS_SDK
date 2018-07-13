@@ -58,34 +58,30 @@ typedef size_t mem_size_t;
 #define mem_malloc(s)      pvPortMalloc(s, "", __LINE__,false)
 #endif
 #ifndef mem_calloc
-#define mem_calloc(l, s)   ({void* ptr = (void*)pvPortMalloc((l) * (s), "", __LINE__,true);if(ptr){os_memset(ptr,0x0,(l) * (s));} ptr;})// pvPortCalloc(l, s, "", __LINE__)
+#define mem_calloc(l, s)   pvPortCalloc(l, s, "", __LINE__)
 #endif
 #ifndef mem_realloc
 #define mem_realloc(p, s)  pvPortRealloc(p, s, "", __LINE__)
 #endif
 #ifndef mem_zalloc
-#define mem_zalloc(s)      mem_calloc(1,s) // pvPortZalloc(s, "", __LINE__)
+#define mem_zalloc(s)     pvPortZalloc(s, "", __LINE__)
 #endif
 #else
 #ifndef mem_free
-#define mem_free(s) \
-do{\
-	const char *file = mem_debug_file;\
-    vPortFree(s, file, __LINE__);\
-}while(0)
+#define mem_free(s)      vPortFree(s, mem_debug_file, __LINE__)
 #endif
 
 #ifndef mem_malloc
-#define mem_malloc(s) (const char *file = mem_debug_file; pvPortMalloc(s, file, __LINE__,false);})
+#define mem_malloc(s)   pvPortMalloc(s, mem_debug_file, __LINE__,false)
 #endif
 #ifndef mem_calloc
-#define mem_calloc(l, s) ({const char *file = mem_debug_file; pvPortCalloc(l, s, file, __LINE__);})
+#define mem_calloc(l, s)  pvPortCalloc(l, s, mem_debug_file, __LINE__)
 #endif
 #ifndef mem_realloc
-#define mem_realloc(p, s) ({const char *file = mem_debug_file; pvPortRealloc(p, s, file, __LINE__);})
+#define mem_realloc(p, s) pvPortRealloc(p, s, mem_debug_file, __LINE__)
 #endif
 #ifndef mem_zalloc
-#define mem_zalloc(s) ({const char *file = mem_debug_file; pvPortZalloc(s, file, __LINE__);})
+#define mem_zalloc(s)   pvPortZalloc(s, mem_debug_file, __LINE__)
 #endif
 
 #endif
@@ -94,7 +90,7 @@ do{\
 #ifndef MEMLEAK_DEBUG
 #define os_malloc(s) pvPortMalloc(s, "", __LINE__,true)
 #else
-#define os_malloc(s) ({const char *file = mem_debug_file; pvPortMalloc(s, file, __LINE__,true);})
+#define os_malloc(s) pvPortMalloc(s, mem_debug_file, __LINE__,true)
 #endif
 #endif
 #ifndef os_realloc
