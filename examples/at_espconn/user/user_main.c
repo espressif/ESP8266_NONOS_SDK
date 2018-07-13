@@ -219,6 +219,9 @@ user_init(void)
 #ifdef CONFIG_AT_SMARTCONFIG_COMMAND_ENABLE
     at_cmd_enable_smartconfig();
 #endif
+#ifdef CONFIG_AT_WPA2_ENTERPRISE_COMMAND_ENABLE
+    at_cmd_enable_wpa2_enterprise();
+#endif
 	at_port_print("\r\n***==================================***");
 	at_port_print("\r\n***  Welcome to at espconn demo!!!   ***");
 	at_port_print("\r\n*** Please create a TCP Server on PC,***");
