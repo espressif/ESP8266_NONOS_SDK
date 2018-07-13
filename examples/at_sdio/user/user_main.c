@@ -216,7 +216,9 @@ void ICACHE_FLASH_ATTR user_init(void)
 	at_fake_uart_enable(TRUE,at_sdio_response);
 	
     at_cmd_array_regist(&at_custom_cmd[0], sizeof(at_custom_cmd)/sizeof(at_custom_cmd[0]));
-
+#ifdef CONFIG_AT_SMARTCONFIG_COMMAND_ENABLE
+    at_cmd_enable_smartconfig();
+#endif
 	espconn_tcp_set_wnd(4);
 	at_port_print_irom_str("\r\nready\r\n");
 

@@ -33,4 +33,5 @@
     #endif
 #endif
 
+#define CONFIG_AT_SMARTCONFIG_COMMAND_ENABLE
 #endif
