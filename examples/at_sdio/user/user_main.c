@@ -219,6 +219,9 @@ void ICACHE_FLASH_ATTR user_init(void)
 #ifdef CONFIG_AT_SMARTCONFIG_COMMAND_ENABLE
     at_cmd_enable_smartconfig();
 #endif
+#ifdef CONFIG_AT_WPA2_ENTERPRISE_COMMAND_ENABLE
+    at_cmd_enable_wpa2_enterprise();
+#endif
 	espconn_tcp_set_wnd(4);
 	at_port_print_irom_str("\r\nready\r\n");
 
