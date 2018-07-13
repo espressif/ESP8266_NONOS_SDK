@@ -55,9 +55,9 @@ at_setupCmdTest(uint8_t id, char *pPara)
     //get the second parameter
     // string
     at_data_str_copy(buffer, &pPara, 10);
-    at_port_print("the second parameter:");
+    at_port_print_irom_str("the second parameter:");
     at_port_print(buffer);
-    at_port_print("\r\n");
+    at_port_print_irom_str("\r\n");
 
     if (*pPara == ',') {
         pPara++; // skip ','
@@ -81,30 +81,21 @@ at_setupCmdTest(uint8_t id, char *pPara)
 void ICACHE_FLASH_ATTR
 at_testCmdTest(uint8_t id)
 {
-    uint8 buffer[32] = {0};
-
-    os_sprintf(buffer, "%s\r\n", "at_testCmdTest");
-    at_port_print(buffer);
+    at_port_print_irom_str("at_testCmdTest\r\n");
     at_response_ok();
 }
 
 void ICACHE_FLASH_ATTR
 at_queryCmdTest(uint8_t id)
 {
-    uint8 buffer[32] = {0};
-
-    os_sprintf(buffer, "%s\r\n", "at_queryCmdTest");
-    at_port_print(buffer);
+    at_port_print_irom_str("at_queryCmdTest\r\n");
     at_response_ok();
 }
 
 void ICACHE_FLASH_ATTR
 at_exeCmdTest(uint8_t id)
 {
-    uint8 buffer[32] = {0};
-
-    os_sprintf(buffer, "%s\r\n", "at_exeCmdTest");
-    at_port_print(buffer);
+    at_port_print_irom_str("at_exeCmdTest\r\n");
     at_response_ok();
 }
 
@@ -182,14 +173,14 @@ user_init(void)
     at_init();
 #ifdef ESP_AT_FW_VERSION
     if ((ESP_AT_FW_VERSION != NULL) && (os_strlen(ESP_AT_FW_VERSION) < 64)) {
-        os_sprintf(buf,"compile time:%s %s\r\n"ESP_AT_FW_VERSION,__DATE__,__TIME__);
+        os_sprintf(buf,"compile time:"__DATE__" "__TIME__"\r\n"ESP_AT_FW_VERSION,);
     } else {
-        os_sprintf(buf,"compile time:%s %s",__DATE__,__TIME__);
+        os_sprintf(buf,"compile time:"__DATE__" "__TIME__);
     }
 #else
-    os_sprintf(buf,"compile time:%s %s",__DATE__,__TIME__);
+    os_sprintf(buf,"compile time:"__DATE__" "__TIME__);
 #endif
     at_set_custom_info(buf);
-    at_port_print("\r\nready\r\n");
+    at_port_print_irom_str("\r\nready\r\n");
     at_cmd_array_regist(&at_custom_cmd[0], sizeof(at_custom_cmd)/sizeof(at_custom_cmd[0]));
 }

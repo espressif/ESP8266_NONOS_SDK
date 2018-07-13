@@ -27,6 +27,11 @@
 
 #include "c_types.h"
 
+#define at_port_print_irom_str(str)   do { \
+        static const uint8 irom_str[] ICACHE_RODATA_ATTR = str;  \
+        at_port_print(irom_str);  \
+    } while(0)
+
 typedef struct
 {
   char *at_cmdName;
