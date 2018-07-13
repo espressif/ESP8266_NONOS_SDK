@@ -75,8 +75,18 @@ void ets_timer_setfn(os_timer_t *ptimer, os_timer_func_t *pfunction, void *parg)
 
 int ets_sprintf(char *str, const char *format, ...)  __attribute__ ((format (printf, 2, 3)));
 int os_printf_plus(const char *format, ...)  __attribute__ ((format (printf, 1, 2)));
+int ets_snprintf(char *str, unsigned int size, const char *format, ...)  __attribute__ ((format (printf, 3, 4)));
+#define os_sprintf_plus  ets_sprintf
+#define os_sprintf(buf, fmt, ...) ({int len = 0; \
+    static const char flash_str[] ICACHE_RODATA_ATTR STORE_ATTR = fmt;  \
+    len = os_sprintf_plus(buf, flash_str, ##__VA_ARGS__);  \
+    len;})
 
-#define os_sprintf  ets_sprintf
+#define os_snprintf_plus  ets_snprintf
+#define os_snprintf(buf, size, fmt, ...) ({int len = 0;  \
+    static const char flash_str[] ICACHE_RODATA_ATTR STORE_ATTR = fmt;  \
+    len = os_snprintf_plus(buf, size, flash_str, ##__VA_ARGS__);  \
+    len;})
 
 #ifdef USE_OPTIMIZE_PRINTF
 #define os_printf(fmt, ...) do {	\
