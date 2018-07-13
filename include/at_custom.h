@@ -174,4 +174,12 @@ bool at_fake_uart_enable(bool enable,at_fake_uart_tx_func_type at_fake_uart_tx_f
   */
 bool at_set_escape_character(uint8 ch);
 
+
+/**
+  * @brief Enable smartconfig command
+  * @      include AT+CWSTARTSMART, AT+CWSTOPSMART, AT+CWSTARTDISCOVER, AT+CWSTOPDISCOVER
+  * @param  None
+  * @retval TRUE,if set ok,otherwize FALSE.
+  */
+bool at_cmd_enable_smartconfig(void);
 #endif
