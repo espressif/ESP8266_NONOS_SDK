@@ -216,6 +216,9 @@ user_init(void)
     at_set_custom_info(buf);
     at_port_print_irom_str("\r\nready\r\n");
     at_cmd_array_regist(&at_custom_cmd[0], sizeof(at_custom_cmd)/sizeof(at_custom_cmd[0]));
+#ifdef CONFIG_AT_SMARTCONFIG_COMMAND_ENABLE
+    at_cmd_enable_smartconfig();
+#endif
 	at_port_print("\r\n***==================================***");
 	at_port_print("\r\n***  Welcome to at espconn demo!!!   ***");
 	at_port_print("\r\n*** Please create a TCP Server on PC,***");
