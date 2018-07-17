@@ -258,6 +258,9 @@ bool wifi_station_set_config_current(struct station_config *config);
 bool wifi_station_connect(void);
 bool wifi_station_disconnect(void);
 
+void wifi_enable_signaling_measurement(void);
+void wifi_disable_signaling_measurement(void);
+
 sint8 wifi_station_get_rssi(void);
 
 typedef enum {

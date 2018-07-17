@@ -3,9 +3,9 @@ gwen:
     crypto      :   3da4ef9
     espnow      :   3da4ef9
     json        :   3da4ef9
-    main        :   2b01db7
-    net80211    :   8cab471
-    pp          :   3da4ef9
+    main        :   2dd2f49
+    net80211    :   2dd2f49
+    pp          :   2dd2f49
     smartconfig :   017200b
     ssl         :   3da4ef9
     upgrade     :   3da4ef9
