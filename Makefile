@@ -222,6 +222,7 @@ CCFLAGS += 			\
 	-fno-builtin-printf
 #	-Wall			
 
+DEFINES += -DSPI_FLASH_SIZE_MAP=$(size_map)
 CFLAGS = $(CCFLAGS) $(DEFINES) $(EXTRA_CCFLAGS) $(INCLUDES)
 DFLAGS = $(CCFLAGS) $(DDEFINES) $(EXTRA_CCFLAGS) $(INCLUDES)
 
