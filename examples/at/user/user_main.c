@@ -87,6 +87,13 @@
 #error "The flash map is not supported"
 #endif
 
+#ifdef CONFIG_ENABLE_IRAM_MEMORY
+uint32 user_iram_memory_is_enabled(void)
+{
+    return CONFIG_ENABLE_IRAM_MEMORY;
+}
+#endif
+
 // test :AT+TEST=1,"abc"<,3>
 void ICACHE_FLASH_ATTR
 at_setupCmdTest(uint8_t id, char *pPara)
