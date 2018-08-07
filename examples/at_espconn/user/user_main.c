@@ -227,6 +227,13 @@ void ICACHE_FLASH_ATTR user_pre_init(void)
     system_phy_freq_trace_enable(at_get_rf_auto_trace_from_flash());
 }
 
+#ifdef CONFIG_ENABLE_IRAM_MEMORY
+uint32 user_iram_memory_is_enabled(void)
+{
+    return CONFIG_ENABLE_IRAM_MEMORY;
+}
+#endif
+
 void ICACHE_FLASH_ATTR
 user_init(void)
 {
