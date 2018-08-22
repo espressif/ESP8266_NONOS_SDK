@@ -208,7 +208,7 @@ user_init(void)
     at_init();
 #ifdef ESP_AT_FW_VERSION
     if ((ESP_AT_FW_VERSION != NULL) && (os_strlen(ESP_AT_FW_VERSION) < 64)) {
-        os_sprintf(buf,"compile time:"__DATE__" "__TIME__"\r\n"ESP_AT_FW_VERSION,);
+        os_sprintf(buf,"compile time:"__DATE__" "__TIME__"\r\n"ESP_AT_FW_VERSION);
     } else {
         os_sprintf(buf,"compile time:"__DATE__" "__TIME__);
     }
