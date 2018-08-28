@@ -13,4 +13,4 @@ The following partition address CAN NOT be modified, and you MUST give the corre
 - SYSTEM\_PARTITION\_OTA_2  
 - SYSTEM\_PARTITION\_SYSTEM_PARAMETER  
 
-If you donot use Non-FOTA bin, eagle.irom0.text.bin and irom0.text MUST be downloaded the fixed address, which also can be found in [ESP8266 SDK Getting Started Guide](https://www.espressif.com/sites/default/files/documentation/2a-esp8266-sdk_getting_started_guide_en.pdf) or [ESP8266 SDK 入门指南](https://www.espressif.com/sites/default/files/documentation/2a-esp8266-sdk_getting_started_guide_cn.pdf), and you can define their partition type after `SYSTEM_PARTITION_CUSTOMER_BEGIN`.
+If you donot use Non-FOTA bin, eagle.irom0.text.bin and irom0.text MUST be downloaded the fixed address, which also can be found in [ESP8266 SDK Getting Started Guide](https://www.espressif.com/sites/default/files/documentation/2a-esp8266-sdk_getting_started_guide_en.pdf) or [ESP8266 SDK 入门指南](https://www.espressif.com/sites/default/files/documentation/2C-ESP8266_Non_OS_SDK_API_Reference__EN.pdf), and you can define their partition type after `SYSTEM_PARTITION_CUSTOMER_BEGIN`.
