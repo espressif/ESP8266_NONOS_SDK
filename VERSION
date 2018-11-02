@@ -1,11 +1,11 @@
 gwen:
     at          :   fabaecd
     crypto      :   25f7d60
-    espnow      :   25f7d60
+    espnow      :   20853ed
     json        :   25f7d60
-    main        :   19b8d44
+    main        :   20853ed
     net80211    :   19b8d44
-    pp          :   551aeee
+    pp          :   20853ed
     smartconfig :   25f7d60
     ssl         :   25f7d60
     upgrade     :   551aeee
