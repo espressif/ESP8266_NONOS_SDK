@@ -39,6 +39,8 @@
 #define SLC_INTEREST_EVENT (SLC_TX_EOF_INT_ENA | SLC_RX_EOF_INT_ENA | SLC_RX_UDF_INT_ENA | SLC_TX_DSCR_ERR_INT_ENA)
 #define TRIG_TOHOST_INT()	SET_PERI_REG_MASK(SLC_INTVEC_TOHOST , BIT0);\
 							CLEAR_PERI_REG_MASK(SLC_INTVEC_TOHOST , BIT0)
+                            
+
 struct sdio_queue
 {
 	uint32	blocksize:12;
@@ -137,10 +139,10 @@ void sdio_slave_init(void)
 	struct sdio_list* p = NULL;
 	while(loop--) {
 		if(pHead_Sended == NULL) {
-			pHead_Sended = (struct sdio_list*)os_malloc(sizeof(struct sdio_list));
+			pHead_Sended = (struct sdio_list*)os_malloc_dram(sizeof(struct sdio_list));
 			p = pHead_Sended;
 		} else {
-			p->next = (struct sdio_list*)os_malloc(sizeof(struct sdio_list));
+			p->next = (struct sdio_list*)os_malloc_dram(sizeof(struct sdio_list));
 			p = p->next;
 		}
 		//os_printf("p:0x%08x\r\n",p);
