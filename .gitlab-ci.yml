@@ -27,7 +27,7 @@ build_ssc:
       - ./SSC/ssc_bin
     expire_in: 6 mos
   script:
-    - git clone $GITLAB_SSH_SERVER/yinling/SSC.git
+    - git clone -b release/nonos_2.2.0 $GITLAB_SSH_SERVER/yinling/SSC.git
     - cd SSC
     # try checkout same branch
     - git checkout ${CI_BUILD_REF_NAME} || echo "Using default branch..."
