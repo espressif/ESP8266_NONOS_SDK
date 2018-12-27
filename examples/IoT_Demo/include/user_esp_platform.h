@@ -51,4 +51,9 @@ struct dhcp_client_info {
 	uint8 pad[3];
 };
 
+uint8 ICACHE_FLASH_ATTR user_esp_platform_get_connect_status(void);
+void ICACHE_FLASH_ATTR user_esp_platform_set_connect_status(uint8 status);
+void ICACHE_FLASH_ATTR user_esp_platform_check_ip(uint8 reset_flag);
+void ICACHE_FLASH_ATTR user_esp_platform_set_token(uint8_t *token);
+
 #endif
