@@ -35,7 +35,7 @@
 #endif
 
 uint32 priv_param_start_sec;
-
+void ICACHE_FLASH_ATTR user_esp_platform_init(void);
 /******************************************************************************
  * FunctionName : user_rf_cal_sector_set
  * Description  : SDK just reversed 4 sectors, used for rf init data and paramters.

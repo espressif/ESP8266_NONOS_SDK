@@ -28,6 +28,7 @@
 #include "mem.h"
 #include "user_interface.h"
 
+#include "user_light_adj.h"
 #include "user_light.h"
 #include "pwm.h"
 

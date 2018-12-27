@@ -28,6 +28,7 @@
 #include "mem.h"
 #include "osapi.h"
 #include "upgrade.h"
+#include "at_custom.h"
 
 #ifdef AT_UPGRADE_SUPPORT
 #ifdef AT_CUSTOM_UPGRADE
