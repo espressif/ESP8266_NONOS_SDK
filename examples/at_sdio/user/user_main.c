@@ -173,6 +173,8 @@ static const partition_item_t at_partition_table[] = {
 #endif
 };
 
+uint8 ICACHE_FLASH_ATTR at_get_rf_auto_trace_from_flash(void);
+void ICACHE_FLASH_ATTR system_phy_freq_trace_enable(bool);
 void ICACHE_FLASH_ATTR user_pre_init(void)
 {
     if(!system_partition_table_regist(at_partition_table, sizeof(at_partition_table)/sizeof(at_partition_table[0]),SPI_FLASH_SIZE_MAP)) {
@@ -204,7 +206,7 @@ uint32 sdio_recv_data_callback(uint8* data,uint32 len)
 }
 
 extern void at_custom_uart_rx_buffer_fetch_cb(void);
-
+sint8 ICACHE_FLASH_ATTR espconn_tcp_set_wnd(uint8 num);
 void ICACHE_FLASH_ATTR user_init(void)
 {
     char buf[128] = {0};

@@ -21,6 +21,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
+#include "stdlib.h"
 
 #include "ets_sys.h"
 #include "os_type.h"
@@ -59,7 +60,7 @@ struct wait_param {
 };
 
 void esp_platform_timer_action(struct esp_platform_wait_timer_param   *timer_wait_param, uint16 count);
-
+int ICACHE_FLASH_ATTR indexof(char *p1, char *p2, int start);
 /******************************************************************************
  * FunctionName : split
  * Description  : split string p1 according to sting p2 and save the splits
