@@ -26,6 +26,7 @@
 #include "eagle_soc.h"
 #include "osapi.h"
 
+#include "user_interface.h"
 
 // Show the spi registers.
 #define SHOWSPIREG(i) __ShowRegValue(__func__, __LINE__);

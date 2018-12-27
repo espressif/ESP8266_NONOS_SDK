@@ -21,6 +21,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
+#include "stdlib.h"
 
 #include "ets_sys.h"
 #include "os_type.h"
@@ -31,6 +32,9 @@
 #include "espconn.h"
 #include "user_esp_platform.h"
 #include "user_iot_version.h"
+#include "user_esp_platform_timer.h"
+#include "user_light_adj.h"
+
 #include "upgrade.h"
 
 #if ESP_PLATFORM
