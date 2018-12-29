@@ -57,8 +57,7 @@ extern "C"
  * @brief Support HSPI and SPI module.
  *
  */
-typedef enum
-{
+typedef enum {
     SpiNum_SPI   = 0,
     SpiNum_HSPI  = 1,
 } SpiNum;
@@ -67,8 +66,7 @@ typedef enum
  * @brief The SPI module can work in either master or slave mode.
  *
  */
-typedef enum
-{
+typedef enum {
     SpiMode_Master = 0,
     SpiMode_Slave  = 1,
 } SpiMode;
@@ -83,8 +81,7 @@ typedef enum
  *   1        0        2
  *   1        1        3
  */
-typedef enum
-{
+typedef enum {
     SpiSubMode_0 = 0,
     SpiSubMode_1 = 1,
     SpiSubMode_2 = 2,
@@ -97,30 +94,27 @@ typedef enum
  * @attention Max speed 80MHz
  *
  */
-typedef enum
-{
-    SpiSpeed_0_5MHz     = 160,
-    SpiSpeed_1MHz       = 80,
-    SpiSpeed_2MHz       = 40,
-    SpiSpeed_5MHz       = 16,
-    SpiSpeed_8MHz       = 10,
-    SpiSpeed_10MHz      = 8,
- 
+typedef enum {
+    SpiSpeed_0_5MHz   = 160,
+    SpiSpeed_1MHz     = 80,
+    SpiSpeed_2MHz     = 40,
+    SpiSpeed_5MHz     = 16,
+    SpiSpeed_8MHz     = 10,
+    SpiSpeed_10MHz    = 8,
+
 } SpiSpeed;
 
 /**
  * @brief The SPI mode working speed.
  *
  */
-typedef enum
-{
+typedef enum {
     SpiBitOrder_MSBFirst = 0,
     SpiBitOrder_LSBFirst = 1,
 } SpiBitOrder;
 
 // @brief SPI interrupt soource defined.
-typedef enum
-{
+typedef enum {
     SpiIntSrc_TransDone = SPI_TRANS_DONE,
     SpiIntSrc_WrStaDone = SPI_SLV_WR_STA_DONE,
     SpiIntSrc_RdStaDone = SPI_SLV_RD_STA_DONE,
@@ -129,8 +123,7 @@ typedef enum
 } SpiIntSrc;
 
 // @brief SPI CS pin.
-typedef enum
-{
+typedef enum {
     SpiPinCS_0 = 1,
     SpiPinCS_1 = 2,
     SpiPinCS_2 = 4,
@@ -141,8 +134,7 @@ typedef enum
 /**
  * @brief SPI attribute
  */
-typedef struct
-{
+typedef struct {
     SpiMode        mode;           ///< Master or slave mode
     SpiSubMode     subMode;        ///< SPI SPI_CPOL SPI_CPHA mode
     SpiSpeed       speed;          ///< SPI Clock
@@ -152,8 +144,7 @@ typedef struct
 /**
  * @brief SPI data package
  */
-typedef struct
-{
+typedef struct {
     uint16_t    cmd;            ///< Command value
     uint8_t     cmdLen;         ///< Command byte length
     uint32_t    *addr;          ///< Point to address value
@@ -166,9 +157,8 @@ typedef struct
 /**
  * @brief SPI interrupt information
  */
-typedef struct
-{
-    SpiIntSrc       src;                ///< Interrupt source  
+typedef struct {
+    SpiIntSrc       src;                ///< Interrupt source
     void            *isrFunc;           ///< SPI interrupt callback function.
 
 } SpiIntInfo;
@@ -185,7 +175,7 @@ typedef struct
  *
  * @return void.
  */
-void SPIInit(SpiNum spiNum, SpiAttr* pAttr);
+void SPIInit(SpiNum spiNum, SpiAttr *pAttr);
 
 /**
  * @brief Set slave address value by master.
@@ -219,9 +209,9 @@ void SPIMasterCfgCmd(SpiNum spiNum, uint32_t cmd);
  * @param [in] pInData
  *             Pointer to a strcuture that will be send.
  *
- * @return int, -1:indicates failure,others indicates success.
+ * @return int32_t, -1:indicates failure,others indicates success.
  */
- int SPIMasterSendData(SpiNum spiNum, SpiData* pInData);
+int32_t SPIMasterSendData(SpiNum spiNum, SpiData *pInData);
 
 /**
  * @brief Receive data from slave by master.
@@ -231,10 +221,10 @@ void SPIMasterCfgCmd(SpiNum spiNum, uint32_t cmd);
  * @param [in] pOutData
  *             Point to data buffer.
  *
- * @return int, -1:indicates failure,others indicates success.
+ * @return int32_t, -1:indicates failure,others indicates success.
  *
  */
- int SPIMasterRecvData(SpiNum spiNum, SpiData* pOutData);
+int32_t SPIMasterRecvData(SpiNum spiNum, SpiData *pOutData);
 
 /**
  * @brief Load data to slave send buffer.
@@ -246,9 +236,9 @@ void SPIMasterCfgCmd(SpiNum spiNum, uint32_t cmd);
  * @param [in] inLen
  *             The number of bytes to be set.
  *
- * @return int, -1:indicates failure,others indicates success.
+ * @return int32_t, -1:indicates failure,others indicates success.
  */
-int SPISlaveSendData(SpiNum spiNum, uint32_t *pInData, uint8_t inLen);
+int32_t SPISlaveSendData(SpiNum spiNum, uint32_t *pInData, uint8_t inLen);
 
 /**
  * @brief Receive data by slave.
@@ -258,9 +248,9 @@ int SPISlaveSendData(SpiNum spiNum, uint32_t *pInData, uint8_t inLen);
  * @param [in] isrFunc
  *             isrFunc is a pointer to the function to be called when the SPI interrupt occurs.
  *
- * @return int, -1:indicates failure,others indicates success.
+ * @return int32_t, -1:indicates failure,others indicates success.
  */
-int SPISlaveRecvData(SpiNum spiNum);
+int32_t SPISlaveRecvData(SpiNum spiNum);
 
 /**
  * @brief Set slave status by master.
@@ -282,11 +272,11 @@ void SPIMasterSendStatus(SpiNum spiNum, uint8_t data);
  * @param [in] spiNum
  *             Indicates which submode to be used, SPI or HSPI.
  *
- * @return int, -1: indicates failure; other value in slave status.
+ * @return int32_t, -1: indicates failure; other value in slave status.
  *
  * @attention Just for ESP8266(slave) register of RD_STATUS or WR_STATUS.
  */
-int SPIMasterRecvStatus(SpiNum spiNum);
+int32_t SPIMasterRecvStatus(SpiNum spiNum);
 
 /**
  * @brief Select SPI CS pin.

@@ -33,10 +33,10 @@
 #define UART_RX_BUFFER_SIZE 256 //Ring buffer length of rx buffer
 
 #define UART_BUFF_EN  0   //use uart buffer  , FOR UART0
-#define UART_SELFTEST  0  //set 1:enable the loop test demo for uart buffer, FOR UART0
+#define UART_SELFTEST 0   //set 1:enable the loop test demo for uart buffer, FOR UART0
 
 #define UART_HW_RTS   0   //set 1: enable uart hw flow control RTS, PIN MTDO, FOR UART0
-#define UART_HW_CTS  0    //set1: enable uart hw flow contrl CTS , PIN MTCK, FOR UART0
+#define UART_HW_CTS   0   //set1: enable uart hw flow contrl CTS , PIN MTCK, FOR UART0
 
 
 
@@ -46,16 +46,16 @@
 
 
 typedef enum {
-    FIVE_BITS = 0x0,
-    SIX_BITS = 0x1,
+    FIVE_BITS  = 0x0,
+    SIX_BITS   = 0x1,
     SEVEN_BITS = 0x2,
     EIGHT_BITS = 0x3
 } UartBitsNum4Char;
 
 typedef enum {
-    ONE_STOP_BIT             = 0x1,
-    ONE_HALF_STOP_BIT        = 0x2,
-    TWO_STOP_BIT             = 0x3
+    ONE_STOP_BIT       = 0x1,
+    ONE_HALF_STOP_BIT  = 0x2,
+    TWO_STOP_BIT       = 0x3
 } UartStopBitsNum;
 
 typedef enum {
@@ -71,28 +71,28 @@ typedef enum {
 
 typedef enum {
     UART_None_Inverse = 0x0,
-    UART_Rxd_Inverse = UART_RXD_INV,
-    UART_CTS_Inverse = UART_CTS_INV,
-    UART_Txd_Inverse = UART_TXD_INV,
-    UART_RTS_Inverse = UART_RTS_INV,
+    UART_Rxd_Inverse  = UART_RXD_INV,
+    UART_CTS_Inverse  = UART_CTS_INV,
+    UART_Txd_Inverse  = UART_TXD_INV,
+    UART_RTS_Inverse  = UART_RTS_INV,
 } UART_LineLevelInverse;
 
 
 typedef enum {
-    BIT_RATE_300 = 300,
-    BIT_RATE_600 = 600,
-    BIT_RATE_1200 = 1200,
-    BIT_RATE_2400 = 2400,
-    BIT_RATE_4800 = 4800,
-    BIT_RATE_9600   = 9600,
-    BIT_RATE_19200  = 19200,
-    BIT_RATE_38400  = 38400,
-    BIT_RATE_57600  = 57600,
-    BIT_RATE_74880  = 74880,
-    BIT_RATE_115200 = 115200,
-    BIT_RATE_230400 = 230400,
-    BIT_RATE_460800 = 460800,
-    BIT_RATE_921600 = 921600,
+    BIT_RATE_300     = 300,
+    BIT_RATE_600     = 600,
+    BIT_RATE_1200    = 1200,
+    BIT_RATE_2400    = 2400,
+    BIT_RATE_4800    = 4800,
+    BIT_RATE_9600    = 9600,
+    BIT_RATE_19200   = 19200,
+    BIT_RATE_38400   = 38400,
+    BIT_RATE_57600   = 57600,
+    BIT_RATE_74880   = 74880,
+    BIT_RATE_115200  = 115200,
+    BIT_RATE_230400  = 230400,
+    BIT_RATE_460800  = 460800,
+    BIT_RATE_921600  = 921600,
     BIT_RATE_1843200 = 1843200,
     BIT_RATE_3686400 = 3686400,
 } UartBautRate;
@@ -104,9 +104,9 @@ typedef enum {
 } UartFlowCtrl;
 
 typedef enum {
-    USART_HardwareFlowControl_None = 0x0,
-    USART_HardwareFlowControl_RTS = 0x1,
-    USART_HardwareFlowControl_CTS = 0x2,
+    USART_HardwareFlowControl_None    = 0x0,
+    USART_HardwareFlowControl_RTS     = 0x1,
+    USART_HardwareFlowControl_CTS     = 0x2,
     USART_HardwareFlowControl_CTS_RTS = 0x3
 } UART_HwFlowCtrl;
 
@@ -117,17 +117,17 @@ typedef enum {
 } RcvMsgBuffState;
 
 typedef struct {
-    uint32     RcvBuffSize;
-    uint8     *pRcvMsgBuff;
-    uint8     *pWritePos;
-    uint8     *pReadPos;
-    uint8      TrigLvl; //JLU: may need to pad
+    uint32_t     RcvBuffSize;
+    uint8_t     *pRcvMsgBuff;
+    uint8_t     *pWritePos;
+    uint8_t     *pReadPos;
+    uint8_t      TrigLvl; //JLU: may need to pad
     RcvMsgBuffState  BuffState;
 } RcvMsgBuff;
 
 typedef struct {
-    uint32   TrxBuffSize;
-    uint8   *pTrxBuff;
+    uint32_t   TrxBuffSize;
+    uint8_t   *pTrxBuff;
 } TrxMsgBuff;
 
 typedef enum {
@@ -139,17 +139,17 @@ typedef enum {
 } RcvMsgState;
 
 typedef struct {
-    UartBautRate 	     baut_rate;
-    UartBitsNum4Char  data_bits;
+    UartBautRate         baut_rate;
+    UartBitsNum4Char     data_bits;
     UartExistParity      exist_parity;
-    UartParityMode 	    parity;    
-    UartStopBitsNum   stop_bits;
+    UartParityMode       parity;
+    UartStopBitsNum      stop_bits;
     UartFlowCtrl         flow_ctrl;
-    RcvMsgBuff          rcv_buff;
+    RcvMsgBuff           rcv_buff;
     TrxMsgBuff           trx_buff;
-    RcvMsgState        rcv_state;
-    int                      received;
-    int                      buff_uart_no;  //indicate which uart use tx/rx buffer
+    RcvMsgState          rcv_state;
+    int32_t              received;
+    int32_t              buff_uart_no;  //indicate which uart use tx/rx buffer
 } UartDevice;
 
 void uart_init(UartBautRate uart0_br, UartBautRate uart1_br);
@@ -161,24 +161,24 @@ void uart0_sendStr(const char *str);
 #define UART_TX_EMPTY_THRESH_VAL 0x10
 
 
- struct UartBuffer{
-    uint32     UartBuffSize;
-    uint8     *pUartBuff;
-    uint8     *pInPos;
-    uint8     *pOutPos;
-    STATUS  BuffState;
-    uint16    Space;  //remanent space of the buffer
-    uint8  TcpControl;
-    struct  UartBuffer     *  nextBuff;
+struct UartBuffer {
+    uint32_t     UartBuffSize;
+    uint8_t     *pUartBuff;
+    uint8_t     *pInPos;
+    uint8_t     *pOutPos;
+    STATUS      BuffState;
+    uint16_t    Space;  //remanent space of the buffer
+    uint8_t     TcpControl;
+    struct  UartBuffer     *nextBuff;
 };
 
-struct UartRxBuff{
-    uint32     UartRxBuffSize;
-    uint8     *pUartRxBuff;
-    uint8     *pWritePos;
-    uint8     *pReadPos;
+struct UartRxBuff {
+    uint32_t     UartRxBuffSize;
+    uint8_t     *pUartRxBuff;
+    uint8_t     *pWritePos;
+    uint8_t     *pReadPos;
     STATUS RxBuffState;
-    uint32    Space;  //remanent space of the buffer
+    uint32_t    Space;  //remanent space of the buffer
 } ;
 
 typedef enum {
@@ -187,42 +187,42 @@ typedef enum {
 } TCPState;
 
 //void ICACHE_FLASH_ATTR uart_test_rx();
-STATUS uart_tx_one_char(uint8 uart, uint8 TxChar);
-STATUS uart_tx_one_char_no_wait(uint8 uart, uint8 TxChar);
+STATUS uart_tx_one_char(uint8_t uart, uint8_t TxChar);
+STATUS uart_tx_one_char_no_wait(uint8_t uart, uint8_t TxChar);
 void  uart1_sendStr_no_wait(const char *str);
-struct UartBuffer*  Uart_Buf_Init();
+struct UartBuffer  *Uart_Buf_Init();
 
 
 #if UART_BUFF_EN
-LOCAL void  Uart_Buf_Cpy(struct UartBuffer* pCur, char* pdata , uint16 data_len);
-void  uart_buf_free(struct UartBuffer* pBuff);
-void  tx_buff_enq(char* pdata, uint16 data_len );
-LOCAL void  tx_fifo_insert(struct UartBuffer* pTxBuff, uint8 data_len,  uint8 uart_no);
-void  tx_start_uart_buffer(uint8 uart_no);
-uint16  rx_buff_deq(char* pdata, uint16 data_len );
+LOCAL void  Uart_Buf_Cpy(struct UartBuffer *pCur, char *pdata, uint16_t data_len);
+void  uart_buf_free(struct UartBuffer *pBuff);
+void  tx_buff_enq(char *pdata, uint16_t data_len);
+LOCAL void  tx_fifo_insert(struct UartBuffer *pTxBuff, uint8_t data_len,  uint8_t uart_no);
+void  tx_start_uart_buffer(uint8_t uart_no);
+uint16_t  rx_buff_deq(char *pdata, uint16_t data_len);
 void  Uart_rx_buff_enq();
 #endif
-void  uart_rx_intr_enable(uint8 uart_no);
-void  uart_rx_intr_disable(uint8 uart_no);
-void uart0_tx_buffer(uint8 *buf, uint16 len);
+void  uart_rx_intr_enable(uint8_t uart_no);
+void  uart_rx_intr_disable(uint8_t uart_no);
+void uart0_tx_buffer(uint8_t *buf, uint16_t len);
 
 //==============================================
 #define FUNC_UART0_CTS 4
-#define FUNC_U0CTS                      4
-#define FUNC_U1TXD_BK                   2
+#define FUNC_U0CTS     4
+#define FUNC_U1TXD_BK  2
 #define UART_LINE_INV_MASK  (0x3f<<19)
-void UART_SetWordLength(uint8 uart_no, UartBitsNum4Char len);
-void UART_SetStopBits(uint8 uart_no, UartStopBitsNum bit_num);
-void UART_SetLineInverse(uint8 uart_no, UART_LineLevelInverse inverse_mask);
-void UART_SetParity(uint8 uart_no, UartParityMode Parity_mode);
-void UART_SetBaudrate(uint8 uart_no,uint32 baud_rate);
-void UART_SetFlowCtrl(uint8 uart_no,UART_HwFlowCtrl flow_ctrl,uint8 rx_thresh);
-void UART_WaitTxFifoEmpty(uint8 uart_no , uint32 time_out_us); //do not use if tx flow control enabled
-void UART_ResetFifo(uint8 uart_no);
-void UART_ClearIntrStatus(uint8 uart_no,uint32 clr_mask);
-void UART_SetIntrEna(uint8 uart_no,uint32 ena_mask);
-void UART_SetPrintPort(uint8 uart_no);
-bool UART_CheckOutputFinished(uint8 uart_no, uint32 time_out_us);
+void UART_SetWordLength(uint8_t uart_no, UartBitsNum4Char len);
+void UART_SetStopBits(uint8_t uart_no, UartStopBitsNum bit_num);
+void UART_SetLineInverse(uint8_t uart_no, UART_LineLevelInverse inverse_mask);
+void UART_SetParity(uint8_t uart_no, UartParityMode Parity_mode);
+void UART_SetBaudrate(uint8_t uart_no, uint32_t baud_rate);
+void UART_SetFlowCtrl(uint8_t uart_no, UART_HwFlowCtrl flow_ctrl, uint8_t rx_thresh);
+void UART_WaitTxFifoEmpty(uint8_t uart_no, uint32_t time_out_us);  //do not use if tx flow control enabled
+void UART_ResetFifo(uint8_t uart_no);
+void UART_ClearIntrStatus(uint8_t uart_no, uint32_t clr_mask);
+void UART_SetIntrEna(uint8_t uart_no, uint32_t ena_mask);
+void UART_SetPrintPort(uint8_t uart_no);
+bool UART_CheckOutputFinished(uint8_t uart_no, uint32_t time_out_us);
 //==============================================
 
 #endif
