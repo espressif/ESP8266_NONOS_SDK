@@ -3,9 +3,9 @@ gwen:
     crypto      :   25f7d60
     espnow      :   20853ed
     json        :   25f7d60
-    main        :   1db186f
+    main        :   43ffa0c
     net80211    :   1db186f
-    pp          :   20853ed
+    pp          :   43ffa0c
     smartconfig :   25f7d60
     ssl         :   25f7d60
     upgrade     :   551aeee
