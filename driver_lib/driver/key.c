@@ -26,9 +26,8 @@
 #include "os_type.h"
 #include "osapi.h"
 #include "mem.h"
-#include "gpio.h"
 #include "user_interface.h"
-
+#include "gpio.h"
 #include "driver/key.h"
 
 LOCAL void key_intr_handler(void *arg);
@@ -36,15 +35,15 @@ LOCAL void key_intr_handler(void *arg);
 /******************************************************************************
  * FunctionName : key_init_single
  * Description  : init single key's gpio and register function
- * Parameters   : uint8 gpio_id - which gpio to use
- *                uint32 gpio_name - gpio mux name
- *                uint32 gpio_func - gpio function
+ * Parameters   : uint8_t gpio_id - which gpio to use
+ *                uint32_t gpio_name - gpio mux name
+ *                uint32_t gpio_func - gpio function
  *                key_function long_press - long press function, needed to install
  *                key_function short_press - short press function, needed to install
  * Returns      : single_key_param - single key parameter, needed by key init
 *******************************************************************************/
 struct single_key_param *ICACHE_FLASH_ATTR
-key_init_single(uint8 gpio_id, uint32 gpio_name, uint8 gpio_func, key_function long_press, key_function short_press)
+key_init_single(uint8_t gpio_id, uint32_t gpio_name, uint8_t gpio_func, key_function long_press, key_function short_press)
 {
     struct single_key_param *single_key = (struct single_key_param *)os_zalloc(sizeof(struct single_key_param));
 
@@ -66,7 +65,7 @@ key_init_single(uint8 gpio_id, uint32 gpio_name, uint8 gpio_func, key_function l
 void ICACHE_FLASH_ATTR
 key_init(struct keys_param *keys)
 {
-    uint8 i;
+    uint8_t i;
 
     ETS_GPIO_INTR_ATTACH(key_intr_handler, keys);
 
@@ -146,8 +145,8 @@ key_50ms_cb(struct single_key_param *single_key)
 LOCAL void
 key_intr_handler(void *arg)
 {
-    uint8 i;
-    uint32 gpio_status = GPIO_REG_READ(GPIO_STATUS_ADDRESS);
+    uint8_t i;
+    uint32_t gpio_status = GPIO_REG_READ(GPIO_STATUS_ADDRESS);
     struct keys_param *keys = (struct keys_param *)arg;
 
     for (i = 0; i < keys->key_num; i++) {

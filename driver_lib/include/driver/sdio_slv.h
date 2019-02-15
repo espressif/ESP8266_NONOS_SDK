@@ -24,17 +24,19 @@
 
 #ifndef __SDIO_SLAVE_H__
 #define __SDIO_SLAVE_H__
-#include "c_types.h"
+#include "ets_sys.h"
+#include "c_types.h"
+
 #include "user_interface.h"
 
-#define RX_AVAILIBLE 2
-#define TX_AVAILIBLE 1
-#define INIT_STAGE	 0
+#define RX_AVAILIBLE   2
+#define TX_AVAILIBLE   1
+#define INIT_STAGE     0
 
 void sdio_slave_init(void);
 
-int32 sdio_load_data(const uint8* data,uint32 len);
-typedef void (*sdio_recv_data_callback_t)(uint8* data,uint32 len);
+int32_t sdio_load_data(const uint8_t *data, uint32_t len);
+typedef void (*sdio_recv_data_callback_t)(uint8_t *data, uint32_t len);
 
 bool sdio_register_recv_cb(sdio_recv_data_callback_t cb);
 #endif

@@ -25,6 +25,8 @@
 #include "ets_sys.h"
 #include "os_type.h"
 #include "osapi.h"
+#include "driver/hw_timer.h"
+
 
 #define US_TO_RTC_TIMER_TICKS(t)          \
     ((t) ?                                   \
@@ -34,29 +36,13 @@
      0)
 
 #define FRC1_ENABLE_TIMER  BIT7
-#define FRC1_AUTO_LOAD  BIT6
+#define FRC1_AUTO_LOAD     BIT6
 
-//TIMER PREDIVED MODE
-typedef enum {
-    DIVDED_BY_1 = 0,		//timer clock
-    DIVDED_BY_16 = 4,	//divided by 16
-    DIVDED_BY_256 = 8,	//divided by 256
-} TIMER_PREDIVED_MODE;
-
-typedef enum {			//timer interrupt mode
-    TM_LEVEL_INT = 1,	// level interrupt
-    TM_EDGE_INT   = 0,	//edge interrupt
-} TIMER_INT_MODE;
-
-typedef enum {
-    FRC1_SOURCE = 0,
-    NMI_SOURCE = 1,
-} FRC1_TIMER_SOURCE_TYPE;
 
 /******************************************************************************
 * FunctionName : hw_timer_arm
 * Description  : set a trigger timer delay for this timer.
-* Parameters   : uint32 val :
+* Parameters   : uint32_t val :
 in autoload mode
                         50 ~ 0x7fffff;  for FRC1 source.
                         100 ~ 0x7fffff;  for NMI source.
@@ -64,7 +50,7 @@ in non autoload mode:
                         10 ~ 0x7fffff;
 * Returns      : NONE
 *******************************************************************************/
-void  hw_timer_arm(u32 val)
+void  hw_timer_arm(uint32_t val)
 {
     RTC_REG_WRITE(FRC1_LOAD_ADDRESS, US_TO_RTC_TIMER_TICKS(val));
 }
@@ -100,15 +86,15 @@ static void hw_timer_nmi_cb(void)
 * FunctionName : hw_timer_init
 * Description  : initilize the hardware isr timer
 * Parameters   :
-FRC1_TIMER_SOURCE_TYPE source_type:
+frc1_timer_source_type source_type:
                         FRC1_SOURCE,    timer use frc1 isr as isr source.
                         NMI_SOURCE,     timer use nmi isr as isr source.
-u8 req:
+uint8_t req:
                         0,  not autoload,
                         1,  autoload mode,
 * Returns      : NONE
 *******************************************************************************/
-void ICACHE_FLASH_ATTR hw_timer_init(FRC1_TIMER_SOURCE_TYPE source_type, u8 req)
+void ICACHE_FLASH_ATTR hw_timer_init(frc1_timer_source_type source_type, uint8_t req)
 {
     if (req == 1) {
         RTC_REG_WRITE(FRC1_CTRL_ADDRESS,
@@ -132,7 +118,7 @@ void ICACHE_FLASH_ATTR hw_timer_init(FRC1_TIMER_SOURCE_TYPE source_type, u8 req)
 #if 0
 void   hw_test_timer_cb(void)
 {
-    static uint16 j = 0;
+    static uint16_t j = 0;
     j++;
 
     if ((WDEV_NOW() - tick_now2) >= 1000000) {
