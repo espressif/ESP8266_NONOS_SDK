@@ -1,11 +1,11 @@
 gwen:
     at          :   0b65f40
     crypto      :   12f98d2
-    espnow      :   12f98d2
+    espnow      :   24500e9
     json        :   ce90efd
-    main        :   61055fa
+    main        :   24500e9
     net80211    :   61055fa
-    pp          :   61055fa
+    pp          :   24500e9
     smartconfig :   16cf6ef
     ssl         :   b19a6f7
     upgrade     :   6ab97e9
