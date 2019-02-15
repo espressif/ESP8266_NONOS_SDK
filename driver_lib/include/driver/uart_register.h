@@ -123,7 +123,7 @@
 #define UART_BIT_NUM_S                      2
 #define UART_PARITY_EN                      (BIT(1))
 #define UART_PARITY_EN_M                0x00000001
-#define UART_PARITY_EN_S                 1
+#define UART_PARITY_EN_S                    1
 #define UART_PARITY                         (BIT(0))
 #define UART_PARITY_M                       0x00000001
 #define UART_PARITY_S                        0
