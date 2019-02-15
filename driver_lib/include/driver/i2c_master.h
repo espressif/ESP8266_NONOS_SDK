@@ -25,6 +25,7 @@
 #ifndef __I2C_MASTER_H__
 #define __I2C_MASTER_H__
 
+#include "ets_sys.h"
 #define I2C_MASTER_SDA_MUX PERIPHS_IO_MUX_GPIO2_U
 #define I2C_MASTER_SCL_MUX PERIPHS_IO_MUX_MTMS_U
 #define I2C_MASTER_SDA_GPIO 2
@@ -69,10 +70,10 @@ void i2c_master_init(void);
 #define i2c_master_wait    os_delay_us
 void i2c_master_stop(void);
 void i2c_master_start(void);
-void i2c_master_setAck(uint8 level);
-uint8 i2c_master_getAck(void);
-uint8 i2c_master_readByte(void);
-void i2c_master_writeByte(uint8 wrdata);
+void i2c_master_setAck(uint8_t level);
+uint8_t i2c_master_getAck(void);
+uint8_t i2c_master_readByte(void);
+void i2c_master_writeByte(uint8_t wrdata);
 
 bool i2c_master_checkAck(void);
 void i2c_master_send_ack(void);
