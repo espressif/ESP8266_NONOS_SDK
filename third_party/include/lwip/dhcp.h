@@ -123,6 +123,8 @@ void dhcp_inform(struct netif *netif);
 /** Handle a possible change in the network configuration */
 void dhcp_network_changed(struct netif *netif);
 
+err_t dhcp_set_vendor_class_identifier(uint8_t len, char *str);
+
 /** if enabled, check whether the offered IP address is not in use, using ARP */
 #if DHCP_DOES_ARP_CHECK
 void dhcp_arp_reply(struct netif *netif, ip_addr_t *addr);
