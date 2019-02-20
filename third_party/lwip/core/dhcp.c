@@ -1099,12 +1099,12 @@ dhcp_renew(struct netif *netif)
     }
 #endif /* LWIP_NETIF_HOSTNAME */
 
-#if 1
+#if 0
     dhcp_option(dhcp, DHCP_OPTION_REQUESTED_IP, 4);
     dhcp_option_long(dhcp, ntohl(dhcp->offered_ip_addr.addr));
 #endif
 
-#if 1
+#if 0
     dhcp_option(dhcp, DHCP_OPTION_SERVER_ID, 4);
     dhcp_option_long(dhcp, ntohl(dhcp->server_ip_addr.addr));
 #endif
