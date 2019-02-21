@@ -211,7 +211,6 @@ CCFLAGS += 			\
 	-g			\
 	-Wpointer-arith		\
 	-Wundef			\
-	-Werror			\
 	-Wl,-EL			\
 	-fno-inline-functions	\
 	-nostdlib       \
@@ -219,7 +218,10 @@ CCFLAGS += 			\
 	-mtext-section-literals \
 	-ffunction-sections \
 	-fdata-sections	\
-	-fno-builtin-printf
+	-fno-builtin-printf \
+	-fno-guess-branch-probability \
+	-freorder-blocks-and-partition \
+	-fno-cse-follow-jumps
 #	-Wall			
 
 DEFINES += -DSPI_FLASH_SIZE_MAP=$(size_map)
