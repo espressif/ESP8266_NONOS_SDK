@@ -1,17 +1,17 @@
 gwen:
-    at          :   0b65f40
-    crypto      :   12f98d2
-    espnow      :   24500e9
-    json        :   ce90efd
-    main        :   24500e9
-    net80211    :   61055fa
-    pp          :   24500e9
-    smartconfig :   16cf6ef
-    ssl         :   b19a6f7
-    upgrade     :   6ab97e9
-    wpa         :   05c8012
-    wpa2        :   d49991f
-    wps         :   1247cc5
+    at          :   53b6e66
+    crypto      :   53b6e66
+    espnow      :   53b6e66
+    json        :   53b6e66
+    main        :   53b6e66
+    net80211    :   53b6e66
+    pp          :   53b6e66
+    smartconfig :   53b6e66
+    ssl         :   53b6e66
+    upgrade     :   53b6e66
+    wpa         :   53b6e66
+    wpa2        :   53b6e66
+    wps         :   53b6e66
 
 phy:
     phy         :   1136
