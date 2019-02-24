@@ -17,6 +17,6 @@ phy:
     phy         :   1136
 
 gitlab:
-    driver      :   c37b846e
+    driver      :   5a2a54b4
     lwip        :   ee3dfcf2
     mbedtls     :   ee3dfcf2
