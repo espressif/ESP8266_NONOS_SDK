@@ -383,7 +383,7 @@ dhcp_fine_tmr()
     /* only act on DHCP configured interfaces */
     if (netif->dhcp != NULL) {
       /*add DHCP retries processing by LiuHan*/
-      if (DHCP_MAXRTX != 0) {
+      if (DHCP_MAXRTX != 0 && netif->dhcp->state != DHCP_RENEWING) {
     	  if (netif->dhcp->tries >= DHCP_MAXRTX){
 			  os_printf("DHCP timeout\n");
 			  if (netif->dhcp_event != NULL)
