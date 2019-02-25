@@ -648,6 +648,9 @@ pbuf_header(struct pbuf *p, s16_t header_size_increment)
   return 0;
 }
 
+#ifdef EBUF_LWIP
+int system_pp_recycle_rx_pkt(void *eb);
+#endif
 /**
  * Dereference a pbuf chain or queue and deallocate any no-longer-used
  * pbufs at the head of this chain or queue.

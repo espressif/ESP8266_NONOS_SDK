@@ -34,6 +34,7 @@
 #define _CRT_SECURE_NO_DEPRECATE 1
 #endif
 
+int system_get_data_of_array_8(const unsigned char *array, int size);
 /**
  * \name SECTION: System support
  *
