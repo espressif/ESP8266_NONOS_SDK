@@ -20,7 +20,8 @@ static const char mem_debug_file[] ICACHE_RODATA_ATTR = __FILE__;
 #define lwIP_unlikely(Expression) !!(Expression)
 #endif
 
-#define lwIP_ASSERT(Expression)	do{if(!(Expression)) {os_printf("%s %d\n", __func__, __LINE__);return;}}while(0)
+#define lwIP_ASSERT(Expression)	do{if(!(Expression)) {os_printf("%s %d\n", __func__, __LINE__);return 0;}}while(0)
+#define lwIP_ASSERTS(Expression)	do{if(!(Expression)) {os_printf("%s %d\n", __func__, __LINE__);return;}}while(0)
 
 ringbuf_t ICACHE_FLASH_ATTR
 ringbuf_new(size_t capacity)
@@ -54,7 +55,7 @@ ringbuf_reset(ringbuf_t rb)
 void ICACHE_FLASH_ATTR
 ringbuf_free(ringbuf_t *rb)
 {
-	lwIP_ASSERT(rb && *rb);
+	lwIP_ASSERTS(rb && *rb);
 	os_free((*rb)->buf);
 	os_free(*rb);
 	*rb = NULL;

@@ -271,6 +271,14 @@ extern void espconn_ssl_disconnect(espconn_msg *pdis);
 
 extern sint16 espconn_secure_get_size(uint8 level);
 
+/******************************************************************************
+ * FunctionName : espconn_ssl_delete
+ * Description  : delete the server: delete a listening PCB and free it
+ * Parameters   : pdeletecon -- the espconn used to delete a server
+ * Returns      : none
+*******************************************************************************/
+extern sint8  espconn_ssl_delete(struct espconn *pdeletecon);
+
 #endif
 
 
