@@ -82,4 +82,7 @@ bool ping_start(struct ping_option *ping_opt);
 bool ping_regist_recv(struct ping_option *ping_opt, ping_recv_function ping_recv);
 bool ping_regist_sent(struct ping_option *ping_opt, ping_sent_function ping_sent);
 
+uint32 system_relative_time(uint32 time);
+int    system_get_time(void);
+
 #endif /* __PING_H__ */
