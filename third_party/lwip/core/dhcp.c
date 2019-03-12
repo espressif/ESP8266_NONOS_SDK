@@ -1002,7 +1002,7 @@ dhcp_discover(struct netif *netif)
   return result;
 }
 
-
+extern int system_station_got_ip_set(ip_addr_t *ip, ip_addr_t *mask, ip_addr_t *gw);
 /**
  * Bind the interface to the offered IP address.
  *
