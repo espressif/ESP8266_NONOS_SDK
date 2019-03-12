@@ -3,9 +3,9 @@ gwen:
     crypto      :   8a853d3
     espnow      :   8a853d3
     json        :   8a853d3
-    main        :   5fba87e
+    main        :   6fa0dbf
     net80211    :   8a853d3
-    pp          :   8a853d3
+    pp          :   6fa0dbf
     smartconfig :   8a853d3
     ssl         :   8a853d3
     upgrade     :   8a853d3
