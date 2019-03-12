@@ -16,6 +16,42 @@
 #define   espconn_manual_recv_disabled(espconn)  (((espconn)->pcommon.espconn_opt & ESPCONN_MANUALRECV) != 0)
 #define   espconn_manual_recv_enabled(espconn)  (((espconn)->pcommon.espconn_opt & ESPCONN_MANUALRECV) == 0)
 
+extern int ets_task();
+extern int ets_post();
+
+/******************************************************************************
+ * FunctionName : espconn_pbuf_delete
+ * Description  : remove the node from the active connection list
+ * Parameters   : arg -- Additional argument to pass to the callback function
+ * Returns      : none
+*******************************************************************************/
+extern void ICACHE_FLASH_ATTR espconn_pbuf_delete(espconn_buf **phead, espconn_buf* pdelete);
+
+/******************************************************************************
+ * FunctionName : espconn_tcp_delete
+ * Description  : delete the server: delete a listening PCB and free it
+ * Parameters   : pdeletecon -- the espconn used to delete a server
+ * Returns      : none
+*******************************************************************************/
+extern sint8 ICACHE_FLASH_ATTR espconn_tcp_delete(struct espconn *pdeletecon);
+
+/******************************************************************************
+ * FunctionName : espconn_tcp_write
+ * Description  : write the packet which in the active connection's list.
+ * Parameters   : arg -- the node pointer which reverse the packet
+ * Returns      : ESPCONN_MEM: memory error
+ * 				  ESPCONN_OK:have enough space for write packet
+*******************************************************************************/
+extern err_t ICACHE_FLASH_ATTR espconn_tcp_write(void *arg);
+
+/******************************************************************************
+ * FunctionName : espconn_kill_pcb
+ * Description  : kill all the TCP block by port
+ * Parameters   : none
+ * Returns      : none
+*******************************************************************************/
+extern void ICACHE_FLASH_ATTR espconn_kill_pcb(u16_t port);
+
 /******************************************************************************
  * FunctionName : espconn_kill_oldest_pcb
  * Description  : A oldest incoming connection has been killed.

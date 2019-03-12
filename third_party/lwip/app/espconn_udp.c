@@ -19,8 +19,11 @@
 #include "lwip/mem.h"
 #include "lwip/tcp_impl.h"
 #include "lwip/udp.h"
+#include "lwip/igmp.h"
 
 #include "lwip/app/espconn_udp.h"
+
+#include "user_interface.h"
 
 #ifdef MEMLEAK_DEBUG
 static const char mem_debug_file[] ICACHE_RODATA_ATTR = __FILE__;
@@ -33,6 +36,9 @@ enum send_opt{
 	ESPCONN_SENDTO,
 	ESPCONN_SEND
 };
+
+struct netif * eagle_lwip_getif(uint8 index);
+
 static void ICACHE_FLASH_ATTR espconn_data_sentcb(struct espconn *pespconn)
 {
     if (pespconn == NULL) {

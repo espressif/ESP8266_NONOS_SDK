@@ -3748,6 +3748,9 @@ static int ssl_write_new_session_ticket( mbedtls_ssl_context *ssl )
 }
 #endif /* MBEDTLS_SSL_SESSION_TICKETS */
 
+#if defined(ESP8266_PLATFORM)
+int mbedtls_write_finished(mbedtls_ssl_context *ssl);
+#endif
 /*
  * SSL handshake -- server side -- single step
  */

@@ -184,6 +184,8 @@ os_timer_t mdns_timer;
 static void mdns_recv(void *s, struct udp_pcb *pcb, struct pbuf *p,
 		struct ip_addr *addr, u16_t port);
 
+struct netif * eagle_lwip_getif(uint8 index);
+
 /*-----------------------------------------------------------------------------
  * Globales
  *----------------------------------------------------------------------------*/

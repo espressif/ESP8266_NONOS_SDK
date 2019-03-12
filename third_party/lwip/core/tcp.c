@@ -109,6 +109,8 @@ struct tcp_pcb *tcp_tmp_pcb;
 static u8_t tcp_timer;
 static u16_t tcp_new_port(void);//����µ�tcp���ض˿�
 
+int system_get_data_of_array_8(const unsigned char *array, int size);
+
 /**
  * Called periodically to dispatch TCP timers.
  *
