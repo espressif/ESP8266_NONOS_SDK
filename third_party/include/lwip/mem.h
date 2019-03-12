@@ -45,13 +45,11 @@ extern "C" {
 
 typedef size_t mem_size_t;
 
-void *pvPortMalloc (size_t sz, const char *, unsigned, bool);
+void *pvPortMalloc (size_t sz, const char *, unsigned);
 void vPortFree (void *p, const char *, unsigned);
 void *pvPortZalloc (size_t sz, const char *, unsigned);
 void *pvPortRealloc (void *p, size_t n, const char *, unsigned);
 void* pvPortCalloc(size_t count,size_t size,const char *,unsigned);
-void* pvPortCallocIram(size_t count,size_t size,const char *,unsigned);
-void *pvPortZallocIram (size_t sz, const char *, unsigned);
 
 /* aliases for C library malloc() */
 #define mem_init()
@@ -60,19 +58,19 @@ void *pvPortZallocIram (size_t sz, const char *, unsigned);
  */
 #ifndef MEMLEAK_DEBUG
 #ifndef mem_free
-#define mem_free vPortFree
+#define mem_free(p) vPortFree(p, NULL, __LINE__)
 #endif
 #ifndef mem_malloc
-#define mem_malloc pvPortMalloc
+#define mem_malloc(s) pvPortMalloc((s), NULL, __LINE__)
 #endif
 #ifndef mem_calloc
-#define mem_calloc pvPortCalloc
+#define mem_calloc(l, s) pvPortCalloc(l, s, NULL, __LINE__)
 #endif
 #ifndef mem_realloc
-#define mem_realloc pvPortRealloc
+#define mem_realloc(p, s) pvPortRealloc(p, s, NULL, __LINE__)
 #endif
 #ifndef mem_zalloc
-#define mem_zalloc pvPortZalloc
+#define mem_zalloc(s) pvPortZalloc(s, NULL, __LINE__)
 #endif
 #else
 #ifndef mem_free
