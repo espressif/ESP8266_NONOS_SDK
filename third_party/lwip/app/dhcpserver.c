@@ -36,6 +36,8 @@ uint32 dhcps_lease_time = DHCPS_LEASE_TIME_DEF;  //minute
 
 void wifi_softap_dhcps_client_leave(u8 *bssid, struct ip_addr *ip,bool force);
 uint32 wifi_softap_dhcps_client_update(u8 *bssid, struct ip_addr *ip);
+struct netif * eagle_lwip_getif(uint8 index);
+int wifi_softap_set_station_info(char *info, struct ip_addr *addr);
 
 /******************************************************************************
  * FunctionName : node_insert_to_list
@@ -663,7 +665,7 @@ static void ICACHE_FLASH_ATTR handle_dhcp(void *arg,
                  os_printf("dhcps: handle_dhcp-> DHCPD_STATE_ACK\n");
 #endif
                  send_ack(pmsg_dhcps);
-                 wifi_softap_set_station_info(pmsg_dhcps->chaddr, &client_address.addr);
+                 wifi_softap_set_station_info(pmsg_dhcps->chaddr, &client_address);
                  break;
             case DHCPS_STATE_NAK://4
 #if DHCPS_DEBUG            

@@ -42,6 +42,7 @@
 static const char mem_debug_file[] ICACHE_RODATA_ATTR = __FILE__;
 #endif
 
+extern int isdigit(int c);
 /** The global array of available sockets */
 static lwIP_sock sockets[NUM_SOCKETS];
 
