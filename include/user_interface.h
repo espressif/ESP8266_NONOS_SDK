@@ -159,7 +159,6 @@ void system_phy_set_max_tpw(uint8 max_tpw);
 void system_phy_set_tpw_via_vdd33(uint16 vdd33);
 void system_phy_set_rfoption(uint8 option);
 void system_phy_set_powerup_option(uint8 option);
-void system_phy_freq_trace_enable(bool enable);
 
 bool system_param_save_with_protect(uint16 start_sec, void *param, uint16 len);
 bool system_param_load(uint16 start_sec, uint16 offset, void *param, uint16 len);
