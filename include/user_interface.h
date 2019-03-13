@@ -25,6 +25,7 @@
 #ifndef __USER_INTERFACE_H__
 #define __USER_INTERFACE_H__
 
+#include "c_types.h"
 #include "os_type.h"
 #ifdef LWIP_OPEN_SRC
 #include "lwip/ip_addr.h"
