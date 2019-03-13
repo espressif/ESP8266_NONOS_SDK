@@ -191,15 +191,12 @@ static const partition_item_t at_partition_table[] = {
 #endif
 };
 
-uint8 ICACHE_FLASH_ATTR at_get_rf_auto_trace_from_flash(void);
-void ICACHE_FLASH_ATTR system_phy_freq_trace_enable(bool);
 void ICACHE_FLASH_ATTR user_pre_init(void)
 {
     if(!system_partition_table_regist(at_partition_table, sizeof(at_partition_table)/sizeof(at_partition_table[0]),SPI_FLASH_SIZE_MAP)) {
 		os_printf("system_partition_table_regist fail\r\n");
 		while(1);
 	}
-    system_phy_freq_trace_enable(at_get_rf_auto_trace_from_flash());
 }
 
 #ifdef CONFIG_ENABLE_IRAM_MEMORY
