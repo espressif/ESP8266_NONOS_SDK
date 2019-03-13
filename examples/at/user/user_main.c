@@ -168,14 +168,6 @@ user_rf_cal_sector_set(void)
     return rf_cal_sec;
 }
 
-uint8 ICACHE_FLASH_ATTR at_get_rf_auto_trace_from_flash(void);
-void ICACHE_FLASH_ATTR system_phy_freq_trace_enable(bool);
-
-void ICACHE_FLASH_ATTR user_rf_pre_init(void)
-{
-    system_phy_freq_trace_enable(at_get_rf_auto_trace_from_flash());
-}
-
 void ICACHE_FLASH_ATTR
 user_init(void)
 {
