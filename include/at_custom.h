@@ -28,7 +28,7 @@
 #include "c_types.h"
 
 #define at_port_print_irom_str(str)   do { \
-        static const uint8 irom_str[] ICACHE_RODATA_ATTR = str;  \
+        static const uint8_t irom_str[] ICACHE_RODATA_ATTR = str;  \
         at_port_print(irom_str);  \
     } while(0)
 
@@ -42,13 +42,13 @@ typedef struct
   void (*at_exeCmd)(uint8_t id);
 }at_funcationType;
 
-typedef void (*at_custom_uart_rx_intr)(uint8* data,int32 len);
+typedef void (*at_custom_uart_rx_intr)(uint8_t* data,int32_t len);
 
 typedef void (*at_custom_response_func_type)(const char *str);
 
-typedef void (*at_fake_uart_tx_func_type)(const uint8*data,uint32 length);
+typedef void (*at_fake_uart_tx_func_type)(const uint8_t*data,uint32_t length);
 
-extern uint8 at_customLinkMax;
+extern uint8_t at_customLinkMax;
 
 /**
   * @brief  Response "OK" to uart.
@@ -82,7 +82,7 @@ void at_register_response_func(at_custom_response_func_type response_func);
   *         cmd_num : the num of at cmd that custom defined
   * @retval None
   */
-void at_cmd_array_regist(at_funcationType *custom_at_cmd_array,uint32 cmd_num);
+void at_cmd_array_regist(at_funcationType *custom_at_cmd_array,uint32_t cmd_num);
 /**
   * @brief  get digit form at cmd line.the maybe alter pSrc
   * @param  p_src: at cmd line string
@@ -99,7 +99,7 @@ bool at_get_next_int_dec(char **p_src,int*result,int* err);
   *         max_len :max len of string excepted to get
   * @retval None
   */
-int32 at_data_str_copy(char *p_dest, char **p_src, int32 max_len);
+int32_t at_data_str_copy(char *p_dest, char **p_src, int32_t max_len);
 
 /**
   * @brief  initialize at module
@@ -141,7 +141,7 @@ void at_leave_special_state(void);
   *         bit15~8 : at test version
   *         bit7~0  : customized version
   */
-uint32 at_get_version(void);
+uint32_t at_get_version(void);
 
 /**
   * @brief  register custom uart rx interrupt function
@@ -157,7 +157,7 @@ void at_register_uart_rx_intr(at_custom_uart_rx_intr rx_func);
   * @param  length: data length
   * @retval data len,if ok len == length
   */
-uint32 at_fake_uart_rx(uint8* data,uint32 length);
+uint32_t at_fake_uart_rx(uint8_t* data,uint32_t length);
 
 /**
   * @brief enable fake uart,and register fake uart tx
@@ -172,7 +172,7 @@ bool at_fake_uart_enable(bool enable,at_fake_uart_tx_func_type at_fake_uart_tx_f
   * @param  ch: escape character.
   * @retval TRUE,if set ok,otherwize FALSE.
   */
-bool at_set_escape_character(uint8 ch);
+bool at_set_escape_character(uint8_t ch);
 
 /**
   * @brief Enable wpa2 enterprise command
