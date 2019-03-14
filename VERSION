@@ -2,7 +2,6 @@ gwen:
     at          :   8a853d3
     crypto      :   8a853d3
     espnow      :   8a853d3
-    json        :   8a853d3
     main        :   d073cbd
     net80211    :   8a853d3
     pp          :   d073cbd
@@ -18,5 +17,6 @@ phy:
 
 gitlab:
     driver      :   5a2a54b4
+    json        :   f55d5fee
     lwip        :   fa67274d
     mbedtls     :   6775af13
