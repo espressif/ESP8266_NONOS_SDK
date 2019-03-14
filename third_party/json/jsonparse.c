@@ -256,6 +256,15 @@ jsonparse_strcmp_value(struct jsonparse_state *state, const char *str)
   if(state->vtype == 0) {
     return -1;
   }
+  
+  if (str == NULL) {
+      return -1;
+  }
+  
+  if (os_strlen(str) != state->vlen) {
+      return -1;
+  }
+  
   return os_strncmp(str, &state->json[state->vstart], state->vlen);
 }
 /*--------------------------------------------------------------------*/
