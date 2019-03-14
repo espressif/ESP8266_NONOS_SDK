@@ -883,7 +883,8 @@ dns_enqueue(const char *name, dns_found_callback found, void *callback_arg)
   size_t namelen;
 
   /* search an unused entry, or the oldest one */
-  lseq = lseqi = 0;
+  lseq = 0;
+  lseqi = DNS_TABLE_SIZE;
   for (i = 0; i < DNS_TABLE_SIZE; ++i) {
     pEntry = &dns_table[i];
     /* is it an unused entry ? */
