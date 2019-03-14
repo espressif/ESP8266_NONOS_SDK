@@ -12,7 +12,7 @@
 #     a generated lib/image xxx.a ()
 #
 ifndef PDIR
-
+UP_EXTRACT_DIR = ..
 GEN_LIBS = libjson.a
 
 endif
@@ -26,7 +26,7 @@ endif
 #   for a subtree within the makefile rooted therein
 #
 #DEFINES += 
-CCFLAGS += -ffunction-sections -fdata-sections
+CCFLAGS += -DJSON_FORMAT
 
 #############################################################
 # Recursion Magic - Don't touch this!!
