@@ -2,7 +2,6 @@ gwen:
     at          :   53b6e66
     crypto      :   53b6e66
     espnow      :   53b6e66
-    json        :   53b6e66
     main        :   c0eb301
     net80211    :   53b6e66
     pp          :   c0eb301
@@ -18,5 +17,6 @@ phy:
 
 gitlab:
     driver      :   9f17ed94
+    json        :   b25135a5
     lwip        :   cf6c1616
     mbedtls     :   1e469d5d
