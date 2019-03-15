@@ -191,9 +191,9 @@ struct netif * eagle_lwip_getif(uint8 index);
  *----------------------------------------------------------------------------*/
 
 /* MDNS variables */
-static char host_name[MDNS_NAME_LENGTH];
-static char service_name[MDNS_NAME_LENGTH];
-static char server_name[MDNS_NAME_LENGTH];
+static char host_name[MDNS_NAME_LENGTH + 1];
+static char service_name[MDNS_NAME_LENGTH + 1];
+static char server_name[MDNS_NAME_LENGTH + 1];
 //static char puck_datasheet[PUCK_DATASHEET_SIZE];
 static struct udp_pcb *mdns_pcb = NULL;
 static struct mdns_info * ms_info = NULL;
@@ -928,8 +928,7 @@ mdns_close(void)
 void ICACHE_FLASH_ATTR
 mdns_set_name(const char *name)
 {
-	//strcpy(host_name, name);
-	os_strcpy(service_name, name);
+	os_strncpy(service_name, name ? name : "Espressif", MDNS_NAME_LENGTH);
 }
 
 void ICACHE_FLASH_ATTR
@@ -964,25 +963,16 @@ mdns_get_hostname(void) {
 
 void ICACHE_FLASH_ATTR
 mdns_set_hostname(char *name) {
-	if (name == NULL) {
-		os_strncpy(host_name, "Espressif", os_strlen("Espressif")+3);
-		return;
-	}
-	if (os_strlen(name) + 3 <= MDNS_NAME_LENGTH ){
-		os_strncpy(host_name, name, os_strlen(name) );
-//		os_memset(host_name + os_strlen(host_name) ,0x00,3);
-	} else {
-		os_strncpy(host_name, name, MDNS_NAME_LENGTH);
-	}
+    os_strncpy(host_name, name ? name : "Espressif", MDNS_NAME_LENGTH);
 }
 
 void ICACHE_FLASH_ATTR
 mdns_set_servername(const char *name) {
-	if (name == NULL) {
-		PUCK_SERVICE = "_Espressif._tcp._local";
-	}else {
-		os_sprintf(server_name ,"_%s._tcp.local",name);
-		PUCK_SERVICE = server_name;
+	if (MDNS_NAME_LENGTH > os_strlen("._tcp.local") + 1) {
+	    os_snprintf(server_name, MDNS_NAME_LENGTH - os_strlen("._tcp.local") - 1, "_%s._tcp.local", name ? name : "Espressif");
+	    PUCK_SERVICE = server_name;
+	} else {
+	    os_printf("Please check MDNS_NAME_LENGTH\r\n");
 	}
 }
 
