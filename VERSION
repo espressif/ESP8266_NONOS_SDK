@@ -18,5 +18,5 @@ phy:
 gitlab:
     driver      :   32124083
     json        :   1ee88246
-    lwip        :   bdcde0d7
+    lwip        :   071f7ed9
     mbedtls     :   78497e12
