@@ -70,6 +70,62 @@ static const char mem_debug_file[] ICACHE_RODATA_ATTR = __FILE__;
 /* ping variables */
 static u16_t ping_seq_num = 0;
 static u32_t ping_time;
+static struct ping_msg *ping_list = NULL;
+
+static void ICACHE_FLASH_ATTR ping_coarse_tmr(void *arg);
+static void ICACHE_FLASH_ATTR ping_result_tmr(void *arg);
+
+static void ICACHE_FLASH_ATTR ping_raw_stop(void)
+{
+    if (ping_list) {
+        sys_untimeout(ping_result_tmr, ping_list);
+        raw_remove(ping_list->ping_pcb);
+        os_free(ping_list);
+        ping_list = NULL;
+    }
+}
+
+static void ICACHE_FLASH_ATTR ping_raw_start(struct ping_msg *pingmsg)
+{
+    ping_list = pingmsg;
+}
+
+static void ICACHE_FLASH_ATTR ping_result_tmr(void *arg)
+{
+    ping_raw_stop();
+}
+
+static void ICACHE_FLASH_ATTR ping_prepare_result(void *arg)
+{
+    struct ping_msg *pingmsg = (struct ping_msg*)arg;
+    struct ping_option *ping_opt = NULL;
+    struct ping_resp pingresp;
+    ip_addr_t ping_target;
+
+    ping_opt = pingmsg->ping_opt;
+    if (pingmsg->sent_count == 1) {
+        sys_untimeout(ping_coarse_tmr, pingmsg);
+
+        uint32 delay = system_relative_time(pingmsg->ping_start);
+        delay /= PING_COARSE;
+        if (ping_opt->sent_function == NULL) {
+            os_printf("ping %d, timeout %d, total payload %d bytes, %d ms\n", pingmsg->max_count, pingmsg->timeout_count,
+                    PING_DATA_SIZE * (pingmsg->max_count - pingmsg->timeout_count), delay);
+        } else {
+            os_bzero(&pingresp, sizeof(struct ping_resp));
+            pingresp.total_count = pingmsg->max_count;
+            pingresp.timeout_count = pingmsg->timeout_count;
+            pingresp.total_bytes = PING_DATA_SIZE * (pingmsg->max_count - pingmsg->timeout_count);
+            pingresp.total_time = delay;
+            pingresp.ping_err = 0;
+        }
+
+        if (ping_opt->sent_function != NULL)
+            ping_opt->sent_function(ping_opt, (uint8*) &pingresp);
+
+        sys_timeout(0, ping_result_tmr, pingmsg);
+    }
+}
 
 static void ICACHE_FLASH_ATTR ping_timeout(void* arg)
 {
@@ -83,6 +139,8 @@ static void ICACHE_FLASH_ATTR ping_timeout(void* arg)
 		pingresp.ping_err = -1;
 		pingmsg->ping_opt->recv_function(pingmsg->ping_opt, (void*)&pingresp);
 	}
+
+	ping_prepare_result(pingmsg);
 }
 
 /** Prepare a echo ICMP request */
@@ -166,6 +224,7 @@ ping_recv(void *arg, struct raw_pcb *pcb, struct pbuf *p, ip_addr_t *addr)
 				  pingresp.ping_err = 0;
 				  pingmsg->ping_opt->recv_function(pingmsg->ping_opt,(void*) &pingresp);
 			  }
+			  ping_prepare_result(pingmsg);
 		  }
 		  seqno = iecho->seqno;
 	  }
@@ -277,6 +336,7 @@ ping_raw_init(struct ping_msg *pingmsg)
 	pingmsg ->ping_sent = system_get_time();
 	ping_send(pingmsg->ping_pcb, &ping_target);
 
+	ping_raw_start(pingmsg);
 	sys_timeout(PING_TIMEOUT_MS, ping_timeout, pingmsg);
 	sys_timeout(pingmsg->coarse_time, ping_coarse_tmr, pingmsg);
 	return true;
@@ -286,6 +346,7 @@ bool ICACHE_FLASH_ATTR
 ping_start(struct ping_option *ping_opt)
 {
 	struct ping_msg *pingmsg = NULL;
+	ping_raw_stop();
 	pingmsg = (struct ping_msg *)os_zalloc(sizeof(struct ping_msg));
 	if (pingmsg == NULL || ping_opt == NULL)
 		return false;
