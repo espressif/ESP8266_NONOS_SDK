@@ -49,6 +49,10 @@ struct dhcp
   u16_t request_timeout; /* #ticks with period DHCP_FINE_TIMER_SECS for request timeout */
   u16_t t1_timeout;  /* #ticks with period DHCP_COARSE_TIMER_SECS for renewal time */
   u16_t t2_timeout;  /* #ticks with period DHCP_COARSE_TIMER_SECS for rebind time */
+  u16_t t1_renew_time;  /* #ticks with period DHCP_COARSE_TIMER_SECS until next renew try */
+  u16_t t2_rebind_time; /* #ticks with period DHCP_COARSE_TIMER_SECS until next rebind try */
+  u16_t lease_used; /* #ticks with period DHCP_COARSE_TIMER_SECS since last received DHCP ack */
+  u16_t t0_timeout; /* #ticks with period DHCP_COARSE_TIMER_SECS for lease time */
   ip_addr_t server_ip_addr; /* dhcp server address that offered this lease */
   ip_addr_t offered_ip_addr;
   ip_addr_t offered_sn_mask;
