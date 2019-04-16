@@ -2,8 +2,8 @@ gwen:
     at          :   ee359db
     crypto      :   8a853d3
     espnow      :   8a853d3
-    main        :   80099a2
-    net80211    :   80099a2
+    main        :   3b41fcf
+    net80211    :   3b41fcf
     pp          :   d073cbd
     smartconfig :   8a853d3
     ssl         :   8a853d3
