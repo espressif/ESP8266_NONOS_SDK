@@ -4,6 +4,12 @@ ifndef PDIR
 
 endif
 
+MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+SDKDIR := $(patsubst %/,%,$(dir $(MAKEFILE_PATH)))/
+ifndef PYTHON
+PYTHON := python
+endif
+
 ifeq ($(COMPILE), gcc)
 	AR = xtensa-lx106-elf-ar
 	CC = xtensa-lx106-elf-gcc
@@ -260,14 +266,14 @@ $(BINODIR)/%.bin: $(IMAGEODIR)/%.out
 	@mkdir -p $(BINODIR)
 	
 ifeq ($(APP), 0)
-	@$(RM) -r ../bin/eagle.S ../bin/eagle.dump
-	@$(OBJDUMP) -x -s $< > ../bin/eagle.dump
-	@$(OBJDUMP) -S $< > ../bin/eagle.S
+	@$(RM) -r $(SDKDIR)bin/eagle.S $(SDKDIR)bin/eagle.dump
+	@$(OBJDUMP) -x -s $< > $(SDKDIR)bin/eagle.dump
+	@$(OBJDUMP) -S $< > $(SDKDIR)bin/eagle.S
 else
-	mkdir -p ../bin/upgrade
-	@$(RM) -r ../bin/upgrade/$(BIN_NAME).S ../bin/upgrade/$(BIN_NAME).dump
-	@$(OBJDUMP) -x -s $< > ../bin/upgrade/$(BIN_NAME).dump
-	@$(OBJDUMP) -S $< > ../bin/upgrade/$(BIN_NAME).S
+	mkdir -p $(SDKDIR)bin/upgrade
+	@$(RM) -r $(SDKDIR)bin/upgrade/$(BIN_NAME).S $(SDKDIR)bin/upgrade/$(BIN_NAME).dump
+	@$(OBJDUMP) -x -s $< > $(SDKDIR)bin/upgrade/$(BIN_NAME).dump
+	@$(OBJDUMP) -S $< > $(SDKDIR)bin/upgrade/$(BIN_NAME).S
 endif
 
 	@$(OBJCOPY) --only-section .text -O binary $< eagle.app.v6.text.bin
@@ -279,9 +285,9 @@ endif
 	@echo "!!!"
 	
 ifeq ($(app), 0)
-	@python ../tools/gen_appbin.py $< 0 $(mode) $(freqdiv) $(size_map) $(app)
-	@mv eagle.app.flash.bin ../bin/eagle.flash.bin
-	@mv eagle.app.v6.irom0text.bin ../bin/eagle.irom0text.bin
+	@$(PYTHON) $(SDKDIR)tools/gen_appbin.py $< 0 $(mode) $(freqdiv) $(size_map) $(app)
+	@mv eagle.app.flash.bin $(SDKDIR)bin/eagle.flash.bin
+	@mv eagle.app.v6.irom0text.bin $(SDKDIR)bin/eagle.irom0text.bin
 	@rm eagle.app.v6.*
 	@echo "No boot needed."
 	@echo "Generate eagle.flash.bin and eagle.irom0text.bin successully in folder bin."
@@ -289,10 +295,10 @@ ifeq ($(app), 0)
 	@echo "eagle.irom0text.bin---->0x10000"
 else
     ifneq ($(boot), new)
-		@python ../tools/gen_appbin.py $< 1 $(mode) $(freqdiv) $(size_map) $(app)
+		@$(PYTHON) $(SDKDIR)tools/gen_appbin.py $< 1 $(mode) $(freqdiv) $(size_map) $(app)
 		@echo "Support boot_v1.1 and +"
     else
-		@python ../tools/gen_appbin.py $< 2 $(mode) $(freqdiv) $(size_map) $(app)
+		@$(PYTHON) $(SDKDIR)tools/gen_appbin.py $< 2 $(mode) $(freqdiv) $(size_map) $(app)
 
     	ifeq ($(size_map), 6)
 		@echo "Support boot_v1.4 and +"
@@ -305,7 +311,7 @@ else
         endif
     endif
 
-	@mv eagle.app.flash.bin ../bin/upgrade/$(BIN_NAME).bin
+	@mv eagle.app.flash.bin $(SDKDIR)bin/upgrade/$(BIN_NAME).bin
 	@rm eagle.app.v6.*
 	@echo "Generate $(BIN_NAME).bin successully in folder bin/upgrade."
 	@echo "boot.bin------------>0x00000"
