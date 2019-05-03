@@ -30,7 +30,7 @@
 #include "gpio.h"
 #include "driver/key.h"
 
-LOCAL void key_intr_handler(void *arg);
+static void key_intr_handler(void *arg);
 
 /******************************************************************************
  * FunctionName : key_init_single
@@ -82,10 +82,10 @@ key_init(struct keys_param *keys)
                           | GPIO_PIN_PAD_DRIVER_SET(GPIO_PAD_DRIVER_DISABLE)
                           | GPIO_PIN_SOURCE_SET(GPIO_AS_PIN_SOURCE));
 
-        //clear gpio14 status
+        /* clear gpio14 status */
         GPIO_REG_WRITE(GPIO_STATUS_W1TC_ADDRESS, BIT(keys->single_key[i]->gpio_id));
 
-        //enable interrupt
+        /* enable interrupt */
         gpio_pin_intr_state_set(GPIO_ID_PIN(keys->single_key[i]->gpio_id), GPIO_PIN_INTR_NEGEDGE);
     }
 
@@ -98,12 +98,12 @@ key_init(struct keys_param *keys)
  * Parameters   : single_key_param *single_key - single key parameter
  * Returns      : none
 *******************************************************************************/
-LOCAL void ICACHE_FLASH_ATTR
+static void ICACHE_FLASH_ATTR
 key_5s_cb(struct single_key_param *single_key)
 {
     os_timer_disarm(&single_key->key_5s);
 
-    // low, then restart
+    /* low, then restart */
     if (0 == GPIO_INPUT_GET(GPIO_ID_PIN(single_key->gpio_id))) {
         if (single_key->long_press) {
             single_key->long_press();
@@ -117,12 +117,12 @@ key_5s_cb(struct single_key_param *single_key)
  * Parameters   : single_key_param *single_key - single key parameter
  * Returns      : none
 *******************************************************************************/
-LOCAL void ICACHE_FLASH_ATTR
+static void ICACHE_FLASH_ATTR
 key_50ms_cb(struct single_key_param *single_key)
 {
     os_timer_disarm(&single_key->key_50ms);
 
-    // high, then key is up
+    /* high, then key is up */
     if (1 == GPIO_INPUT_GET(GPIO_ID_PIN(single_key->gpio_id))) {
         os_timer_disarm(&single_key->key_5s);
         single_key->key_level = 1;
@@ -142,7 +142,7 @@ key_50ms_cb(struct single_key_param *single_key)
  * Parameters   : key_param *keys - keys parameter, which inited by key_init_single
  * Returns      : none
 *******************************************************************************/
-LOCAL void
+static void
 key_intr_handler(void *arg)
 {
     uint8_t i;
@@ -151,21 +151,21 @@ key_intr_handler(void *arg)
 
     for (i = 0; i < keys->key_num; i++) {
         if (gpio_status & BIT(keys->single_key[i]->gpio_id)) {
-            //disable interrupt
+            /* disable interrupt */
             gpio_pin_intr_state_set(GPIO_ID_PIN(keys->single_key[i]->gpio_id), GPIO_PIN_INTR_DISABLE);
 
-            //clear interrupt status
+            /* clear interrupt status */
             GPIO_REG_WRITE(GPIO_STATUS_W1TC_ADDRESS, gpio_status & BIT(keys->single_key[i]->gpio_id));
 
             if (keys->single_key[i]->key_level == 1) {
-                // 5s, restart & enter softap mode
+                /* 5s, restart & enter softap mode */
                 os_timer_disarm(&keys->single_key[i]->key_5s);
                 os_timer_setfn(&keys->single_key[i]->key_5s, (os_timer_func_t *)key_5s_cb, keys->single_key[i]);
                 os_timer_arm(&keys->single_key[i]->key_5s, 5000, 0);
                 keys->single_key[i]->key_level = 0;
                 gpio_pin_intr_state_set(GPIO_ID_PIN(keys->single_key[i]->gpio_id), GPIO_PIN_INTR_POSEDGE);
             } else {
-                // 50ms, check if this is a real key up
+                /* 50ms, check if this is a real key up */
                 os_timer_disarm(&keys->single_key[i]->key_50ms);
                 os_timer_setfn(&keys->single_key[i]->key_50ms, (os_timer_func_t *)key_50ms_cb, keys->single_key[i]);
                 os_timer_arm(&keys->single_key[i]->key_50ms, 50, 0);

@@ -114,7 +114,7 @@ void ICACHE_FLASH_ATTR hw_timer_init(frc1_timer_source_type source_type, uint8_t
     ETS_FRC1_INTR_ENABLE();
 }
 
-//-------------------------------Test Code Below--------------------------------------
+/*-------------------------------Test Code Below--------------------------------------*/
 #if 0
 void   hw_test_timer_cb(void)
 {
@@ -128,7 +128,7 @@ void   hw_test_timer_cb(void)
         j = 0;
     }
 
-    //hw_timer_arm(50);
+    /* hw_timer_arm(50); */
 }
 
 void ICACHE_FLASH_ATTR user_init(void)

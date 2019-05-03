@@ -24,6 +24,7 @@
 
 #ifndef _GPIO_H_
 #define _GPIO_H_
+#include "c_types.h"
 
 #define GPIO_PIN_ADDR(i) (GPIO_PIN0_ADDRESS + i*4)
 

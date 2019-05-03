@@ -22,21 +22,15 @@
  *
  */
 
-/**
- * @file spi_interface.h
- * @brief Defines and Macros for the SPI.
- */
 #ifndef __SPI_INTERFACE_H__
 #define __SPI_INTERFACE_H__
 
 #include "driver/spi_register.h"
 #include "c_types.h"
 
-//*****************************************************************************
-//
-// Make sure all of the definitions in this header have a C binding.
-//
-//*****************************************************************************
+/*****************************************************************************
+ Make sure all of the definitions in this header have a C binding.
+*****************************************************************************/
 
 #ifdef __cplusplus
 extern "C"
@@ -88,12 +82,7 @@ typedef enum {
     SpiSubMode_3 = 3,
 } SpiSubMode;
 
-/**
- * @brief The SPI module working speed.
- *
- * @attention Max speed 80MHz
- *
- */
+/* SPI mode working speed */
 typedef enum {
     SpiSpeed_0_5MHz   = 160,
     SpiSpeed_1MHz     = 80,
@@ -104,16 +93,12 @@ typedef enum {
 
 } SpiSpeed;
 
-/**
- * @brief The SPI mode working speed.
- *
- */
 typedef enum {
     SpiBitOrder_MSBFirst = 0,
     SpiBitOrder_LSBFirst = 1,
 } SpiBitOrder;
 
-// @brief SPI interrupt soource defined.
+/* SPI interrupt soource defined */
 typedef enum {
     SpiIntSrc_TransDone = SPI_TRANS_DONE,
     SpiIntSrc_WrStaDone = SPI_SLV_WR_STA_DONE,
@@ -122,7 +107,7 @@ typedef enum {
     SpiIntSrc_RdBufDone = SPI_SLV_RD_BUF_DONE,
 } SpiIntSrc;
 
-// @brief SPI CS pin.
+/* SPI CS pin */
 typedef enum {
     SpiPinCS_0 = 1,
     SpiPinCS_1 = 2,
@@ -135,22 +120,22 @@ typedef enum {
  * @brief SPI attribute
  */
 typedef struct {
-    SpiMode        mode;           ///< Master or slave mode
-    SpiSubMode     subMode;        ///< SPI SPI_CPOL SPI_CPHA mode
-    SpiSpeed       speed;          ///< SPI Clock
-    SpiBitOrder    bitOrder;       ///< SPI bit order
+    SpiMode        mode;
+    SpiSubMode     subMode;
+    SpiSpeed       speed;
+    SpiBitOrder    bitOrder;
 } SpiAttr;
 
 /**
  * @brief SPI data package
  */
 typedef struct {
-    uint16_t    cmd;            ///< Command value
-    uint8_t     cmdLen;         ///< Command byte length
-    uint32_t    *addr;          ///< Point to address value
-    uint8_t     addrLen;        ///< Address byte length
-    uint32_t    *data;          ///< Point to data buffer
-    uint8_t     dataLen;        ///< Data byte length.
+    uint16_t    cmd;
+    uint8_t     cmdLen;
+    uint32_t    *addr;
+    uint8_t     addrLen;
+    uint32_t    *data;
+    uint8_t     dataLen;
 } SpiData;
 
 
@@ -158,9 +143,8 @@ typedef struct {
  * @brief SPI interrupt information
  */
 typedef struct {
-    SpiIntSrc       src;                ///< Interrupt source
-    void            *isrFunc;           ///< SPI interrupt callback function.
-
+    SpiIntSrc src;
+    void      *isrFunc;
 } SpiIntInfo;
 
 #pragma upack (1)
@@ -175,7 +159,7 @@ typedef struct {
  *
  * @return void.
  */
-void SPIInit(SpiNum spiNum, SpiAttr *pAttr);
+void spi_init(SpiNum spiNum, SpiAttr *pAttr);
 
 /**
  * @brief Set slave address value by master.
@@ -187,7 +171,7 @@ void SPIInit(SpiNum spiNum, SpiAttr *pAttr);
  *
  * @return void.
  */
-void SPIMasterCfgAddr(SpiNum spiNum, uint32_t addr);
+void spi_master_config_addr(SpiNum spiNum, uint32_t addr);
 
 /**
  * @brief Set command value by master.
@@ -199,7 +183,7 @@ void SPIMasterCfgAddr(SpiNum spiNum, uint32_t addr);
  *
  * @return void.
  */
-void SPIMasterCfgCmd(SpiNum spiNum, uint32_t cmd);
+void spi_master_config_cmd(SpiNum spiNum, uint32_t cmd);
 
 /**
  * @brief Send data to slave from master.
@@ -211,7 +195,7 @@ void SPIMasterCfgCmd(SpiNum spiNum, uint32_t cmd);
  *
  * @return int32_t, -1:indicates failure,others indicates success.
  */
-int32_t SPIMasterSendData(SpiNum spiNum, SpiData *pInData);
+int32_t spi_master_send_data(SpiNum spiNum, SpiData *pInData);
 
 /**
  * @brief Receive data from slave by master.
@@ -224,7 +208,7 @@ int32_t SPIMasterSendData(SpiNum spiNum, SpiData *pInData);
  * @return int32_t, -1:indicates failure,others indicates success.
  *
  */
-int32_t SPIMasterRecvData(SpiNum spiNum, SpiData *pOutData);
+int32_t spi_master_recv_data(SpiNum spiNum, SpiData *pOutData);
 
 /**
  * @brief Load data to slave send buffer.
@@ -238,7 +222,7 @@ int32_t SPIMasterRecvData(SpiNum spiNum, SpiData *pOutData);
  *
  * @return int32_t, -1:indicates failure,others indicates success.
  */
-int32_t SPISlaveSendData(SpiNum spiNum, uint32_t *pInData, uint8_t inLen);
+int32_t spi_slave_send_data(SpiNum spiNum, uint32_t *pInData, uint8_t inLen);
 
 /**
  * @brief Receive data by slave.
@@ -250,7 +234,7 @@ int32_t SPISlaveSendData(SpiNum spiNum, uint32_t *pInData, uint8_t inLen);
  *
  * @return int32_t, -1:indicates failure,others indicates success.
  */
-int32_t SPISlaveRecvData(SpiNum spiNum);
+int32_t spi_slave_recv_data(SpiNum spiNum);
 
 /**
  * @brief Set slave status by master.
@@ -264,7 +248,7 @@ int32_t SPISlaveRecvData(SpiNum spiNum);
  *
  * @attention Just for ESP8266(slave) register of RD_STATUS or WR_STATUS.
  */
-void SPIMasterSendStatus(SpiNum spiNum, uint8_t data);
+void spi_master_send_status(SpiNum spiNum, uint8_t data);
 
 /**
  * @brief Get salve status by master.
@@ -276,7 +260,7 @@ void SPIMasterSendStatus(SpiNum spiNum, uint8_t data);
  *
  * @attention Just for ESP8266(slave) register of RD_STATUS or WR_STATUS.
  */
-int32_t SPIMasterRecvStatus(SpiNum spiNum);
+int32_t spi_master_recv_status(SpiNum spiNum);
 
 /**
  * @brief Select SPI CS pin.
@@ -288,7 +272,7 @@ int32_t SPIMasterRecvStatus(SpiNum spiNum);
  *
  * @return void.
  */
-void SPICsPinSelect(SpiNum spiNum, SpiPinCS pinCs);
+void spi_cs_pin_select(SpiNum spiNum, SpiPinCS pinCs);
 
 /**
  * @brief Set SPI module interrupt source and callback function.
@@ -300,7 +284,7 @@ void SPICsPinSelect(SpiNum spiNum, SpiPinCS pinCs);
  *
  * @return void.
  */
-void SPIIntCfg(SpiNum spiNum, SpiIntInfo *pIntInfo);
+void spi_int_cfg(SpiNum spiNum, SpiIntInfo *pIntInfo);
 
 /**
  * @brief Enable SPI module interrupt source.
@@ -312,7 +296,7 @@ void SPIIntCfg(SpiNum spiNum, SpiIntInfo *pIntInfo);
  *
  * @return void.
  */
-void SPIIntEnable(SpiNum spiNum, SpiIntSrc intSrc);
+void spi_int_enable(SpiNum spiNum, SpiIntSrc intSrc);
 
 /**
  * @brief Disable SPI module interrupt source.
@@ -324,7 +308,7 @@ void SPIIntEnable(SpiNum spiNum, SpiIntSrc intSrc);
  *
  * @return void.
  */
-void SPIIntDisable(SpiNum spiNum, SpiIntSrc intSrc);
+void spi_int_disable(SpiNum spiNum, SpiIntSrc intSrc);
 
 /**
  * @brief Clear all of spi interrupt.
@@ -334,10 +318,10 @@ void SPIIntDisable(SpiNum spiNum, SpiIntSrc intSrc);
  *
  * @return void.
  */
-void SPIIntClear(SpiNum spiNum);
+void spi_int_clear(SpiNum spiNum);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif //  __SPI_INTERFACE_H__
+#endif /* __SPI_INTERFACE_H__ */

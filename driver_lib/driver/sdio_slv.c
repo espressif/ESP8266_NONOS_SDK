@@ -25,20 +25,20 @@
 #include "ets_sys.h"
 #include "osapi.h"
 #include "os_type.h"
-//#include "gpio.h"
 #include "user_interface.h"
 #include "mem.h"
-#include "driver/slc_register.h"
 #include "driver/sdio_slv.h"
+#include "driver/slc_register.h"
 
-#define SDIO_TOKEN_SIZE     0 // 4
+#define SDIO_TOKEN_SIZE     0 /* 4 */
 #define RX_BUFFER_SIZE      512
 #define RX_BUFFER_NUM       4
 
 #define TX_BUFFER_SIZE        512
 #define SLC_INTEREST_EVENT (SLC_TX_EOF_INT_ENA | SLC_RX_EOF_INT_ENA | SLC_RX_UDF_INT_ENA | SLC_TX_DSCR_ERR_INT_ENA)
 #define TRIG_TOHOST_INT()    SET_PERI_REG_MASK(SLC_INTVEC_TOHOST , BIT0);\
-    //CLEAR_PERI_REG_MASK(SLC_INTVEC_TOHOST , BIT0)
+    /* CLEAR_PERI_REG_MASK(SLC_INTVEC_TOHOST , BIT0) */
+
 struct sdio_queue {
     uint32_t    blocksize: 12;
     uint32_t    datalen: 12;
@@ -65,7 +65,6 @@ union sdio_slave_status {
     uint32_t word_value;
 };
 
-//uint8_t rx_buffer[RX_BUFFER_NUM][RX_BUFFER_SIZE],tx_buffer[1024];
 uint8_t tx_buffer[TX_BUFFER_SIZE];
 
 uint32_t data_len = 0;
@@ -82,8 +81,6 @@ struct sdio_list *pTail_ToSend;
 struct sdio_list *pHead_Sended;
 struct sdio_list *pTail_Sended;
 
-
-
 os_event_t *sdioQueue;
 struct sdio_queue rx_que, tx_que;
 
@@ -93,7 +90,6 @@ static void sdio_slave_isr(void *para);
 static void tx_buff_handle_done(void);
 static void rx_buff_read_done(void);
 static void tx_buff_write_done(void);
-
 static void sdio_try_to_load(void);
 static void sdio_read_done_process(void);
 
@@ -102,21 +98,20 @@ void sdio_slave_init(void)
     uint32_t regval = 0;
     union sdio_slave_status sdio_sta;
     ETS_SDIO_INTR_DISABLE();
-    ////reset orginal link
+    /* reset orginal link */
     SET_PERI_REG_MASK(SLC_CONF0, SLC_RXLINK_RST | SLC_TXLINK_RST);
     CLEAR_PERI_REG_MASK(SLC_CONF0, SLC_RXLINK_RST | SLC_TXLINK_RST);
 
     os_printf("RX&TX link reset!\n");
 
-    //set sdio mode
+    /* set sdio mode */
     SET_PERI_REG_MASK(SLC_RX_DSCR_CONF, SLC_RX_EOF_MODE | SLC_RX_FILL_MODE);
-    //clear to host interrupt io signal for preventing from random initial signal.
+    /* clear to host interrupt io signal for preventing from random initial signal. */
     WRITE_PERI_REG(SLC_HOST_INTR_CLR, 0xffffffff);
-    //enable 2 events to trigger the to host intr io
+    /* enable 2 events to trigger the to host intr io */
     SET_PERI_REG_MASK(SLC_HOST_INTR_ENA, SLC_HOST_TOHOST_BIT0_INT_ENA);
-    ////initialize rx queue information
 
-    has_read = TRUE;
+    has_read = true;
     pHead_ToSend = NULL;
 
     int32_t loop = RX_BUFFER_NUM;
@@ -131,13 +126,14 @@ void sdio_slave_init(void)
             p = p->next;
         }
 
-        //os_printf("p:0x%08x\r\n",p);
+        /* os_printf("p:0x%08x\r\n",p); */
         p->tail = p->buffer + SDIO_TOKEN_SIZE;
         p->next = NULL;
     }
 
     pTail_Sended = p;
 
+    /* initialize rx queue information */
     rx_que.blocksize = RX_BUFFER_SIZE;
     rx_que.datalen = 0;
     rx_que.eof = 1;
@@ -148,7 +144,7 @@ void sdio_slave_init(void)
     rx_que.next_link_ptr = 0;
 
 
-    ////initialize tx queue information
+    /* initialize tx queue information */
     tx_que.blocksize = TX_BUFFER_SIZE;
     tx_que.datalen = 0;
     tx_que.eof = 0;
@@ -158,7 +154,7 @@ void sdio_slave_init(void)
     tx_que.buf_ptr = (uint32_t)tx_buffer;
     tx_que.next_link_ptr = 0;
 
-    ///////link tx&rx queue information address to sdio hardware
+    /* link tx&rx queue information address to sdio hardware */
     CLEAR_PERI_REG_MASK(SLC_RX_LINK, SLC_RXLINK_DESCADDR_MASK);
     regval = ((uint32_t)&rx_que);
     SET_PERI_REG_MASK(SLC_RX_LINK, regval & SLC_RXLINK_DESCADDR_MASK);
@@ -170,7 +166,7 @@ void sdio_slave_init(void)
     SET_PERI_REG_MASK(SLC_RX_DSCR_CONF, SLC_TOKEN_NO_REPLACE);
 #endif
 
-    /////config sdio_status reg
+    /* config sdio_status reg */
     sdio_sta.elm_value.comm_cnt = 7;
     sdio_sta.elm_value.intr_no = INIT_STAGE;
     sdio_sta.elm_value.wr_busy = 0;
@@ -181,18 +177,17 @@ void sdio_slave_init(void)
     WRITE_PERI_REG(SLC_HOST_CONF_W2, sdio_sta.word_value);
 
 
-    /////attach isr func to sdio interrupt
+    /* attach isr func to sdio interrupt */
     ETS_SDIO_INTR_ATTACH(sdio_slave_isr, NULL);
-    /////enable sdio operation intr
+    /* enable sdio operation intr */
     WRITE_PERI_REG(SLC_INT_ENA,  SLC_INTEREST_EVENT);
-    /////clear sdio initial random active intr signal
+    /* clear sdio initial random active intr signal */
     WRITE_PERI_REG(SLC_INT_CLR, 0xffffffff);
-    /////enable sdio intr in cpu
+    /* enable sdio intr in cpu */
     ETS_SDIO_INTR_ENABLE();
 }
 
-static void sdio_slave_isr(void *para)
-{
+static void sdio_slave_isr(void *para) {
     uint32_t slc_intr_status, postval;
     static uint8_t state = 0;
     uint16_t rx_len, i;
@@ -206,42 +201,41 @@ static void sdio_slave_isr(void *para)
         return;
     }
 
-    //clear all intrs
+    /* clear all intrs */
     WRITE_PERI_REG(SLC_INT_CLR, slc_intr_status);
-    //os_printf("slc_intr_status:0x%08x\r\n",slc_intr_status);
-    //process every intr
+    /* os_printf("slc_intr_status:0x%08x\r\n",slc_intr_status); */
 
-    //TO HOST DONE
+    /* TO HOST DONE */
     if (slc_intr_status & SLC_RX_EOF_INT_ENA) {
-        //following code must be called after a data pack has been read
+        /* following code must be called after a data pack has been read */
         rx_buff_read_done();
-        //TRIG_TOHOST_INT();
-        //system_os_post(2, 1, 0);
+        /* TRIG_TOHOST_INT();
+        system_os_post(2, 1, 0); */
         sdio_read_done_process();
     }
 
-    //FROM HOST DONE
+    /* FROM HOST DONE */
     if (slc_intr_status & SLC_TX_EOF_INT_ENA) {
-        //call the following function after host cpu data transmission finished
+        /* call the following function after host cpu data transmission finished */
         tx_buff_write_done();
 
-        //system_os_post(USER_TASK_PRIO_1,SDIO_DATA_ERROR,0);
-        //os_printf("%d,%s\r\n",tx_que.datalen,tx_que.buf_ptr);
-        //at_fake_uart_rx((uint8_t*)tx_que.buf_ptr,tx_que.datalen);
+        /* system_os_post(USER_TASK_PRIO_1,SDIO_DATA_ERROR,0); */
+        /* os_printf("%d,%s\r\n",tx_que.datalen,tx_que.buf_ptr); */
+        /* at_fake_uart_rx((uint8_t*)tx_que.buf_ptr,tx_que.datalen); */
         if (sdio_recv_data_callback_ptr) {
             sdio_recv_data_callback_ptr((uint8_t *)tx_que.buf_ptr, tx_que.datalen);
         }
 
         tx_buff_handle_done();
         TRIG_TOHOST_INT();
-        //system_os_post(2, 3, 0);
+        /* system_os_post(2, 3, 0); */
     }
 
-    //TO HOST underflow
+    /* TO HOST underflow */
     if (slc_intr_status & SLC_RX_UDF_INT_ENA) {
     }
 
-    //FROM HOST overflow
+    /* FROM HOST overflow */
     if (slc_intr_status & SLC_TX_DSCR_ERR_INT_ENA) {
     }
 
@@ -254,52 +248,49 @@ static void sdio_slave_isr(void *para)
 
 }
 
-static void rx_buff_read_done(void)
-{
+static void rx_buff_read_done(void) {
     union sdio_slave_status sdio_sta;
-    /////modify sdio status reg
+
+    /* modify sdio status reg */
     sdio_sta.word_value = READ_PERI_REG(SLC_HOST_CONF_W2);
     sdio_sta.elm_value.comm_cnt++;
     sdio_sta.elm_value.rd_empty = 1;
     sdio_sta.elm_value.rx_length = 0;
     sdio_sta.elm_value.intr_no &= (~RX_AVAILIBLE);
-    WRITE_PERI_REG(SLC_HOST_CONF_W2, sdio_sta.word_value);  //update sdio status register
-    //os_printf("rx_buff_read_done\r\n");
+    WRITE_PERI_REG(SLC_HOST_CONF_W2, sdio_sta.word_value);  /* update sdio status register */
+    /* os_printf("rx_buff_read_done\r\n"); */
 }
 
-static void tx_buff_write_done(void)
-{
+static void tx_buff_write_done(void) {
     union sdio_slave_status sdio_sta;
-    /////modify sdio status reg
+
+    /* modify sdio status reg */
     sdio_sta.word_value = READ_PERI_REG(SLC_HOST_CONF_W2);
     sdio_sta.elm_value.comm_cnt++;
     sdio_sta.elm_value.wr_busy = 1;
     sdio_sta.elm_value.intr_no &= (~TX_AVAILIBLE);
-    WRITE_PERI_REG(SLC_HOST_CONF_W2, sdio_sta.word_value);  //update sdio status register
+    WRITE_PERI_REG(SLC_HOST_CONF_W2, sdio_sta.word_value);  /* update sdio status register */
 }
 
-static void tx_buff_handle_done(void)
-{
+static void tx_buff_handle_done(void) {
     union sdio_slave_status sdio_sta;
 
-    /////config tx queue information
+    /* config tx queue information */
     tx_que.blocksize = TX_BUFFER_SIZE;
     tx_que.datalen = 0;
     tx_que.eof = 0;
     tx_que.owner = 1;
 
-    /////modify sdio status reg
+    /* modify sdio status reg */
     sdio_sta.word_value = READ_PERI_REG(SLC_HOST_CONF_W2);
     sdio_sta.elm_value.wr_busy = 0;
     sdio_sta.elm_value.intr_no |= TX_AVAILIBLE;
 
-    SET_PERI_REG_MASK(SLC_TX_LINK, SLC_TXLINK_START);       //tx buffer is ready for being written
-    WRITE_PERI_REG(SLC_HOST_CONF_W2, sdio_sta.word_value);  //update sdio status register
-    //*******************************************************************//
-
+    SET_PERI_REG_MASK(SLC_TX_LINK, SLC_TXLINK_START);       /* tx buffer is ready for being written */
+    WRITE_PERI_REG(SLC_HOST_CONF_W2, sdio_sta.word_value);  /* update sdio status register */
 }
-static int32_t rx_buff_load_done(uint16_t rx_len)
-{
+
+static int32_t rx_buff_load_done(uint16_t rx_len) {
     union sdio_slave_status sdio_sta;
 
     if (rx_len == 0) {
@@ -310,32 +301,31 @@ static int32_t rx_buff_load_done(uint16_t rx_len)
         rx_len = rx_que.blocksize;
     }
 
-    //os_memcpy(rx_que.buf_ptr,data,rx_len);
-    /////config rx queue information
+    /* os_memcpy(rx_que.buf_ptr,data,rx_len); */
+    /* config rx queue information */
     rx_que.blocksize = RX_BUFFER_SIZE;
     rx_que.datalen = rx_len + SDIO_TOKEN_SIZE;
     rx_que.eof = 1;
     rx_que.owner = 1;
 
-    //ETS_SDIO_INTR_DISABLE();
-    //available_buffer_amount--;
+    /* ETS_SDIO_INTR_DISABLE(); */
+    /* available_buffer_amount--; */
 
-    /////modify sdio status reg
+    /* modify sdio status reg */
     sdio_sta.word_value = READ_PERI_REG(SLC_HOST_CONF_W2);
     sdio_sta.elm_value.rd_empty = 0;
     sdio_sta.elm_value.intr_no |= RX_AVAILIBLE;
     sdio_sta.elm_value.rx_length = rx_len;
 
-    SET_PERI_REG_MASK(SLC_RX_LINK, SLC_RXLINK_START);       //rx buffer is ready for being read
-    WRITE_PERI_REG(SLC_HOST_CONF_W2, sdio_sta.word_value);  //update sdio status register
-    //ETS_SDIO_INTR_ENABLE();
-    //os_printf("rx_buff_load_done(%d,0x%08x):%s\r\n",rx_len,rx_que.buf_ptr,rx_que.buf_ptr);
-    //os_printf("rx_buff_load_done:%d\r\n",rx_len);
+    SET_PERI_REG_MASK(SLC_RX_LINK, SLC_RXLINK_START);       /* rx buffer is ready for being read */
+    WRITE_PERI_REG(SLC_HOST_CONF_W2, sdio_sta.word_value);  /* update sdio status register */
+    /* ETS_SDIO_INTR_ENABLE(); */
+    /* os_printf("rx_buff_load_done(%d,0x%08x):%s\r\n",rx_len,rx_que.buf_ptr,rx_que.buf_ptr); */
+
     return rx_len;
 }
 
-int32_t ICACHE_FLASH_ATTR sdio_load_data(const uint8_t *data, uint32_t len)
-{
+int32_t ICACHE_FLASH_ATTR sdio_load_data(const uint8_t *data, uint32_t len) {
     int32_t data_len = 0;
 
     if (pHead_Sended == NULL) {
@@ -353,7 +343,7 @@ int32_t ICACHE_FLASH_ATTR sdio_load_data(const uint8_t *data, uint32_t len)
             pHead_Sended->tail += len;
             len = 0;
             data_len += len;
-            //os_printf(">555:0x%08x,0x%08x\r\n",pHead_Sended->buffer,pHead_Sended->tail);
+            /* os_printf(">555:0x%08x,0x%08x\r\n",pHead_Sended->buffer,pHead_Sended->tail); */
         } else {
             os_memcpy(pHead_Sended->tail, data, left_len);
             pHead_Sended->tail += left_len;
@@ -377,12 +367,10 @@ int32_t ICACHE_FLASH_ATTR sdio_load_data(const uint8_t *data, uint32_t len)
                 os_printf("buf full\r\n");
                 break;
             }
-
-            //os_printf(">666\r\n");
         }
     }
 
-    //os_printf(">>pHead_ToSend:0x%08x\r\n",pHead_ToSend);
+    /* os_printf(">>pHead_ToSend:0x%08x\r\n",pHead_ToSend); */
 
     if (pHead_ToSend == NULL) {
         pTail_ToSend = pHead_Sended;
@@ -390,28 +378,26 @@ int32_t ICACHE_FLASH_ATTR sdio_load_data(const uint8_t *data, uint32_t len)
 
         pHead_Sended = pHead_Sended->next;
         pTail_ToSend->next = NULL;
-        //system_os_post(2, 2, 0);
+        /* system_os_post(2, 2, 0); */
         sdio_try_to_load();
     }
 
     return data_len;
 }
 
-static void sdio_try_to_load(void)
-{
-    if ((has_read == TRUE) && (pHead_ToSend != NULL)) {
+static void sdio_try_to_load(void) {
+    if ((has_read == true) && (pHead_ToSend != NULL)) {
         rx_que.buf_ptr = (uint32_t)pHead_ToSend->buffer;
         rx_buff_load_done(pHead_ToSend->tail - pHead_ToSend->buffer - SDIO_TOKEN_SIZE);
-        //pHead_ToSend = pHead_ToSend->next;
-        has_read = FALSE;
-        //os_printf("SLC_INT_STATUS:0x%08x\r\n",READ_PERI_REG(SLC_INT_STATUS));
+        /* pHead_ToSend = pHead_ToSend->next; */
+        has_read = false;
+        /* os_printf("SLC_INT_STATUS:0x%08x\r\n",READ_PERI_REG(SLC_INT_STATUS)); */
         TRIG_TOHOST_INT();
     }
 }
 
-static void sdio_read_done_process(void)
-{
-    has_read = TRUE;
+static void sdio_read_done_process(void) {
+    has_read = true;
 
     pHead_ToSend->tail = pHead_ToSend->buffer + SDIO_TOKEN_SIZE;
 
@@ -426,13 +412,13 @@ static void sdio_read_done_process(void)
     pHead_ToSend = pHead_ToSend->next;
     pTail_Sended->next = NULL;
 
-    //os_printf(">>pHead_ToSend:0x%08x,pHead_Sended:0x%08x,0x%08x,0x%08x\r\n",pHead_ToSend,pHead_Sended,pHead_Sended->buffer,pHead_Sended->tail);
+    /* os_printf(">>pHead_ToSend:0x%08x,pHead_Sended:0x%08x,0x%08x,0x%08x\r\n",pHead_ToSend,pHead_Sended,pHead_Sended->buffer,pHead_Sended->tail); */
     if (pHead_ToSend) {
         rx_que.buf_ptr = (uint32_t)pHead_ToSend->buffer;
         rx_buff_load_done(pHead_ToSend->tail - pHead_ToSend->buffer - SDIO_TOKEN_SIZE);
-        has_read = FALSE;
-        //os_printf("intr trig\r\n");
-        //TRIG_TOHOST_INT();
+        has_read = false;
+        /* os_printf("intr trig\r\n");
+        TRIG_TOHOST_INT(); */
     } else if ((pHead_Sended != NULL) && (pHead_Sended->buffer != (pHead_Sended->tail - SDIO_TOKEN_SIZE))) {
         pHead_ToSend = pHead_Sended;
         pTail_ToSend = pHead_ToSend;
@@ -441,18 +427,17 @@ static void sdio_read_done_process(void)
 
         rx_que.buf_ptr = (uint32_t)pHead_ToSend->buffer;
         rx_buff_load_done(pHead_ToSend->tail - pHead_ToSend->buffer - SDIO_TOKEN_SIZE);
-        has_read = FALSE;
-        //os_printf("intr trig\r\n");
-        //TRIG_TOHOST_INT();
+        has_read = false;
+        /* os_printf("intr trig\r\n");
+        TRIG_TOHOST_INT(); */
     }
 
     TRIG_TOHOST_INT();
 }
 
-bool sdio_register_recv_cb(sdio_recv_data_callback_t cb)
-{
+bool sdio_register_recv_cb(sdio_recv_data_callback_t cb) {
     sdio_recv_data_callback_ptr = cb;
 
-    return TRUE;
+    return true;
 }
 

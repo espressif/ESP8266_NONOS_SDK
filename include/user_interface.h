@@ -244,11 +244,11 @@ typedef struct {
 struct station_config {
     uint8_t ssid[32];
     uint8_t password[64];
-    uint8_t bssid_set;    // Note: If bssid_set is 1, station will just connect to the router
-                        // with both ssid[] and bssid[] matched. Please check about this.
+    uint8_t bssid_set;    /* Note: If bssid_set is 1, station will just connect to the router */
+                        /* with both ssid[] and bssid[] matched. Please check about this. */
     uint8_t bssid[6];
     wifi_fast_scan_threshold_t threshold;
-    bool open_and_wep_mode_disable; // Can connect to open/wep router by default.
+    bool open_and_wep_mode_disable; /* Can connect to open/wep router by default.*/
 };
 
 bool wifi_station_get_config(struct station_config *config);
@@ -284,12 +284,12 @@ typedef union {
 } wifi_scan_time_t;
 
 struct scan_config {
-    uint8_t *ssid;    // Note: ssid == NULL, don't filter ssid.
-    uint8_t *bssid;    // Note: bssid == NULL, don't filter bssid.
-    uint8_t channel;    // Note: channel == 0, scan all channels, otherwise scan set channel.
-    uint8_t show_hidden;    // Note: show_hidden == 1, can get hidden ssid routers' info.
-    wifi_scan_type_t scan_type; // scan type, active or passive
-    wifi_scan_time_t scan_time; // scan time per channel
+    uint8_t *ssid;				/* Note: ssid == NULL, don't filter ssid. */
+    uint8_t *bssid;				/* Note: bssid == NULL, don't filter bssid. */
+    uint8_t channel;    		/* Note: channel == 0, scan all channels, otherwise scan set channel. */
+    uint8_t show_hidden;		/* Note: show_hidden == 1, can get hidden ssid routers' info. */
+    wifi_scan_type_t scan_type; /* scan type, active or passive */
+    wifi_scan_time_t scan_time; /* scan time per channel */
 };
 
 bool wifi_station_scan(struct scan_config *config, scan_done_cb_t cb);
@@ -338,12 +338,12 @@ void wifi_station_clear_username(void);
 struct softap_config {
     uint8_t ssid[32];
     uint8_t password[64];
-    uint8_t ssid_len;    // Note: Recommend to set it according to your ssid
-    uint8_t channel;    // Note: support 1 ~ 13
-    AUTH_MODE authmode;    // Note: Don't support AUTH_WEP in softAP mode.
-    uint8_t ssid_hidden;    // Note: default 0
-    uint8_t max_connection;    // Note: default 4, max 4
-    uint16_t beacon_interval;    // Note: support 100 ~ 60000 ms, default 100
+    uint8_t ssid_len;			/* Note: Recommend to set it according to your ssid */
+    uint8_t channel;			/* Note: support 1 ~ 13 */
+    AUTH_MODE authmode;			/* Note: Don't support AUTH_WEP in softAP mode. */
+    uint8_t ssid_hidden;		/* Note: default 0 */
+    uint8_t max_connection;		/* Note: default 4, max 4 */
+    uint16_t beacon_interval;	/* Note: support 100 ~ 60000 ms, default 100 */
 };
 
 bool wifi_softap_get_config(struct softap_config *config);

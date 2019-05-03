@@ -1,4 +1,3 @@
-//Generated at 2012-10-23 19:55:03
 /*
  * ESPRESSIF MIT License
  *
@@ -28,7 +27,7 @@
 #define SLC_REGISTER_H_
 
 #define REG_SLC_BASE  0x60000B00
-//version value:32'h091700
+/* version value:32'h091700 */
 
 #define SLC_CONF0                                (REG_SLC_BASE + 0x0)
 #ifndef ESP_MAC_5
@@ -246,7 +245,7 @@
 #define SLC_RX_EOF_MODE (BIT(19))
 #define SLC_RX_FILL_MODE (BIT(18))
 #define SLC_INFOR_NO_REPLACE (BIT(17))
-#define SLC_TOKEN_NO_REPLACE (BIT(16))  //
+#define SLC_TOKEN_NO_REPLACE (BIT(16))
 #define SLC_POP_IDLE_CNT 0x0000FFFF
 #endif
 #define SLC_POP_IDLE_CNT_S 0
@@ -276,9 +275,10 @@
 #define SLC_HOST_CONF_W5                        (REG_SLC_BASE + 0x80 + 0x3C)
 #define SLC_HOST_INTR_RAW                       (REG_SLC_BASE + 0x80 + 0x8)
 #define SLC_HOST_INTR_ENA_BIT                   (BIT(23))
-//[15:12]: 0x3ff9xxxx -- 0b01  from_host
-//         0x3ffaxxxx -- 0b10  general
-//         0x3ffbxxxx -- 0b11  to_host
+
+/* [15:12]: 0x3ff9xxxx -- 0b01  from_host
+            0x3ffaxxxx -- 0b10  general
+            0x3ffbxxxx -- 0b11  to_host */
 #define SLC_DATA_ADDR_CLEAR_MASK                    (~(0xf<<12))
 #define SLC_FROM_HOST_ADDR_MASK                     (0x1<<12)
 #define SLC_TO_HOST_ADDR_MASK                       (0x3<<12)
@@ -294,7 +294,7 @@
     } while(0);
 
 
-#define SLC_TX_DESC_DEBUG_REG  0x3ff0002c  //[15:0] set to 0xcccc
+#define SLC_TX_DESC_DEBUG_REG  0x3ff0002c  /* [15:0] set to 0xcccc */
 
 
-#endif // SLC_REGISTER_H_INCLUDED
+#endif /* SLC_REGISTER_H_ */

@@ -22,19 +22,20 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
+
+#ifndef __HW_TIMER_H__
+#define __HW_TIMER_H__
 #include "ets_sys.h"
-#ifndef __hw_timer_H__
-#define __hw_timer_H__
-//TIMER PREDIVED MODE
+
 typedef enum {
-    DIVDED_BY_1 = 0,        //timer clock
-    DIVDED_BY_16 = 4,    //divided by 16
-    DIVDED_BY_256 = 8,    //divided by 256
+    DIVDED_BY_1 = 0,
+    DIVDED_BY_16 = 4,
+    DIVDED_BY_256 = 8,
 } time_predived_mode;
 
-typedef enum {            //timer interrupt mode
-    TM_LEVEL_INT = 1,    // level interrupt
-    TM_EDGE_INT   = 0,    //edge interrupt
+typedef enum {
+    TM_LEVEL_INT = 1,
+    TM_EDGE_INT   = 0,
 } time_int_mode;
 
 typedef enum {
@@ -48,4 +49,4 @@ void  hw_timer_init(frc1_timer_source_type source_type, uint8_t req);
 void  hw_timer_set_func(void (* user_hw_timer_cb_set)(void)) ;
 void  hw_timer_arm(uint32_t val) ;
 
-#endif
+#endif /* __HW_TIMER_H__ */
