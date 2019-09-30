@@ -598,7 +598,7 @@ int system_get_data_of_array_8(const unsigned char *array, int size);
  *      MBEDTLS_TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA
  *      MBEDTLS_TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA
  */
-//#define MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED
+#define MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED
 
 /**
  * \def MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED
@@ -1061,7 +1061,7 @@ int system_get_data_of_array_8(const unsigned char *array, int size);
  *
  * Comment this macro to disable support for SSL 3.0
  */
-//#define MBEDTLS_SSL_PROTO_SSL3
+#define MBEDTLS_SSL_PROTO_SSL3
 
 /**
  * \def MBEDTLS_SSL_PROTO_TLS1
@@ -1687,7 +1687,7 @@ int system_get_data_of_array_8(const unsigned char *array, int size);
  * This module is used by the following key exchanges:
  *      DHE-RSA, DHE-PSK
  */
-//#define MBEDTLS_DHM_C
+#define MBEDTLS_DHM_C
 
 /**
  * \def MBEDTLS_ECDH_C
