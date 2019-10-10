@@ -19,4 +19,4 @@ gitlab:
     driver      :   5a2a54b4
     json        :   f55d5fee
     lwip        :   eaca5185
-    mbedtls     :   08957d11
+    mbedtls     :   82b93fe5
