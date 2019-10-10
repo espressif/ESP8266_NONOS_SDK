@@ -1005,7 +1005,7 @@ int system_get_data_of_array_8(const unsigned char *array, int size);
  *
  * Comment this macro to disable 1/n-1 record splitting.
  */
-#define MBEDTLS_SSL_CBC_RECORD_SPLITTING
+//#define MBEDTLS_SSL_CBC_RECORD_SPLITTING
 
 /**
  * \def MBEDTLS_SSL_RENEGOTIATION
@@ -2482,7 +2482,7 @@ extern unsigned int max_content_len;
  * Module:  library/ssl_tls.c
  * Caller:
  */
-#define ESP8266_PLATFORM
+//#define ESP8266_PLATFORM
 
 /**
  * Complete list of ciphersuites to use, in order of preference.
