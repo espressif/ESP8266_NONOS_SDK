@@ -1,9 +1,9 @@
 gwen:
-    at          :   1c287e8
+    at          :   b2602cc
     crypto      :   8a853d3
     espnow      :   8a853d3
-    main        :   bd176e4
-    net80211    :   bd176e4
+    main        :   b2602cc
+    net80211    :   6f9197d
     pp          :   d073cbd
     smartconfig :   8a853d3
     ssl         :   8a853d3
@@ -13,10 +13,10 @@ gwen:
     wps         :   8a853d3
 
 phy:
-    phy         :   1143
+    phy         :   1152
 
 gitlab:
     driver      :   5a2a54b4
     json        :   f55d5fee
     lwip        :   eaca5185
-    mbedtls     :   6775af13
+    mbedtls     :   82b93fe5
