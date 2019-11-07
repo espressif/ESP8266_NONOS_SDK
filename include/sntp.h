@@ -53,7 +53,7 @@ ip_addr_t sntp_getserver(uint8_t idx);
  * @param numdns the index of the NTP server to set must be < SNTP_MAX_SERVERS,now sdk support SNTP_MAX_SERVERS = 3
  * @param dnsserver DNS name of the NTP server to set, to be resolved at contact time
  */
-void sntp_setservername(uint8_t idx, char *server);
+void sntp_setservername(uint8_t idx, const char *server);
 /**
  * Obtain one of the currently configured by name NTP servers.
  *
