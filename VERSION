@@ -5,7 +5,6 @@ gwen:
     main        :   d5773a1
     net80211    :   6f9197d
     pp          :   d073cbd
-    smartconfig :   8a853d3
     ssl         :   8a853d3
     upgrade     :   8a853d3
     wpa         :   8a853d3
@@ -20,3 +19,4 @@ gitlab:
     json        :   f55d5fee
     lwip        :   eaca5185
     mbedtls     :   82b93fe5
+    smartconfig :      2.5.5
