@@ -3,12 +3,12 @@ gwen:
     crypto      :   8a853d3
     espnow      :   8a853d3
     main        :   d5773a1
-    net80211    :   6f9197d
+    net80211    :   decf4ad
     pp          :   d073cbd
     ssl         :   8a853d3
     upgrade     :   8a853d3
     wpa         :   8a853d3
-    wpa2        :   8a853d3
+    wpa2        :   decf4ad
     wps         :   8a853d3
 
 phy:
