@@ -1,22 +1,22 @@
 gwen:
-    at          :   b2602cc
+    at          :   d5773a1
     crypto      :   8a853d3
     espnow      :   8a853d3
-    main        :   bf2ca10
-    net80211    :   6f9197d
+    main        :   d5773a1
+    net80211    :   decf4ad
     pp          :   d073cbd
-    smartconfig :   8a853d3
     ssl         :   8a853d3
     upgrade     :   8a853d3
     wpa         :   8a853d3
-    wpa2        :   8a853d3
+    wpa2        :   decf4ad
     wps         :   8a853d3
 
 phy:
-    phy         :   1152
+    phy         :   1155
 
 gitlab:
     driver      :   5a2a54b4
     json        :   f55d5fee
     lwip        :   eaca5185
     mbedtls     :   82b93fe5
+    smartconfig :      2.5.5
