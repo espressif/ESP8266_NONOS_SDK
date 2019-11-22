@@ -19,4 +19,4 @@ gitlab:
     json        :   f55d5fee
     lwip        :   eaca5185
     mbedtls     :   82b93fe5
-    smartconfig :      2.5.5
+    smartconfig :   ea1d4a13(v2.5.5)
