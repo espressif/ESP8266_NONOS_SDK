@@ -1,15 +1,15 @@
 gwen:
-    at          :   0c2c867
-    crypto      :   7df3439
-    espnow      :   7df3439
-    main        :   0c2c867
-    net80211    :   f7b0286
-    pp          :   ec884ab
-    ssl         :   7df3439
-    upgrade     :   7df3439
-    wpa         :   7df3439
-    wpa2        :   7df3439
-    wps         :   7df3439
+    at          :   774826c
+    crypto      :   774826c
+    espnow      :   774826c
+    main        :   774826c
+    net80211    :   774826c
+    pp          :   774826c
+    ssl         :   774826c
+    upgrade     :   774826c
+    wpa         :   774826c
+    wpa2        :   774826c
+    wps         :   774826c
 
 phy:
     phy         :   1155
