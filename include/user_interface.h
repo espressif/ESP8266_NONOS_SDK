@@ -244,11 +244,13 @@ typedef struct {
 struct station_config {
     uint8_t ssid[32];
     uint8_t password[64];
+    uint8_t channel;
     uint8_t bssid_set;    /* Note: If bssid_set is 1, station will just connect to the router */
                         /* with both ssid[] and bssid[] matched. Please check about this. */
     uint8_t bssid[6];
     wifi_fast_scan_threshold_t threshold;
     bool open_and_wep_mode_disable; /* Can connect to open/wep router by default.*/
+    bool all_channel_scan;
 };
 
 bool wifi_station_get_config(struct station_config *config);
