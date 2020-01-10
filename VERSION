@@ -2,9 +2,9 @@ gwen:
     at          :   5c41018
     crypto      :   1ee4eb1
     espnow      :   1ee4eb1
-    main        :   5c41018
+    main        :   ddef880
     net80211    :   5c41018
-    pp          :   1ee4eb1
+    pp          :   ddef880
     ssl         :   1ee4eb1
     upgrade     :   1ee4eb1
     wpa         :   1ee4eb1
