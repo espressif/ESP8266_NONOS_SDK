@@ -381,7 +381,7 @@ dhcp_coarse_tmr()
   /* iterate through all network interfaces */
   while (netif != NULL) {
     /* only act on DHCP configured interfaces */
-    if (netif->dhcp != NULL) {
+    if ((netif->dhcp != NULL) && (netif->dhcp->state != DHCP_OFF)) {
       /* compare lease time to expire timeout */
       if (netif->dhcp->t0_timeout && (++netif->dhcp->lease_used == netif->dhcp->t0_timeout)) {
         LWIP_DEBUGF(DHCP_DEBUG | LWIP_DBG_TRACE | LWIP_DBG_STATE, ("dhcp_coarse_tmr(): t0 timeout\n"));
