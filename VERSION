@@ -12,7 +12,7 @@ gwen:
     wps         :   1ee4eb1
 
 phy:
-    phy         :   1155
+    phy         :   1156_0
 
 gitlab:
     driver      :   5a2a54b4
