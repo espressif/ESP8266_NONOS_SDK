@@ -5,8 +5,6 @@ AT firmware becomes larger since it supports more functions. So, we provide two 
 * Nano AT, esp-at/examples/at_nano, supports 1MB flash, uses SSL lib which supports less cipher suites.
 It is suggested to use normal AT, if your flash size is 2MB or larger.
 
-Please compile this demo as 1024KB or larger flash in compilation STEP 5.
-
 1¡¢compile options
 
 (1) COMPILE
