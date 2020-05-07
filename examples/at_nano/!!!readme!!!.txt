@@ -1,8 +1,8 @@
 Notice: 
 AT firmware becomes larger since it supports more functions. So, we provide two examples here:
 
-* Normal AT, esp-at/examples/at, supports 2MB or larger flash, uses mbedTLS lib, the default AT.
-* Nano AT, esp-at/examples/at_nano, supports 1MB flash, uses SSL lib which supports less cipher suites.
+* Normal AT, ESP8266_NONOS_SDK/examples/at, supports 2MB or larger flash, uses mbedTLS lib, the default AT.
+* Nano AT, ESP8266_NONOS_SDK/examples/at_nano, supports 1MB flash, uses SSL lib which supports less cipher suites.
 It is suggested to use normal AT, if your flash size is 2MB or larger.
 
 1¡¢compile options

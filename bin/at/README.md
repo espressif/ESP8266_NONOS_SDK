@@ -1,10 +1,17 @@
+# Notice: 
+AT firmware becomes larger since it supports more functions. So, we provide two firmwares here:
+
+* 1024+1024: Normal AT, which is compiled from ESP8266_NONOS_SDK/examples/at, and uses mbedTLS lib.
+* 512+512: Nano AT, which is compiled from ESP8266_NONOS_SDK/examples/at_nano, and uses SSL lib that supports less cipher suites.
+It is suggested to use normal AT(1024+1024), if your flash size is 2MB or larger.
+
 # BOOT MODE
 ## download
 
 ### Flash size 8Mbit: 512KB+512KB
     boot_v1.2+.bin              0x00000
     user1.1024.new.2.bin        0x01000
-    esp_init_data_default.bin   0xfc000 (optional)
+    esp_init_data_default.bin   0xfc000
     blank.bin                   0x7e000 & 0xfe000
 
 
@@ -13,13 +20,6 @@
     user1.2048.new.5.bin        0x01000
     esp_init_data_default.bin   0x1fc000
     blank.bin                   0xfe000 & 0x1fe000
-
-
-### Flash size 32Mbit-C1: 1024KB+1024KB
-    boot_v1.2+.bin              0x00000
-    user1.2048.new.5.bin        0x01000
-    esp_init_data_default.bin   0x3fc000
-    blank.bin                   0xfe000 & 0x3fe000
 
 # NON-BOOT MODE
 ## download
