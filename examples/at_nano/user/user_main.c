@@ -26,6 +26,8 @@
 #include "at_custom.h"
 #include "user_interface.h"
 
+#define COMPATIBLE_WITH_16M_512_512
+
 #if ((SPI_FLASH_SIZE_MAP == 0) || (SPI_FLASH_SIZE_MAP == 1))
 #error "The flash map is not supported"
 #elif (SPI_FLASH_SIZE_MAP == 2)
@@ -157,7 +159,7 @@ at_funcationType at_custom_cmd[] = {
 #endif
 };
 
-static const partition_item_t at_partition_table[] = {
+static const partition_item_t at_partition_table[] = { // 8M 512+512
     { SYSTEM_PARTITION_BOOTLOADER, 						0x0, 												0x1000},
     { SYSTEM_PARTITION_OTA_1,   						0x1000, 											SYSTEM_PARTITION_OTA_SIZE},
     { SYSTEM_PARTITION_OTA_2,   						SYSTEM_PARTITION_OTA_2_ADDR, 						SYSTEM_PARTITION_OTA_SIZE},
@@ -173,11 +175,38 @@ static const partition_item_t at_partition_table[] = {
 #endif
 };
 
+#ifdef COMPATIBLE_WITH_16M_512_512
+static const partition_item_t at_partition_table2[] = { // 16M 512+512
+    { SYSTEM_PARTITION_BOOTLOADER, 						0x0, 												0x1000},
+    { SYSTEM_PARTITION_OTA_1,   						0x1000, 											SYSTEM_PARTITION_OTA_SIZE},
+    { SYSTEM_PARTITION_OTA_2,   						SYSTEM_PARTITION_OTA_2_ADDR, 						SYSTEM_PARTITION_OTA_SIZE},
+    { SYSTEM_PARTITION_RF_CAL,  						0x1fb000, 						0x1000},
+    { SYSTEM_PARTITION_PHY_DATA, 						0x1fc000, 					0x1000},
+    { SYSTEM_PARTITION_SYSTEM_PARAMETER, 				        0x1fd000, 			0x3000},
+    { SYSTEM_PARTITION_AT_PARAMETER, 					SYSTEM_PARTITION_AT_PARAMETER_ADDR, 				0x3000},
+    { SYSTEM_PARTITION_SSL_CLIENT_CERT_PRIVKEY, 		SYSTEM_PARTITION_SSL_CLIENT_CERT_PRIVKEY_ADDR, 		0x1000},
+    { SYSTEM_PARTITION_SSL_CLIENT_CA, 					SYSTEM_PARTITION_SSL_CLIENT_CA_ADDR, 				0x1000},
+#ifdef CONFIG_AT_WPA2_ENTERPRISE_COMMAND_ENABLE
+    { SYSTEM_PARTITION_WPA2_ENTERPRISE_CERT_PRIVKEY, 	SYSTEM_PARTITION_WPA2_ENTERPRISE_CERT_PRIVKEY_ADDR,	0x1000},
+    { SYSTEM_PARTITION_WPA2_ENTERPRISE_CA, 				SYSTEM_PARTITION_WPA2_ENTERPRISE_CA_ADDR, 			0x1000},
+#endif
+};
+#endif
+
 void ICACHE_FLASH_ATTR user_pre_init(void)
 {
-    if(!system_partition_table_regist(at_partition_table, sizeof(at_partition_table)/sizeof(at_partition_table[0]),SPI_FLASH_SIZE_MAP)) {
+    const partition_item_t* partition_table = at_partition_table;
+    uint32 partition_table_size = sizeof(at_partition_table)/sizeof(at_partition_table[0]);
+
+#ifdef COMPATIBLE_WITH_16M_512_512    
+    if (system_get_flash_size_map() == FLASH_SIZE_16M_MAP_512_512) {
+        partition_table = at_partition_table2;
+        partition_table_size = sizeof(at_partition_table2)/sizeof(at_partition_table2[0]);
+    }
+#endif
+    if(!system_partition_table_regist(partition_table, partition_table_size,SPI_FLASH_SIZE_MAP)) {
 		os_printf("system_partition_table_regist fail\r\n");
-	}
+    }
 }
 
 void ICACHE_FLASH_ATTR
