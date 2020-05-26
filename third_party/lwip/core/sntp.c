@@ -919,6 +919,10 @@ sntp_dns_found(const char* hostname, ip_addr_t *ipaddr, void *arg)
   LWIP_UNUSED_ARG(hostname);
   LWIP_UNUSED_ARG(arg);
 
+  if (sntp_pcb == NULL) {
+    return;
+  }
+  
   if (ipaddr != NULL) {
     /* Address resolved, send request */
     LWIP_DEBUGF(SNTP_DEBUG_STATE, ("sntp_dns_found: Server address resolved, sending request\n"));
