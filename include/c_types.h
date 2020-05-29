@@ -25,6 +25,8 @@
 #ifndef _C_TYPES_H_
 #define _C_TYPES_H_
 
+#ifdef USE_NON_STANDARD_TYPES
+
 typedef unsigned char       uint8_t;
 typedef signed char         sint8_t;
 typedef signed char         int8_t;
@@ -65,15 +67,29 @@ typedef double              real64;
 
 typedef unsigned int        size_t;
 
-#ifndef __packed
-#define __packed        __attribute__((packed))
-#endif
-
 #define LOCAL       static
 
 #ifndef NULL
 #define NULL (void *)0
-#endif /* NULL */
+#endif
+
+#ifndef __cplusplus
+typedef unsigned char   bool;
+#define BOOL            bool
+#define true            (1)
+#define false           (0)
+#define TRUE            true
+#define FALSE           false
+#endif /* !__cplusplus */
+
+#else
+#include <stdint.h>
+#include <stdbool.h>
+#endif
+
+#ifndef __packed
+#define __packed        __attribute__((packed))
+#endif
 
 /* probably should not put STATUS here */
 typedef enum {
@@ -101,16 +117,5 @@ typedef enum {
 #endif /* ICACHE_FLASH */
 
 #define STORE_ATTR __attribute__((aligned(4)))
-
-#ifndef __cplusplus
-typedef unsigned char   bool;
-#define BOOL            bool
-#define true            (1)
-#define false           (0)
-#define TRUE            true
-#define FALSE           false
-
-
-#endif /* !__cplusplus */
 
 #endif /* _C_TYPES_H_ */

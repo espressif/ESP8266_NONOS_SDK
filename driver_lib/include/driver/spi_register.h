@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef SPI_REGISTER_H_INCLUDED
-#define SPI_REGISTER_H_INCLUDED
+#ifndef SPI_REGISTER_H_
+#define SPI_REGISTER_H_
 
 #define REG_SPI_BASE(i)  (0x60000200-i*0x100)
 #define SPI_CMD(i)       (REG_SPI_BASE(i)  + 0x0)
@@ -219,4 +219,4 @@
 #define SPI_EXT3(i)     (REG_SPI_BASE(i) + 0xFC)
 #define SPI_INT_HOLD_ENA 0x00000003
 #define SPI_INT_HOLD_ENA_S 0
-#endif // SPI_REGISTER_H_INCLUDED
+#endif /* SPI_REGISTER_H_ */

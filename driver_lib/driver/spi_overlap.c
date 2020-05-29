@@ -22,9 +22,9 @@
  *
  */
 
-#include "driver/spi_overlap.h"
-#include "driver/spi.h"
 #include "gpio.h"
+#include "driver/spi.h"
+#include "driver/spi_overlap.h"
 
 #define SPI_FLASH_READ_MODE_MASK 0x196000
 #define WAIT_HSPI_IDLE()     while(READ_PERI_REG(SPI_EXT2(HSPI))||(READ_PERI_REG(SPI_CMD(HSPI))&0xfffc0000));
@@ -41,32 +41,30 @@
 #define DISABLE_HSPI_DEV_CS()        GPIO_OUTPUT_SET(15, 1);\
     PIN_FUNC_SELECT(PERIPHS_IO_MUX_MTDO_U, FUNC_GPIO15)
 struct hspi_device_register hspi_dev_reg;
+
 /******************************************************************************
  * FunctionName : hspi_overlap_init
  * Description  : enable hspi and spi module overlap mode
 *******************************************************************************/
-void ICACHE_FLASH_ATTR
-hspi_overlap_init(void)
-{
-    //hspi overlap to spi, two spi masters on cspi
+void ICACHE_FLASH_ATTR hspi_overlap_init(void) {
+    /* hspi overlap to spi, two spi masters on cspi */
     SET_PERI_REG_MASK(HOST_INF_SEL, reg_cspi_overlap);
 
-    //set higher priority for spi than hspi
+    /* set higher priority for spi than hspi */
     SET_PERI_REG_MASK(SPI_EXT3(SPI), 0x1);
     SET_PERI_REG_MASK(SPI_EXT3(HSPI), 0x3);
     SET_PERI_REG_MASK(SPI_USER(HSPI), BIT(5));
 }
+
 /******************************************************************************
  * FunctionName : hspi_overlap_deinit
  * Description  : recover hspi and spi module from overlap mode
 *******************************************************************************/
-void ICACHE_FLASH_ATTR
-hspi_overlap_deinit(void)
-{
-    //hspi overlap to spi, two spi masters on cspi
+void ICACHE_FLASH_ATTR hspi_overlap_deinit(void) {
+    /* hspi overlap to spi, two spi masters on cspi */
     CLEAR_PERI_REG_MASK(HOST_INF_SEL, reg_cspi_overlap);
 
-    //set higher priority for spi than hspi
+    /* set higher priority for spi than hspi */
     CLEAR_PERI_REG_MASK(SPI_EXT3(SPI), 0x1);
     CLEAR_PERI_REG_MASK(SPI_EXT3(HSPI), 0x3);
     CLEAR_PERI_REG_MASK(SPI_USER(HSPI), BIT(5));
@@ -77,11 +75,9 @@ hspi_overlap_deinit(void)
  * Description  : backup SPI normal operation register value and disable CPU cache to modify some flash registers.
  * Parameters   :     uint8_t spi_no - SPI module number, Only "SPI" and "HSPI" are valid
 *******************************************************************************/
-void ICACHE_FLASH_ATTR
-spi_reg_backup(uint8_t spi_no, uint32_t *backup_mem)
-{
+void ICACHE_FLASH_ATTR spi_reg_backup(uint8_t spi_no, uint32_t *backup_mem) {
     if (spi_no > 1) {
-        return;    //handle invalid input number
+        return;
     }
 
     backup_mem[PERIPHS_IO_MUX_BACKUP]    = READ_PERI_REG(PERIPHS_IO_MUX);
@@ -94,19 +90,18 @@ spi_reg_backup(uint8_t spi_no, uint32_t *backup_mem)
     backup_mem[SPI_PIN_BACKUP]    = READ_PERI_REG(SPI_PIN(spi_no));
     backup_mem[SPI_SLAVE_BACKUP]    = READ_PERI_REG(SPI_SLAVE(spi_no));
 }
+
 /******************************************************************************
  * FunctionName : spi_reg_recover
  * Description  : recover SPI normal operation register value and enable CPU cache.
  * Parameters   :     uint8_t spi_no - SPI module number, Only "SPI" and "HSPI" are valid
 *******************************************************************************/
-void ICACHE_FLASH_ATTR
-spi_reg_recover(uint8_t spi_no, uint32_t *backup_mem)
-{
+void ICACHE_FLASH_ATTR spi_reg_recover(uint8_t spi_no, uint32_t *backup_mem) {
     if (spi_no > 1) {
-        return;    //handle invalid input number
+        return;
     }
 
-//    WRITE_PERI_REG(PERIPHS_IO_MUX, backup_mem[PERIPHS_IO_MUX_BACKUP]);
+/*    WRITE_PERI_REG(PERIPHS_IO_MUX, backup_mem[PERIPHS_IO_MUX_BACKUP]); */
     WRITE_PERI_REG(SPI_USER(spi_no), backup_mem[SPI_USER_BACKUP]);
     WRITE_PERI_REG(SPI_CTRL(spi_no), backup_mem[SPI_CTRL_BACKUP]);
     WRITE_PERI_REG(SPI_CLOCK(spi_no), backup_mem[SPI_CLOCK_BACKUP]);
@@ -114,12 +109,10 @@ spi_reg_recover(uint8_t spi_no, uint32_t *backup_mem)
     WRITE_PERI_REG(SPI_USER2(spi_no), backup_mem[SPI_USER2_BACKUP]);
     WRITE_PERI_REG(SPI_CMD(spi_no), backup_mem[SPI_CMD_BACKUP]);
     WRITE_PERI_REG(SPI_PIN(spi_no), backup_mem[SPI_PIN_BACKUP]);
-//    WRITE_PERI_REG(SPI_SLAVE(spi_no), backup_mem[SPI_SLAVE_BACKUP]);
+/*    WRITE_PERI_REG(SPI_SLAVE(spi_no), backup_mem[SPI_SLAVE_BACKUP]); */
 }
 
-void ICACHE_FLASH_ATTR
-hspi_master_dev_init(uint8_t dev_no, uint8_t clk_polar, uint8_t clk_div)
-{
+void ICACHE_FLASH_ATTR hspi_master_dev_init(uint8_t dev_no, uint8_t clk_polar, uint8_t clk_div) {
     uint32_t regtemp;
 
     if ((dev_no > 3) || (clk_polar > 1) || (clk_div > 0x1f)) {
@@ -148,7 +141,7 @@ hspi_master_dev_init(uint8_t dev_no, uint8_t clk_polar, uint8_t clk_div)
 
         hspi_dev_reg.hspi_reg_backup_flag = 1;
 
-        //    spi_reg_recover(HSPI, hspi_dev_reg.hspi_flash_reg_backup);
+        /* spi_reg_recover(HSPI, hspi_dev_reg.hspi_flash_reg_backup); */
         hspi_dev_reg.selected_dev_num = HSPI_IDLE;
     }
 
@@ -188,9 +181,7 @@ hspi_master_dev_init(uint8_t dev_no, uint8_t clk_polar, uint8_t clk_div)
     }
 }
 
-void ICACHE_FLASH_ATTR
-hspi_dev_sel(uint8_t dev_no)
-{
+void ICACHE_FLASH_ATTR hspi_dev_sel(uint8_t dev_no) {
     uint32_t regval;
 
     if (dev_no > 3) {
@@ -423,17 +414,15 @@ hspi_dev_sel(uint8_t dev_no)
  *                uint32_t * addr_dest--start address for preped destination memory space
  *                uint32_t byte_length--length of the data which needs to be read from flash
 *******************************************************************************/
-SpiFlashOpResult ICACHE_FLASH_ATTR
-hspi_overlap_read_flash_data(SpiFlashChip *spi, uint32_t flash_addr, uint32_t *addr_dest, uint32_t byte_length)
-{
+SpiFlashOpResult ICACHE_FLASH_ATTR hspi_overlap_read_flash_data(SpiFlashChip *spi, uint32_t flash_addr, uint32_t *addr_dest, uint32_t byte_length) {
     uint32_t  temp_addr, reg_tmp;
-    sint32  temp_length;
+    int32_t  temp_length;
     uint8_t   i;
     uint8_t   remain_word_num;
 
     hspi_dev_sel(SPI_CS0_FLASH);
 
-    //address range check
+    /* address range check */
     if ((flash_addr + byte_length) > (spi->chip_size)) {
         return SPI_FLASH_RESULT_ERR;
     }
@@ -443,7 +432,7 @@ hspi_overlap_read_flash_data(SpiFlashChip *spi, uint32_t flash_addr, uint32_t *a
 
     while (temp_length > 0) {
         if (temp_length >= SPI_BUFF_BYTE_NUM) {
-            //   reg_tmp=((temp_addr&0xff)<<16)|(temp_addr&0xff00)|((temp_addr&0xff0000)>>16)|(SPI_BUFF_BYTE_NUM << SPI_FLASH_BYTES_LEN);
+            /* reg_tmp=((temp_addr&0xff)<<16)|(temp_addr&0xff00)|((temp_addr&0xff0000)>>16)|(SPI_BUFF_BYTE_NUM << SPI_FLASH_BYTES_LEN); */
             reg_tmp = temp_addr | (SPI_BUFF_BYTE_NUM << SPI_FLASH_BYTES_LEN) ;
             WRITE_PERI_REG(SPI_ADDR(HSPI), reg_tmp);
             WRITE_PERI_REG(SPI_CMD(HSPI), SPI_FLASH_READ);
@@ -475,8 +464,7 @@ hspi_overlap_read_flash_data(SpiFlashChip *spi, uint32_t flash_addr, uint32_t *a
     return SPI_FLASH_RESULT_OK;
 }
 
-void ICACHE_FLASH_ATTR
-hspi_overlap_flash_init(void)
+void ICACHE_FLASH_ATTR hspi_overlap_flash_init(void)
 {
     hspi_master_dev_init(SPI_CS0_FLASH, 0, 0);
 

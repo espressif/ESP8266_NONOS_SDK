@@ -40,19 +40,19 @@
 
 typedef void (*upgrade_states_check_callback)(void * arg);
 
-//#define UPGRADE_SSL_ENABLE
+/* #define UPGRADE_SSL_ENABLE */
 
 struct upgrade_server_info {
-    uint8 ip[4];
-    uint16 port;
+    uint8_t  ip[4];
+    uint16_t port;
 
-    uint8 upgrade_flag;
+    uint8_t upgrade_flag;
 
-    uint8 pre_version[16];
-    uint8 upgrade_version[16];
+    uint8_t pre_version[16];
+    uint8_t upgrade_version[16];
 
-    uint32 check_times;
-    uint8 *url;
+    uint32_t check_times;
+    uint8_t *url;
 
     upgrade_states_check_callback check_cb;
     struct espconn *pespconn;
@@ -62,12 +62,12 @@ struct upgrade_server_info {
 #define UPGRADE_FLAG_START      0x01
 #define UPGRADE_FLAG_FINISH     0x02
 
-void system_upgrade_init();
-void system_upgrade_deinit();
-bool system_upgrade(uint8 *data, uint16 len);
+void system_upgrade_init(void);
+void system_upgrade_deinit(void);
+bool system_upgrade(uint8_t *data, uint16_t len);
 
 #ifdef UPGRADE_SSL_ENABLE
-bool system_upgrade_start_ssl(struct upgrade_server_info *server);	// not supported now
+bool system_upgrade_start_ssl(struct upgrade_server_info *server);	/* not supported now */
 #else
 bool system_upgrade_start(struct upgrade_server_info *server);
 #endif

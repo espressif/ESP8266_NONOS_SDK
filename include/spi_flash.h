@@ -24,6 +24,7 @@
 
 #ifndef SPI_FLASH_H
 #define SPI_FLASH_H
+#include <c_types.h>
 
 typedef enum {
     SPI_FLASH_RESULT_OK,
@@ -32,26 +33,26 @@ typedef enum {
 } SpiFlashOpResult;
 
 typedef struct{
-	uint32	deviceId;
-	uint32	chip_size;    // chip size in byte
-	uint32	block_size;
-	uint32  sector_size;
-	uint32  page_size;
-	uint32  status_mask;
+	uint32_t	deviceId;
+	uint32_t	chip_size;    /* chip size in byte */
+	uint32_t	block_size;
+	uint32_t  sector_size;
+	uint32_t  page_size;
+	uint32_t  status_mask;
 } SpiFlashChip;
 
 #define SPI_FLASH_SEC_SIZE      4096
 
-uint32 spi_flash_get_id(void);
-SpiFlashOpResult spi_flash_erase_sector(uint16 sec);
-SpiFlashOpResult spi_flash_write(uint32 des_addr, uint32 *src_addr, uint32 size);
-SpiFlashOpResult spi_flash_read(uint32 src_addr, uint32 *des_addr, uint32 size);
+uint32_t spi_flash_get_id(void);
+SpiFlashOpResult spi_flash_erase_sector(uint16_t sec);
+SpiFlashOpResult spi_flash_write(uint32_t des_addr, uint32_t *src_addr, uint32_t size);
+SpiFlashOpResult spi_flash_read(uint32_t src_addr, uint32_t *des_addr, uint32_t size);
 
 typedef SpiFlashOpResult (* user_spi_flash_read)(
 		SpiFlashChip *spi,
-		uint32 src_addr,
-		uint32 *des_addr,
-        uint32 size);
+		uint32_t src_addr,
+		uint32_t *des_addr,
+        uint32_t size);
 
 void spi_flash_set_read_func(user_spi_flash_read read);
 

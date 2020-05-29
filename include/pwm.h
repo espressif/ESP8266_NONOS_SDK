@@ -36,23 +36,23 @@
 #define PWM_CHANNEL_NUM_MAX 8 
 
 struct pwm_param {
-    uint32 period;
-    uint32 freq;
-    uint32  duty[PWM_CHANNEL_NUM_MAX];  //PWM_CHANNEL<=8
+    uint32_t period;
+    uint32_t freq;
+    uint32_t  duty[PWM_CHANNEL_NUM_MAX];  /* PWM_CHANNEL<=8 */
 };
 
 
 /* pwm_init should be called only once, for now  */
-void pwm_init(uint32 period, uint32 *duty,uint32 pwm_channel_num,uint32 (*pin_info_list)[3]);
+void pwm_init(uint32_t period, uint32_t *duty,uint32_t pwm_channel_num,uint32_t (*pin_info_list)[3]);
 void pwm_start(void);
 
-void pwm_set_duty(uint32 duty, uint8 channel);
-uint32 pwm_get_duty(uint8 channel);
-void pwm_set_period(uint32 period);
-uint32 pwm_get_period(void);
+void pwm_set_duty(uint32_t duty, uint8_t channel);
+uint32_t pwm_get_duty(uint8_t channel);
+void pwm_set_period(uint32_t period);
+uint32_t pwm_get_period(void);
 
-uint32 get_pwm_version(void);
-void set_pwm_debug_en(uint8 print_en);
+uint32_t get_pwm_version(void);
+void set_pwm_debug_en(uint8_t print_en);
 
 #endif
 

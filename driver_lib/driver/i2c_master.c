@@ -22,12 +22,13 @@
  *
  */
 #include "ets_sys.h"
+#include "c_types.h"
 #include "osapi.h"
 #include "gpio.h"
 #include "driver/i2c_master.h"
 
-LOCAL uint8_t m_nLastSDA;
-LOCAL uint8_t m_nLastSCL;
+static uint8_t m_nLastSDA;
+static uint8_t m_nLastSCL;
 
 /******************************************************************************
  * FunctionName : i2c_master_setDC
@@ -37,9 +38,7 @@ LOCAL uint8_t m_nLastSCL;
  *                uint8_t SCL
  * Returns      : NONE
 *******************************************************************************/
-LOCAL void ICACHE_FLASH_ATTR
-i2c_master_setDC(uint8_t SDA, uint8_t SCL)
-{
+static void ICACHE_FLASH_ATTR i2c_master_setDC(uint8_t SDA, uint8_t SCL) {
     SDA    &= 0x01;
     SCL    &= 0x01;
     m_nLastSDA = SDA;
@@ -63,9 +62,7 @@ i2c_master_setDC(uint8_t SDA, uint8_t SCL)
  * Parameters   : NONE
  * Returns      : uint8_t - SDA bit value
 *******************************************************************************/
-LOCAL uint8_t ICACHE_FLASH_ATTR
-i2c_master_getDC(void)
-{
+static uint8_t ICACHE_FLASH_ATTR i2c_master_getDC(void) {
     uint8_t sda_out;
     sda_out = GPIO_INPUT_GET(GPIO_ID_PIN(I2C_MASTER_SDA_GPIO));
     return sda_out;
@@ -77,29 +74,27 @@ i2c_master_getDC(void)
  * Parameters   : NONE
  * Returns      : NONE
 *******************************************************************************/
-void ICACHE_FLASH_ATTR
-i2c_master_init(void)
-{
+void ICACHE_FLASH_ATTR i2c_master_init(void) {
     uint8_t i;
 
     i2c_master_setDC(1, 0);
     i2c_master_wait(5);
 
-    // when SCL = 0, toggle SDA to clear up
+    /* when SCL = 0, toggle SDA to clear up */
     i2c_master_setDC(0, 0) ;
     i2c_master_wait(5);
     i2c_master_setDC(1, 0) ;
     i2c_master_wait(5);
 
-    // set data_cnt to max value
+    /* set data_cnt to max value */
     for (i = 0; i < 28; i++) {
         i2c_master_setDC(1, 0);
-        i2c_master_wait(5);    // sda 1, scl 0
+        i2c_master_wait(5);    /* sda 1, scl 0 */
         i2c_master_setDC(1, 1);
-        i2c_master_wait(5);    // sda 1, scl 1
+        i2c_master_wait(5);    /* sda 1, scl 1 */
     }
 
-    // reset all
+    /* reset all */
     i2c_master_stop();
     return;
 }
@@ -111,24 +106,22 @@ i2c_master_init(void)
  * Parameters   : NONE
  * Returns      : NONE
 *******************************************************************************/
-void ICACHE_FLASH_ATTR
-i2c_master_gpio_init(void)
-{
+void ICACHE_FLASH_ATTR i2c_master_gpio_init(void) {
     ETS_GPIO_INTR_DISABLE() ;
-//    ETS_INTR_LOCK();
+/*    ETS_INTR_LOCK(); */
 
     PIN_FUNC_SELECT(I2C_MASTER_SDA_MUX, I2C_MASTER_SDA_FUNC);
     PIN_FUNC_SELECT(I2C_MASTER_SCL_MUX, I2C_MASTER_SCL_FUNC);
 
-    GPIO_REG_WRITE(GPIO_PIN_ADDR(GPIO_ID_PIN(I2C_MASTER_SDA_GPIO)), GPIO_REG_READ(GPIO_PIN_ADDR(GPIO_ID_PIN(I2C_MASTER_SDA_GPIO))) | GPIO_PIN_PAD_DRIVER_SET(GPIO_PAD_DRIVER_ENABLE)); //open drain;
+    GPIO_REG_WRITE(GPIO_PIN_ADDR(GPIO_ID_PIN(I2C_MASTER_SDA_GPIO)), GPIO_REG_READ(GPIO_PIN_ADDR(GPIO_ID_PIN(I2C_MASTER_SDA_GPIO))) | GPIO_PIN_PAD_DRIVER_SET(GPIO_PAD_DRIVER_ENABLE));
     GPIO_REG_WRITE(GPIO_ENABLE_ADDRESS, GPIO_REG_READ(GPIO_ENABLE_ADDRESS) | (1 << I2C_MASTER_SDA_GPIO));
-    GPIO_REG_WRITE(GPIO_PIN_ADDR(GPIO_ID_PIN(I2C_MASTER_SCL_GPIO)), GPIO_REG_READ(GPIO_PIN_ADDR(GPIO_ID_PIN(I2C_MASTER_SCL_GPIO))) | GPIO_PIN_PAD_DRIVER_SET(GPIO_PAD_DRIVER_ENABLE)); //open drain;
+    GPIO_REG_WRITE(GPIO_PIN_ADDR(GPIO_ID_PIN(I2C_MASTER_SCL_GPIO)), GPIO_REG_READ(GPIO_PIN_ADDR(GPIO_ID_PIN(I2C_MASTER_SCL_GPIO))) | GPIO_PIN_PAD_DRIVER_SET(GPIO_PAD_DRIVER_ENABLE));
     GPIO_REG_WRITE(GPIO_ENABLE_ADDRESS, GPIO_REG_READ(GPIO_ENABLE_ADDRESS) | (1 << I2C_MASTER_SCL_GPIO));
 
     I2C_MASTER_SDA_HIGH_SCL_HIGH();
 
     ETS_GPIO_INTR_ENABLE() ;
-//    ETS_INTR_UNLOCK();
+/*    ETS_INTR_UNLOCK(); */
 
     i2c_master_init();
 }
@@ -139,15 +132,13 @@ i2c_master_gpio_init(void)
  * Parameters   : NONE
  * Returns      : NONE
 *******************************************************************************/
-void ICACHE_FLASH_ATTR
-i2c_master_start(void)
-{
+void ICACHE_FLASH_ATTR i2c_master_start(void) {
     i2c_master_setDC(1, m_nLastSCL);
     i2c_master_wait(5);
     i2c_master_setDC(1, 1);
-    i2c_master_wait(5);    // sda 1, scl 1
+    i2c_master_wait(5);    /* sda 1, scl 1 */
     i2c_master_setDC(0, 1);
-    i2c_master_wait(5);    // sda 0, scl 1
+    i2c_master_wait(5);    /* sda 0, scl 1 */
 }
 
 /******************************************************************************
@@ -156,17 +147,15 @@ i2c_master_start(void)
  * Parameters   : NONE
  * Returns      : NONE
 *******************************************************************************/
-void ICACHE_FLASH_ATTR
-i2c_master_stop(void)
-{
+void ICACHE_FLASH_ATTR i2c_master_stop(void) {
     i2c_master_wait(5);
 
     i2c_master_setDC(0, m_nLastSCL);
-    i2c_master_wait(5);    // sda 0
+    i2c_master_wait(5);    /* sda 0 */
     i2c_master_setDC(0, 1);
-    i2c_master_wait(5);    // sda 0, scl 1
+    i2c_master_wait(5);    /* sda 0, scl 1 */
     i2c_master_setDC(1, 1);
-    i2c_master_wait(5);    // sda 1, scl 1
+    i2c_master_wait(5);    /* sda 1, scl 1 */
 }
 
 /******************************************************************************
@@ -175,17 +164,15 @@ i2c_master_stop(void)
  * Parameters   : uint8_t level - 0 or 1
  * Returns      : NONE
 *******************************************************************************/
-void ICACHE_FLASH_ATTR
-i2c_master_setAck(uint8_t level)
-{
+void ICACHE_FLASH_ATTR i2c_master_setAck(uint8_t level) {
     i2c_master_setDC(m_nLastSDA, 0);
     i2c_master_wait(5);
     i2c_master_setDC(level, 0);
-    i2c_master_wait(5);    // sda level, scl 0
+    i2c_master_wait(5);    /* sda level, scl 0 */
     i2c_master_setDC(level, 1);
-    i2c_master_wait(8);    // sda level, scl 1
+    i2c_master_wait(8);    /* sda level, scl 1 */
     i2c_master_setDC(level, 0);
-    i2c_master_wait(5);    // sda level, scl 0
+    i2c_master_wait(5);    /* sda level, scl 0 */
     i2c_master_setDC(1, 0);
     i2c_master_wait(5);
 }
@@ -196,9 +183,7 @@ i2c_master_setAck(uint8_t level)
  * Parameters   : NONE
  * Returns      : uint8_t - ack value, 0 or 1
 *******************************************************************************/
-uint8_t ICACHE_FLASH_ATTR
-i2c_master_getAck(void)
-{
+uint8_t ICACHE_FLASH_ATTR i2c_master_getAck(void) {
     uint8_t retVal;
     i2c_master_setDC(m_nLastSDA, 0);
     i2c_master_wait(5);
@@ -221,13 +206,12 @@ i2c_master_getAck(void)
 * Parameters   : NONE
 * Returns      : true : get ack ; false : get nack
 *******************************************************************************/
-bool ICACHE_FLASH_ATTR
-i2c_master_checkAck(void)
+bool ICACHE_FLASH_ATTR i2c_master_checkAck(void)
 {
     if (i2c_master_getAck()) {
-        return FALSE;
+        return false;
     } else {
-        return TRUE;
+        return true;
     }
 }
 
@@ -237,20 +221,17 @@ i2c_master_checkAck(void)
 * Parameters   : NONE
 * Returns      : NONE
 *******************************************************************************/
-void ICACHE_FLASH_ATTR
-i2c_master_send_ack(void)
-{
+void ICACHE_FLASH_ATTR i2c_master_send_ack(void) {
     i2c_master_setAck(0x0);
 }
+
 /******************************************************************************
 * FunctionName : i2c_master_send_nack
 * Description  : response nack
 * Parameters   : NONE
 * Returns      : NONE
 *******************************************************************************/
-void ICACHE_FLASH_ATTR
-i2c_master_send_nack(void)
-{
+void ICACHE_FLASH_ATTR i2c_master_send_nack(void) {
     i2c_master_setAck(0x1);
 }
 
@@ -260,28 +241,26 @@ i2c_master_send_nack(void)
  * Parameters   : NONE
  * Returns      : uint8_t - readed value
 *******************************************************************************/
-uint8_t ICACHE_FLASH_ATTR
-i2c_master_readByte(void)
-{
+uint8_t ICACHE_FLASH_ATTR i2c_master_readByte(void) {
     uint8_t retVal = 0;
     uint8_t k, i;
 
     i2c_master_wait(5);
     i2c_master_setDC(m_nLastSDA, 0);
-    i2c_master_wait(5);    // sda 1, scl 0
+    i2c_master_wait(5);    /* sda 1, scl 0 */
 
     for (i = 0; i < 8; i++) {
         i2c_master_wait(5);
         i2c_master_setDC(1, 0);
-        i2c_master_wait(5);    // sda 1, scl 0
+        i2c_master_wait(5);    /* sda 1, scl 0 */
         i2c_master_setDC(1, 1);
-        i2c_master_wait(5);    // sda 1, scl 1
+        i2c_master_wait(5);    /* sda 1, scl 1 */
 
         k = i2c_master_getDC();
         i2c_master_wait(5);
 
         if (i == 7) {
-            i2c_master_wait(3);   ////
+            i2c_master_wait(3);
         }
 
         k <<= (7 - i);
@@ -289,7 +268,7 @@ i2c_master_readByte(void)
     }
 
     i2c_master_setDC(1, 0);
-    i2c_master_wait(5);    // sda 1, scl 0
+    i2c_master_wait(5);    /* sda 1, scl 0 */
 
     return retVal;
 }
@@ -300,11 +279,9 @@ i2c_master_readByte(void)
  * Parameters   : uint8_t wrdata - write value
  * Returns      : NONE
 *******************************************************************************/
-void ICACHE_FLASH_ATTR
-i2c_master_writeByte(uint8_t wrdata)
-{
+void ICACHE_FLASH_ATTR i2c_master_writeByte(uint8_t wrdata) {
     uint8_t dat;
-    sint8 i;
+    int8_t i;
 
     i2c_master_wait(5);
 
@@ -319,7 +296,7 @@ i2c_master_writeByte(uint8_t wrdata)
         i2c_master_wait(5);
 
         if (i == 0) {
-            i2c_master_wait(3);   ////
+            i2c_master_wait(3);
         }
 
         i2c_master_setDC(dat, 0);

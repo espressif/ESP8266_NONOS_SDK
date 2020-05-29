@@ -22,13 +22,13 @@
  *
  */
 
-#ifndef SPI_OVERLAP_APP_H
-#define SPI_OVERLAP_APP_H
+#ifndef SPI_OVERLAP_H_
+#define SPI_OVERLAP_H_
 
 #include "ets_sys.h"
 #include "spi_flash.h"
 #define HSPI_OVERLAP
-//#define NO_HSPI_DEVICE
+/* #define NO_HSPI_DEVICE */
 #define HOST_INF_SEL 0x3ff00028
 #define FUNC_SPI_CS2 1
 #define FUNC_SPI_CS1 1
@@ -82,4 +82,4 @@ void hspi_dev_sel(uint8_t dev_no);
 void hspi_overlap_flash_init(void);
 SpiFlashOpResult hspi_overlap_read_flash_data(SpiFlashChip *spi, uint32_t flash_addr, uint32_t *addr_dest, uint32_t byte_length);
 
-#endif
+#endif /* SPI_OVERLAP_H_ */
