@@ -1,15 +1,15 @@
 gwen:
-    at          :   26c15e1
-    crypto      :   f27ffe0
-    espnow      :   f27ffe0
-    main        :   9532ceb
-    net80211    :   f27ffe0
-    pp          :   f27ffe0
-    ssl         :   f27ffe0
-    upgrade     :   f27ffe0
-    wpa         :   f27ffe0
-    wpa2        :   f27ffe0
-    wps         :   f27ffe0
+    at          :   52383f9
+    crypto      :   52383f9
+    espnow      :   52383f9
+    main        :   52383f9
+    net80211    :   52383f9
+    pp          :   52383f9
+    ssl         :   52383f9
+    upgrade     :   52383f9
+    wpa         :   52383f9
+    wpa2        :   52383f9
+    wps         :   52383f9
 
 phy:
     phy         :   1156_0

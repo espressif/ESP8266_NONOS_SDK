@@ -247,7 +247,7 @@ struct station_config {
                         // with both ssid[] and bssid[] matched. Please check about this.
     uint8 bssid[6];
     wifi_fast_scan_threshold_t threshold;
-    bool open_and_wep_mode_disable; // Can connect to open/wep router by default.
+    bool open_and_wep_mode_disable; // Can connect to open/wep router by default. If want to connect an open AP, please Do Not set password.
     bool all_channel_scan;
 };
 
