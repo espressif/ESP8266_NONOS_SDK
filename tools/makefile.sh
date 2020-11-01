@@ -55,7 +55,7 @@ fi
 	cp TLS.ca_x509.cer ca/
 	cp make_cacert.py ca/
 	cd ca/
-	python make_cacert.py
+	python2 make_cacert.py
 	cd ..
 	cp ca/esp_ca_cert.bin bin/
 	cp ca.crt ca/
@@ -82,7 +82,7 @@ if [ $TrueCA -eq 1 ];then
 		cp make_cert.py client/
 		cd client
 
-		python make_cert.py
+		python2 make_cert.py
 		rm make_cert.py
 		mv esp_cert_private_key.bin ../bin/
 		cd ..
@@ -114,7 +114,7 @@ if [ $TrueCA -eq 1 ];then
 		cp make_cert.py server/
 		cd server
 
-		python make_cert.py
+		python2 make_cert.py
 		rm make_cert.py
 		mv esp_cert_private_key.bin ../bin/
 		cd ..
@@ -181,7 +181,7 @@ EOF
 	cp make_cert.py client/
 	cd client
 
-	python make_cert.py
+	python2 make_cert.py
 	rm make_cert.py
 	mv esp_cert_private_key.bin ../bin/
 	cd ..
