@@ -715,11 +715,12 @@ MQTT_InitConnection(MQTT_Client *mqttClient, const char* host, uint32_t port, ui
 
 /**
   * @brief  MQTT initialization mqtt client function
-  * @param  client:     MQTT_Client reference
-  * @param  clientid:     MQTT client id
-  * @param  client_user:MQTT client user
-  * @param  client_pass:MQTT client password
-  * @param  client_pass:MQTT keep alive timer, in second
+  * @param  client:      MQTT_Client reference
+  * @param  client_id:   MQTT client id
+  * @param  client_user: MQTT client user
+  * @param  client_pass: MQTT client password
+  * @param  keepAliveTime: MQTT keep alive timer, in second
+  * @param  cleanSession: MQTT clean session (TRUE = Clean session, FALSE = Persistent Session)
   * @retval None
   */
 void ICACHE_FLASH_ATTR
