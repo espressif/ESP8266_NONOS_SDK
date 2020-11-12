@@ -897,7 +897,9 @@ espconn_get_connection_info(struct espconn *pespconn, remot_info **pcon_info, ui
 					premot[pespconn->link_cnt].state = plist->pespconn->state;
 					premot[pespconn->link_cnt].remote_port = plist->pcommon.remote_port;
 					os_memcpy(premot[pespconn->link_cnt].remote_ip,	plist->pcommon.remote_ip, 4);
-					pespconn->link_cnt ++;
+					if (!plist->close_flag) {
+					    pespconn->link_cnt ++;
+					}
 				}
 				plist = plist->pnext;
 			}
