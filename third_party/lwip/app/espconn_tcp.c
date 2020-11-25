@@ -434,14 +434,20 @@ espconn_Task(os_event_t *events)
 				break;
 			case SIG_ESPCONN_ERRER:
 				/*remove the node from the client's active connection list*/
-			    if (espconn_manual_recv_enabled(task_msg))
-			        espconn_list_delete(&plink_active, task_msg);
+				if (espconn_manual_recv_enabled(task_msg)) {
+					espconn_list_delete(&plink_active, task_msg);
+				} else {
+					plist->close_flag = 1;
+				}
 				espconn_tcp_reconnect(task_msg);
 				break;
 			case SIG_ESPCONN_CLOSE:
 				/*remove the node from the client's active connection list*/
-			    if (espconn_manual_recv_enabled(task_msg))
-			        espconn_list_delete(&plink_active, task_msg);
+				if (espconn_manual_recv_enabled(task_msg)) {
+					espconn_list_delete(&plink_active, task_msg);
+				} else {
+					plist->close_flag = 1;
+				}
 				espconn_tcp_disconnect_successful(task_msg);
 				break;
 			default:

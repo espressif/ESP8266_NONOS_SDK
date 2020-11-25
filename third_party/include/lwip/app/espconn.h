@@ -191,6 +191,7 @@ typedef struct _espconn_msg{
 	uint8 recv_hold_flag;
 	uint16 recv_holded_buf_Len;
 //*******************************************************
+	uint8 close_flag;
 	ringbuf *readbuf;
 }espconn_msg;
 
