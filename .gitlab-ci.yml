@@ -30,8 +30,8 @@ build_ssc:
   script:
     - git clone $GITLAB_SSH_SERVER/yinling/SSC.git
     - cd SSC
-    # try checkout same branch
-    - git checkout ${CI_BUILD_REF_NAME} || git checkout ${SSC_DEFAULT_BRANCH}
+    # ssc master branch does not support nonos any more, now checkout to the reserved branch
+    - git checkout ${SSC_DEFAULT_BRANCH}
     - chmod +x gen_misc_non_os.sh
     - ./gen_misc_non_os.sh
 
