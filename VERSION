@@ -1,15 +1,15 @@
 gwen:
-    at          :   52383f9
+    at          :   5d97bc9
     crypto      :   52383f9
     espnow      :   52383f9
     main        :   52383f9
-    net80211    :   52383f9
+    net80211    :   5d97bc9
     pp          :   52383f9
     ssl         :   52383f9
     upgrade     :   52383f9
     wpa         :   52383f9
     wpa2        :   52383f9
-    wps         :   52383f9
+    wps         :   5d97bc9
 
 phy:
     phy         :   1156_0
