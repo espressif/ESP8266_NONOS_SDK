@@ -2,6 +2,12 @@ stages:
   - build
   - deploy
 
+.install_compiler: &install_compiler
+  - wget https://dl.espressif.com/dl/xtensa-lx106-elf-linux64-1.22.0-100-ge567ec7-5.2.0.tar.gz
+  - tar -zxvf xtensa-lx106-elf-linux64-1.22.0-100-ge567ec7-5.2.0.tar.gz
+  - export PATH=./xtensa-lx106-elf/bin/:$PATH
+  - xtensa-lx106-elf-gcc -v
+
 .build_template: &build_template
   stage: build
   image: $CI_DOCKER_REGISTRY/esp8266-ci-env
@@ -19,7 +25,7 @@ stages:
     - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-
+    - *install_compiler
 
 build_ssc:
   <<: *build_template
