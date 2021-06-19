@@ -85,6 +85,10 @@ SECTIONS
     *(.sdata2.*)
     *(.gnu.linkonce.s2.*)
     *(.jcr)
+
+	/* Fixed Wrong Data Section, Crash LoadStoreErrorCause by Sergei Sovik https://github.com/SergeiSovik */
+	*libnet80211.a:ieee80211_phy.o(.irom.text .irom.text.*)
+
     _data_end = ABSOLUTE(.);
   } >dram0_0_seg :dram0_0_phdr
 
