@@ -98,7 +98,7 @@ CFG_Load()
 		os_strncpy(sysCfg.mqtt_user, MQTT_USER, sizeof(sysCfg.mqtt_user) - 1);
 		os_strncpy(sysCfg.mqtt_pass, MQTT_PASS, sizeof(sysCfg.mqtt_pass) - 1);
 
-		sysCfg.security = DEFAULT_SECURITY;	/* default non ssl */
+		sysCfg.security = MQTT_SECURITY;	/* default non ssl */
 
 		sysCfg.mqtt_keepalive = MQTT_KEEPALIVE;
 
