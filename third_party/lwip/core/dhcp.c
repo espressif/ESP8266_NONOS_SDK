@@ -1072,16 +1072,22 @@ dhcp_bind(struct netif *netif)
   if (dhcp->subnet_mask_given) {
     /* copy offered network mask */
     ip_addr_copy(sn_mask, dhcp->offered_sn_mask);
-  } else {
-    /* subnet mask not given, choose a safe subnet mask given the network class */
-    u8_t first_octet = ip4_addr1(&dhcp->offered_ip_addr);
-    if (first_octet <= 127) {
-      ip4_addr_set_u32(&sn_mask, PP_HTONL(0xff000000));
-    } else if (first_octet >= 192) {
-      ip4_addr_set_u32(&sn_mask, PP_HTONL(0xffffff00));
-    } else {
-      ip4_addr_set_u32(&sn_mask, PP_HTONL(0xffff0000));
-    }
+  } else { 
+     /* subnet mask not given */
+     if (!ip_addr_isany(&netif->ip_addr)) {
+	 /* if there is an IP lease use the previous mask */
+	 sn_mask = netif->netmask;
+     } else {
+	  /* choose a safe subnet mask given the network class */
+          u8_t first_octet = ip4_addr1(&dhcp->offered_ip_addr);
+          if (first_octet <= 127) {
+             ip4_addr_set_u32(&sn_mask, PP_HTONL(0xff000000));
+          } else if (first_octet >= 192) {
+             ip4_addr_set_u32(&sn_mask, PP_HTONL(0xffffff00));
+          } else {
+             ip4_addr_set_u32(&sn_mask, PP_HTONL(0xffff0000));
+          }
+     }
   }
 
   /* gateway address not given? */
