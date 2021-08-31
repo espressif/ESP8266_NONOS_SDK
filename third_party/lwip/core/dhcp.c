@@ -1073,23 +1073,34 @@ dhcp_bind(struct netif *netif)
     /* copy offered network mask */
     ip_addr_copy(sn_mask, dhcp->offered_sn_mask);
   } else {
-    /* subnet mask not given, choose a safe subnet mask given the network class */
-    u8_t first_octet = ip4_addr1(&dhcp->offered_ip_addr);
-    if (first_octet <= 127) {
-      ip4_addr_set_u32(&sn_mask, PP_HTONL(0xff000000));
-    } else if (first_octet >= 192) {
-      ip4_addr_set_u32(&sn_mask, PP_HTONL(0xffffff00));
-    } else {
-      ip4_addr_set_u32(&sn_mask, PP_HTONL(0xffff0000));
-    }
+     /* subnet mask not given */
+      if (!ip_addr_isany(&netif->netmask)) {
+	      /* if there is a previous subnet mask, use it */
+	      ip_addr_copy(sn_mask, netif->netmask);
+      } else {
+        /* choose a safe subnet mask given the network class */
+        u8_t first_octet = ip4_addr1(&dhcp->offered_ip_addr);
+        if (first_octet <= 127) {
+          ip4_addr_set_u32(&sn_mask, PP_HTONL(0xff000000));
+        } else if (first_octet >= 192) {
+          ip4_addr_set_u32(&sn_mask, PP_HTONL(0xffffff00));
+        } else {
+          ip4_addr_set_u32(&sn_mask, PP_HTONL(0xffff0000));
+        }
+      }
   }
 
-  ip_addr_copy(gw_addr, dhcp->offered_gw_addr);
   /* gateway address not given? */
-  if (ip_addr_isany(&gw_addr)) {
+  if (!ip_addr_isany(&dhcp->offered_gw_addr)) {
+    /* Use the offered address */
+    ip_addr_copy(gw_addr, dhcp->offered_gw_addr);
+  } else if (!ip_addr_isany(&netif->gw)) {
+    /* Use the address previously received */
+    ip_addr_copy(gw_addr, netif->gw);
+  } else {
     /* copy network address */
     ip_addr_get_network(&gw_addr, &dhcp->offered_ip_addr, &sn_mask);
-    /* use first host address on network as gateway */
+    /* assume gateway is xxx.xxx.xxx.1 */
     ip4_addr_set_u32(&gw_addr, ip4_addr_get_u32(&gw_addr) | PP_HTONL(0x00000001));
   }
 
