@@ -3,7 +3,7 @@ gwen:
     crypto      :   81bde69
     espnow      :   81bde69
     main        :   81bde69
-    net80211    :   81bde69
+    net80211    :   5d71a45
     pp          :   81bde69
     ssl         :   81bde69
     upgrade     :   81bde69
