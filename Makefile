@@ -209,6 +209,7 @@ OBINS := $(GEN_BINS:%=$(BINODIR)/%)
 
 CCFLAGS += 			\
 	-g			\
+	-Os     \
 	-Wpointer-arith		\
 	-Wundef			\
 	-Wl,-EL			\
@@ -219,6 +220,7 @@ CCFLAGS += 			\
 	-ffunction-sections \
 	-fdata-sections	\
 	-fno-builtin-printf \
+	-fno-jump-tables \
 	-fno-guess-branch-probability \
 	-freorder-blocks-and-partition \
 	-fno-cse-follow-jumps
