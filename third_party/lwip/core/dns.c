@@ -893,20 +893,10 @@ dns_enqueue(const char *name, dns_found_callback found, void *callback_arg)
 
     /* check if this is the oldest completed entry */
     if (pEntry->state == DNS_STATE_DONE) {
-      if ((dns_seqno - pEntry->seqno) > lseq) {
-        lseq = dns_seqno - pEntry->seqno;
+      u8_t age = (u8_t)(dns_seqno - pEntry->seqno);
+      if (age > lseq) {
+        lseq = age;
         lseqi = i;
-      } else {
-        if (pEntry->seqno >= (0xFF - DNS_TABLE_SIZE)) {
-          static u8 index = 0;
-          if ((pEntry->seqno - (0xFF - DNS_TABLE_SIZE)) == index) {
-            index ++;
-            lseqi = i;
-            if (index == DNS_TABLE_SIZE) {
-              index = 0;
-            }
-          }
-        }
       }
     }
   }
@@ -936,10 +926,8 @@ dns_enqueue(const char *name, dns_found_callback found, void *callback_arg)
   MEMCPY(pEntry->name, name, namelen);
   pEntry->name[namelen] = 0;
 
-  dns_seqno ++;
-  if (dns_seqno == 0xFF) {
-    dns_seqno = 0;
-  }
+  dns_seqno++;
+
   /* force to send query without waiting timer */
   dns_check_entry(i);
 
