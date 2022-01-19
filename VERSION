@@ -17,6 +17,6 @@ phy:
 gitlab:
     driver      :   5a2a54b4
     json        :   f55d5fee
-    lwip        :   c7b8f692
+    lwip        :   3c984cd8
     mbedtls     :   82b93fe5
     smartconfig :   ea1d4a13(v2.5.5)
