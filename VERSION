@@ -3,11 +3,11 @@ gwen:
     crypto      :   865fa65
     espnow      :   865fa65
     main        :   865fa65
-    net80211    :   865fa65
+    net80211    :   1cef03c
     pp          :   865fa65
     ssl         :   865fa65
     upgrade     :   865fa65
-    wpa         :   865fa65
+    wpa         :   1cef03c
     wpa2        :   865fa65
     wps         :   865fa65
 
