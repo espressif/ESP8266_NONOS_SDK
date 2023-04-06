@@ -2,8 +2,8 @@ gwen:
     at          :   865fa65
     crypto      :   865fa65
     espnow      :   865fa65
-    main        :   865fa65
-    net80211    :   1cef03c
+    main        :   072755c
+    net80211    :   072755c
     pp          :   865fa65
     ssl         :   865fa65
     upgrade     :   81bde69
