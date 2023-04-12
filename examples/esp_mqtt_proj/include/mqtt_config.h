@@ -23,7 +23,7 @@ typedef enum{
 #define STA_SSID "AP_SSID"    // your AP/router SSID to config your device networking
 #define STA_PASS "AP_Passwd" // your AP/router password
 
-#define DEFAULT_SECURITY    NO_TLS      // very important: you must config DEFAULT_SECURITY for SSL/TLS
+#define MQTT_SECURITY NO_TLS  // very important: you must config MQTT_SECURITY for SSL/TLS
 
 #define CA_CERT_FLASH_ADDRESS 0x77              // CA certificate address in flash to read, 0x77 means address 0x77000
 #define CLIENT_CERT_FLASH_ADDRESS 0x78          // client certificate and private key address in flash to read, 0x78 means address 0x78000
