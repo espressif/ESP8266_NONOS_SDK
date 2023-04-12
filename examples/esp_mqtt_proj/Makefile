@@ -29,7 +29,7 @@ SUBDIRS=    \
 endif # } PDIR
 
 APPDIR = .
-LDDIR = ../ld
+LDDIR = ../../ld
 
 CCFLAGS += -Os
 
@@ -53,7 +53,8 @@ COMPONENTS_eagle.app.v6 = \
 	modules/libmodules.a
 
 LINKFLAGS_eagle.app.v6 = \
-	-L../lib        \
+	-L../../lib        \
+	-L../../ld        \
 	-nostdlib	\
     -T$(LD_FILE)   \
 	-Wl,--no-check-sections	\
@@ -123,7 +124,7 @@ DDEFINES +=				\
 #
 
 INCLUDES := $(INCLUDES) -I $(PDIR)include -I $(PDIR)include/mqtt -I $(PDIR)include/modules
-PDIR := ../$(PDIR)
+PDIR := ../../$(PDIR)
 sinclude $(PDIR)Makefile
 
 .PHONY: FORCE
