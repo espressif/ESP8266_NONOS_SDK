@@ -25,6 +25,8 @@
 #ifndef __WPA2_ENTERPRISE_H__
 #define __WPA2_ENTERPRISE_H__
 
+#include "c_types.h"
+
 typedef long os_time_t;
 
 struct os_time {
