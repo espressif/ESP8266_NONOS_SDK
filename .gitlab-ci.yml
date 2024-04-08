@@ -27,19 +27,19 @@ stages:
     - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
     - *install_compiler
 
-build_ssc:
-  <<: *build_template
-  artifacts:
-    paths:
-      - ./SSC/ssc_bin
-    expire_in: 6 mos
-  script:
-    - git clone $GITLAB_SSH_SERVER/yinling/SSC.git
-    - cd SSC
-    # ssc master branch does not support nonos any more, now checkout to the reserved branch
-    - git checkout ${SSC_DEFAULT_BRANCH}
-    - chmod +x gen_misc_non_os.sh
-    - ./gen_misc_non_os.sh
+# build_ssc:
+#   <<: *build_template
+#   artifacts:
+#     paths:
+#       - ./SSC/ssc_bin
+#     expire_in: 6 mos
+#   script:
+#     - git clone $GITLAB_SSH_SERVER/yinling/SSC.git
+#     - cd SSC
+#     # ssc master branch does not support nonos any more, now checkout to the reserved branch
+#     - git checkout ${SSC_DEFAULT_BRANCH}
+#     - chmod +x gen_misc_non_os.sh
+#     - ./gen_misc_non_os.sh
 
 build_at:
   <<: *build_template
@@ -52,6 +52,148 @@ build_at:
     - cp -rf examples/at at
     - cd at
     - make COMPILE=gcc BOOT=new APP=1 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=5
+
+build_at_espconn:
+  <<: *build_template
+  artifacts:
+    paths:
+      - ./bin/upgrade
+      - ./bin/*.bin
+    expire_in: 6 mos
+  script:
+    - cp -rf examples/at_espconn at_espconn
+    - cd at_espconn
+    - make COMPILE=gcc BOOT=new APP=1 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=5
+
+build_at_nano:
+  <<: *build_template
+  artifacts:
+    paths:
+      - ./bin/upgrade
+      - ./bin/*.bin
+    expire_in: 6 mos
+  script:
+    - cp -rf examples/at_nano at_nano
+    - cd at_nano
+    - make COMPILE=gcc BOOT=new APP=1 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=5
+
+build_at_sdio:
+  <<: *build_template
+  artifacts:
+    paths:
+      - ./bin/upgrade
+      - ./bin/*.bin
+    expire_in: 6 mos
+  script:
+    - cp -rf examples/at_sdio at_sdio
+    - cd at_sdio
+    - make COMPILE=gcc BOOT=new APP=1 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=5
+
+build_esp_mqtt_proj:
+  <<: *build_template
+  artifacts:
+    paths:
+      - ./bin/upgrade
+      - ./bin/*.bin
+    expire_in: 6 mos
+  script:
+    - cp -rf examples/esp_mqtt_proj esp_mqtt_proj
+    - cd esp_mqtt_proj
+    - make COMPILE=gcc BOOT=new APP=1 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=5
+
+# build_IoT_Demo:
+#   <<: *build_template
+#   artifacts:
+#     paths:
+#       - ./bin/upgrade
+#       - ./bin/*.bin
+#     expire_in: 6 mos
+#   script:
+#     - cp -rf examples/IoT_Demo IoT_Demo
+#     - cd IoT_Demo
+#     - make COMPILE=gcc BOOT=new APP=1 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=5
+
+build_peripheral_test:
+  <<: *build_template
+  artifacts:
+    paths:
+      - ./bin/upgrade
+      - ./bin/*.bin
+    expire_in: 6 mos
+  script:
+    - cp -rf examples/peripheral_test peripheral_test
+    - cd peripheral_test
+    - make COMPILE=gcc BOOT=new APP=1 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=5
+
+build_simple_pair:
+  <<: *build_template
+  artifacts:
+    paths:
+      - ./bin/upgrade
+      - ./bin/*.bin
+    expire_in: 6 mos
+  script:
+    - cp -rf examples/simple_pair simple_pair
+    - cd simple_pair
+    - make COMPILE=gcc BOOT=new APP=1 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=5
+
+build_smart_config:
+  <<: *build_template
+  artifacts:
+    paths:
+      - ./bin/upgrade
+      - ./bin/*.bin
+    expire_in: 6 mos
+  script:
+    - cp -rf examples/smart_config smart_config
+    - cd smart_config
+    - make COMPILE=gcc BOOT=new APP=1 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=5
+
+build_wpa2_enterprise:
+  <<: *build_template
+  artifacts:
+    paths:
+      - ./bin/upgrade
+      - ./bin/*.bin
+    expire_in: 6 mos
+  script:
+    - cp -rf examples/wpa2_enterprise wpa2_enterprise
+    - cd wpa2_enterprise
+    - make COMPILE=gcc BOOT=new APP=1 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=5
+
+build_wps:
+  <<: *build_template
+  artifacts:
+    paths:
+      - ./bin/upgrade
+      - ./bin/*.bin
+    expire_in: 6 mos
+  script:
+    - cp -rf examples/wps wps
+    - cd wps
+    - make COMPILE=gcc BOOT=new APP=1 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=5
+
+build_gen_patch_bin:
+  <<: *build_template
+  artifacts:
+    paths:
+      - ./bin/*.h
+    expire_in: 6 mos
+  script:
+    - cp -rf examples/gen_patch_bin gen_patch_bin
+    - cd gen_patch_bin
+    - python2 gen_patch_bin.py
+    - cp patch_array.h  ../bin/
+
+build_driver_lib:
+  <<: *build_template
+  artifacts:
+    paths:
+      - ./lib
+    expire_in: 6 mos
+  script:
+    - cd driver_lib
+    - ./make_lib.sh driver
 
 push_master_to_github:
   stage: deploy
