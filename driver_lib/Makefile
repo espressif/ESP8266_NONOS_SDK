@@ -53,7 +53,7 @@ LINKFLAGS_eagle.app.v6 = \
     -nostdlib    \
     -T$(LD_FILE)   \
     -Wl,--no-check-sections    \
-    -u call_user_start    \
+    -u call_user_start1    \
     -Wl,-static                        \
     -Wl,--start-group                    \
     -lc                    \
