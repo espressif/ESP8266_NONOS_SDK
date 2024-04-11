@@ -28,9 +28,10 @@ int patch_apply(void)
         uint32 len = 0;
         uint8* data = patch_data + 8;
         uint32* addr = 0;
+        uint8 loop = 0;
 
         ROM_PRINTF("data %p %d...\r\n", data, patch_data[1]);
-        for (uint8 loop = 0; loop < patch_data[1] && (data - patch_data < sizeof(patch_data) - 8); loop++) {
+        for (loop = 0; loop < patch_data[1] && (data - patch_data < sizeof(patch_data) - 8); loop++) {
           addr = data[0] | (data[1] << 8) | (data[2] << 16) | (data[3]<<24);
           len = data[4] | (data[5] << 8) | (data[6] << 16) | (data[7]<<24);
           data += 8;
