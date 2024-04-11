@@ -51,58 +51,58 @@ chk_sum = CHECKSUM_INIT
 blocks = 0
 
 def write_file(file_name,data):
-	if file_name is None:
-		print 'file_name cannot be none\n'
-		sys.exit(0)
+    if file_name is None:
+        print('file_name cannot be none\n')
+        sys.exit(0)
 
-	fp = open(file_name,'ab')
+    fp = open(file_name,'ab')
 
-	if fp:
-		fp.seek(0,os.SEEK_END)
-		fp.write(data)
-		fp.close()
-	else:
-		print '%s write fail\n'%(file_name)
+    if fp:
+        fp.seek(0,os.SEEK_END)
+        fp.write(data)
+        fp.close()
+    else:
+        print('%s write fail\n'%(file_name))
 
 def combine_bin(file_name,dest_file_name,start_offset_addr,need_chk):
     global chk_sum
     global blocks
     if dest_file_name is None:
-        print 'dest_file_name cannot be none\n'
+        print('dest_file_name cannot be none\n')
         sys.exit(0)
 
     if file_name:
         fp = open(file_name,'rb')
         if fp:
-        	########## write text ##########
+            ########## write text ##########
             fp.seek(0,os.SEEK_END)
             data_len = fp.tell()
             if data_len:
-		if need_chk:
+                if need_chk:
                     tmp_len = (data_len + 3) & (~3)
-		else:
-	            tmp_len = (data_len + 15) & (~15)
+                else:
+                    tmp_len = (data_len + 15) & (~15)
                 data_bin = struct.pack('<II',start_offset_addr,tmp_len)
                 write_file(dest_file_name,data_bin)
                 fp.seek(0,os.SEEK_SET)
                 data_bin = fp.read(data_len)
                 write_file(dest_file_name,data_bin)
-		if need_chk:
-		    for loop in range(len(data_bin)):
-		        chk_sum ^= ord(data_bin[loop])
+                if need_chk:
+                    for loop in range(len(data_bin)):
+                        chk_sum ^= ord(data_bin[loop])
                 # print '%s size is %d(0x%x),align 4 bytes,\nultimate size is %d(0x%x)'%(file_name,data_len,data_len,tmp_len,tmp_len)
                 tmp_len = tmp_len - data_len
                 if tmp_len:
                     data_str = ['00']*(tmp_len)
                     data_bin = binascii.a2b_hex(''.join(data_str))
                     write_file(dest_file_name,data_bin)
-		    if need_chk:
-			for loop in range(len(data_bin)):
-			    chk_sum ^= ord(data_bin[loop])
+                    if need_chk:
+                        for loop in range(len(data_bin)):
+                            chk_sum ^= ord(data_bin[loop])
                 blocks = blocks + 1
-        	fp.close()
+                fp.close()
         else:
-        	print '!!!Open %s fail!!!'%(file_name)
+                print('!!!Open %s fail!!!'%(file_name))
 
 
 def getFileCRC(_path): 
@@ -116,7 +116,7 @@ def getFileCRC(_path):
             str = f.read(blocksize) 
         f.close() 
     except: 
-        print 'get file crc error!' 
+        print('get file crc error!')
         return 0 
     return crc
 
@@ -125,7 +125,7 @@ def gen_appbin():
     global crc_sum
     global blocks
     if len(sys.argv) != 7:
-        print 'Usage: gen_appbin.py eagle.app.out boot_mode flash_mode flash_clk_div flash_size_map'
+        print('Usage: gen_appbin.py eagle.app.out boot_mode flash_mode flash_clk_div flash_size_map')
         sys.exit(0)
 
     elf_file = sys.argv[1]
@@ -155,16 +155,16 @@ def gen_appbin():
 
     os.system(cmd)
 
-    fp = file('./eagle.app.sym')
+    fp = open('./eagle.app.sym')
     if fp is None:
-        print "open sym file error\n"
+        print("open sym file error\n")
         sys.exit(0)
 
     lines = fp.readlines()
     fp.close()
 
     entry_addr = None
-    p = re.compile('(\w*)(\sT\s)(call_user_start)$')
+    p = re.compile('(\w*)(\sT\s)(call_user_start1)$')
     for line in lines:
         m = p.search(line)
         if m != None:
@@ -172,7 +172,7 @@ def gen_appbin():
             # print entry_addr
 
     if entry_addr is None:
-        print 'no entry point!!'
+        print('no entry point!!')
         sys.exit(0)
 
     data_start_addr = '0'
@@ -255,7 +255,7 @@ def gen_appbin():
         data_bin = binascii.a2b_hex(''.join(data_str))
         write_file(flash_bin_name,data_bin)
     write_file(flash_bin_name,chr(chk_sum & 0xFF))
-    	
+
     if boot_mode == '1':
         sum_size = os.path.getsize(flash_bin_name)
         data_str = ['FF']*(0x10000-sum_size)
@@ -268,16 +268,16 @@ def gen_appbin():
             write_file(flash_bin_name,data_bin)
             fp.close()
         else :
-            print '!!!Open %s fail!!!'%(flash_bin_name)
+            print('!!!Open %s fail!!!'%(flash_bin_name))
             sys.exit(0)
     if boot_mode == '1' or boot_mode == '2':
         all_bin_crc = getFileCRC(flash_bin_name)
-        print all_bin_crc
+        print(all_bin_crc)
         if all_bin_crc < 0:
             all_bin_crc = abs(all_bin_crc) - 1
         else :
             all_bin_crc = abs(all_bin_crc) + 1
-        print all_bin_crc
+        print(all_bin_crc)
         write_file(flash_bin_name,chr((all_bin_crc & 0x000000FF))+chr((all_bin_crc & 0x0000FF00) >> 8)+chr((all_bin_crc & 0x00FF0000) >> 16)+chr((all_bin_crc & 0xFF000000) >> 24))
     cmd = 'rm eagle.app.sym'
     os.system(cmd)
