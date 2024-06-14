@@ -22,10 +22,13 @@
  *
  */
 
-#ifndef __USER_CONFIG_H__
-#define __USER_CONFIG_H__
+#pragma once
 
+// #define AT_ESP_UPGRADE
+
+#ifndef AT_ESP_UPGRADE
 #define AT_CUSTOM_UPGRADE
+#endif
 
 #ifdef AT_CUSTOM_UPGRADE
     #ifndef AT_UPGRADE_SUPPORT
@@ -37,4 +40,5 @@
 // #define CONFIG_AT_WPA2_ENTERPRISE_COMMAND_ENABLE
 
 #define CONFIG_ENABLE_IRAM_MEMORY       1
-#endif
+
+#define ESP_AT_FW_VERSION "Bin version(Wroom 02):1.7.6"

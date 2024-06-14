@@ -41,7 +41,11 @@ stages:
 #     - chmod +x gen_misc_non_os.sh
 #     - ./gen_misc_non_os.sh
 
-build_at:
+.at_setup_tokens: &at_setup_tokens
+  - echo -e "#define CONFIG_AT_1024_1024_TOKEN \"$AT_1024_1024_TOKEN\"" >> include/user_config.h
+  - echo -e "#define CONFIG_AT_512_512_TOKEN \"$AT_512_512_TOKEN\"" >> include/user_config.h
+
+build_at_1024_1024_u1:
   <<: *build_template
   artifacts:
     paths:
@@ -51,7 +55,47 @@ build_at:
   script:
     - cp -rf examples/at at
     - cd at
-    - make COMPILE=gcc BOOT=new APP=1 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=5
+    - *at_setup_tokens
+    - make COMPILE=gcc BOOT=new APP=1 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=5 AT_ESP_UPGRADE=1
+
+build_at_1024_1024_u2:
+  <<: *build_template
+  artifacts:
+    paths:
+      - ./bin/upgrade
+      - ./bin/*.bin
+    expire_in: 6 mos
+  script:
+    - cp -rf examples/at at
+    - cd at
+    - *at_setup_tokens
+    - make COMPILE=gcc BOOT=new APP=2 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=5 AT_ESP_UPGRADE=1
+
+build_at_512_512_u1:
+  <<: *build_template
+  artifacts:
+    paths:
+      - ./bin/upgrade
+      - ./bin/*.bin
+    expire_in: 6 mos
+  script:
+    - cp -rf examples/at_nano at
+    - cd at
+    - *at_setup_tokens
+    - make COMPILE=gcc BOOT=new APP=1 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=2 AT_ESP_UPGRADE=1
+
+build_at_512_512_u2:
+  <<: *build_template
+  artifacts:
+    paths:
+      - ./bin/upgrade
+      - ./bin/*.bin
+    expire_in: 6 mos
+  script:
+    - cp -rf examples/at_nano at
+    - cd at
+    - *at_setup_tokens
+    - make COMPILE=gcc BOOT=new APP=2 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=2 AT_ESP_UPGRADE=1
 
 build_at_espconn:
   <<: *build_template
