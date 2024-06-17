@@ -239,6 +239,29 @@ build_driver_lib:
     - cd driver_lib
     - ./make_lib.sh driver
 
+collect_at_bins:
+  stage: deploy
+  tags:
+    - deploy
+  needs:
+    - build_at_1024_1024_u1
+    - build_at_1024_1024_u2
+    - build_at_512_512_u1
+    - build_at_512_512_u2
+  image: $CI_DOCKER_REGISTRY/esp8266-ci-env
+  script:
+    - echo "Collecting AT bin files..."
+    - mkdir -p at/1024+1024
+    - mkdir -p at/512+512
+    - cp -f bin/upgrade/user1.2048.new.5.bin at/1024+1024/user1.2048.new.5.bin
+    - cp -f bin/upgrade/user2.2048.new.5.bin at/1024+1024/user2.2048.new.5.bin
+    - cp -f bin/upgrade/user1.1024.new.2.bin at/512+512/user1.1024.new.2.bin
+    - cp -f bin/upgrade/user2.1024.new.2.bin at/512+512/user2.1024.new.2.bin
+  artifacts:
+    paths:
+      - ./at
+    expire_in: 6 mos
+
 push_master_to_github:
   stage: deploy
   only:
