@@ -1,17 +1,14 @@
-rm *.pem -rf
-rm *.srl -rf
-rm *.h -rf
-rm *.cer -rf
-rm *.key_1024 -rf
-rm *.req -rf
-rm *.conf -rf
-rm *.bak -rf
+rm -rf *.pem
+rm -rf *.srl
+rm -rf *.h
+rm -rf *.cer
+rm -rf *.key_1024
+rm -rf *.req
+rm -rf *.conf
+rm -rf *.bak
 
-rm ca/ -rf
-rm bin/ -rf
-rm server/ -rf
-rm client/ -rf
-rm include/ -rf
- 
- 
-
+rm -rf ca/
+rm -rf bin/
+rm -rf server/
+rm -rf client/
+rm -rf include/

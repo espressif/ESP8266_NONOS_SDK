@@ -7,12 +7,12 @@
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR 
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
 # A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
 # CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
 # SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
 # TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY 
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
 # OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -29,7 +29,7 @@ else
 	TrueCA=0
 
 # Generate the openssl configuration files.
-cat > ca_cert.conf << EOF  
+cat > ca_cert.conf << EOF
 [ req ]
 distinguished_name     = req_distinguished_name
 prompt                 = no
@@ -38,7 +38,7 @@ prompt                 = no
  O                      = $PROJECT_NAME Dodgy Certificate Authority
 EOF
 
-	
+
 	openssl genrsa -out ca.key 1024	#you can change number 1024 if encryption bits is required
 	openssl req -out ca.req -key ca.key -new -config ./ca_cert.conf
 
@@ -55,7 +55,7 @@ fi
 	cp TLS.ca_x509.cer ca/
 	cp make_cacert.py ca/
 	cd ca/
-	python make_cacert.py
+	python2 make_cacert.py
 	cd ..
 	cp ca/esp_ca_cert.bin bin/
 	cp ca.crt ca/
@@ -65,7 +65,7 @@ echo esp_ca_cert.bin generated OK\!
 if [ $TrueCA -eq 1 ];then
 	echo trust CA
 	if [ -f "client.crt" ] && [ -f "client.key" ]; then
-		echo client.crt \&\& client.key are found, generating esp_cert_private_key.bin 
+		echo client.crt \&\& client.key are found, generating esp_cert_private_key.bin
 		mkdir client
 		mkdir include
 		openssl rsa -in client.key -out TLS.key_1024.bak -outform DER
@@ -81,8 +81,8 @@ if [ $TrueCA -eq 1 ];then
 		mv client/TLS.key_1024 client/private_key.key_1024
 		cp make_cert.py client/
 		cd client
-	
-		python make_cert.py
+
+		python2 make_cert.py
 		rm make_cert.py
 		mv esp_cert_private_key.bin ../bin/
 		cd ..
@@ -95,7 +95,7 @@ if [ $TrueCA -eq 1 ];then
 		        "s/TLS_key_1024/default_private_key/" > private_key.h
 		cp cert.h private_key.h include/
 		cp client.crt client.key client/
-		
+
 	elif [ -f "server.crt" ] && [ -f "server.key" ]; then
 		echo server.crt \&\& server.key are found, generating esp_cert_private_key.bin
 		mkdir server
@@ -113,8 +113,8 @@ if [ $TrueCA -eq 1 ];then
 		mv server/TLS.key_1024 server/private_key.key_1024
 		cp make_cert.py server/
 		cd server
-	
-		python make_cert.py
+
+		python2 make_cert.py
 		rm make_cert.py
 		mv esp_cert_private_key.bin ../bin/
 		cd ..
@@ -136,7 +136,7 @@ elif [ $TrueCA -eq 0 ];then
 	mkdir client
 	mkdir include
 
-cat > server_cert.conf << EOF  
+cat > server_cert.conf << EOF
 [ req ]
 distinguished_name     = req_distinguished_name
 prompt                 = no
@@ -146,7 +146,7 @@ prompt                 = no
  CN                     = 192.168.111.100
 EOF
 
-cat > client_cert.conf << EOF  
+cat > client_cert.conf << EOF
 [ req ]
 distinguished_name     = req_distinguished_name
 prompt                 = no
@@ -163,8 +163,8 @@ EOF
 	openssl rsa -in client.key -out TLS.key_1024.bak -outform DER
 	openssl rsa -in TLS.key_1024.bak -out TLS.key_1024 -inform DER
 
-	openssl req -out server.req -key server.key -new -config ./server_cert.conf 
-	openssl req -out client.req -key client.key -new -config ./client_cert.conf 
+	openssl req -out server.req -key server.key -new -config ./server_cert.conf
+	openssl req -out client.req -key client.key -new -config ./client_cert.conf
 
 	openssl x509 -req -in server.req -out server.crt -sha1 -CAcreateserial -days 5000 -CA ca.crt -CAkey ca.key
 	openssl x509 -req -in client.req -out client.crt -sha1 -CAcreateserial -days 5000 -CA ca.crt -CAkey ca.key
@@ -180,8 +180,8 @@ EOF
 	mv client/TLS.key_1024 client/private_key.key_1024
 	cp make_cert.py client/
 	cd client
-	
-	python make_cert.py
+
+	python2 make_cert.py
 	rm make_cert.py
 	mv esp_cert_private_key.bin ../bin/
 	cd ..
@@ -203,14 +203,14 @@ fi
 
 #delete intermediate file
 
-rm ca/make_cacert.py ca/esp_ca_cert.bin -rf
-rm *.conf -rf
-rm *.req -rf
-rm *.h -rf
-rm *.bak
-rm *.srl -rf
+rm -rf ca/make_cacert.py ca/esp_ca_cert.bin
+rm -rf *.conf
+rm -rf *.req
+rm -rf *.h
+rm -rf *.bak
+rm -rf *.srl
 
-find -name \*.cer | xargs rm -f
-find -name \*.key_1024 | xargs rm -f
+find . -name \*.cer | xargs rm -f
+find . -name \*.key_1024 | xargs rm -f
 
 echo esp_ca_cert.bin \&\& esp_cert_private_key.bin was generated under bin\/ directory
