@@ -22,7 +22,7 @@ else
 	OBJDUMP = xt-objdump
 endif
 
-PYTHON?=python2
+PYTHON?=python
 BOOT?=none
 APP?=0
 SPI_SPEED?=40

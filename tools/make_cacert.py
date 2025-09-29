@@ -21,6 +21,8 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 # 
 
+from __future__ import print_function
+
 import os
 
 
@@ -50,7 +52,7 @@ def main():
     for _file in file_list:
         if _file.endswith(".cer"):
             cert_file_list.append(_file)
-    print cert_file_list
+    print(cert_file_list)
     for cert_file in cert_file_list:
         with open(cert_file, 'rb') as f:
             buff = f.read()
