@@ -40,7 +40,7 @@ typedef struct
   void (*at_queryCmd)(uint8_t id);
   void (*at_setupCmd)(uint8_t id, char *pPara);
   void (*at_exeCmd)(uint8_t id);
-}at_funcationType;
+}at_functionType;
 
 typedef void (*at_custom_uart_rx_intr)(uint8* data,int32 len);
 
@@ -82,7 +82,7 @@ void at_register_response_func(at_custom_response_func_type response_func);
   *         cmd_num : the num of at cmd that custom defined
   * @retval None
   */
-void at_cmd_array_regist(at_funcationType *custom_at_cmd_array,uint32 cmd_num);
+void at_cmd_array_regist(at_functionType *custom_at_cmd_array,uint32 cmd_num);
 /**
   * @brief  get digit form at cmd line.the maybe alter pSrc
   * @param  p_src: at cmd line string
